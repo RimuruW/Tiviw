@@ -117,6 +117,7 @@ return 0
 }
 
 function installzsh(){
+echo "脚本参考 https://github.com/mechtifs/termuxtomizer"
             rc=~/.zshrc
             touch ~/.hushlogin
             #Zsh
@@ -140,6 +141,7 @@ if [ -f "/data/data/com.termux/files/usr/bin/sudo" ];then
   else
   sudostatus=false
 fi
+echo -e "\n\n项目来自于 https://gitlab.com/st42/termux-sudo.git \n\n"
 echo -e "\n\n"
 blue "sudo 安装状态: $sudostatus"
 echo -e "\n\n"
@@ -199,10 +201,11 @@ esac
 }
 
 function termuxgui(){
+echo "安装方法来自于 酷安@萌系生物研究员"
 pkg i -y x11-repo
 pkg up -y
 pkg i -y xfce tigervnc openbox aterm
-echo -e "#\!/bin/bash -e\nam start com.realvnc.viewer.android/com.realvnc.viewer.android.app.ConnectionChooserActivity\nexport DISPLAY=:1\nXvnc -geometry 720x1440 --SecurityTypes=None \$DISPLAY&\nsleep 1s\nopenbox-session&\nthunar&\nstartxfce4">~/startvnc
+echo -e "#\!/bin/bash -e\nam start com.realvnc.viewer.android/com.realvnc.viewer.android.app.ConnectionChooserActivity\nexport DISPLAY=:1\nXvnc -geometry 720x1440 --SecurityTypes=None \$DISPLAY&\nsleep 1s\nopenbox-session&\nthunar&\nstartxfce4" > ~/startvnc
 chmod +x ~/startvnc
 mv -f ~/startvnc $PREFIX/bin/
 if [ -f "$PREFIX/bin/startvnc" ];then
@@ -220,18 +223,125 @@ return 0
 function tools(){
 echo -e "\n\n"
 echo -e "1 Hexo 配置安装"
+echo -e "2 ADB 配置安装"
+echo -e "3 you-get 安装"
 echo -e "0 退出"
 echo -en "\t\tEnter an option: "
 read toolsinstall
 case $toolsinstall in
 1)
 hexo ;;
+2)
+adbconfig ;;
+3)
+yougetconfig ;;
 0)
 return 0 ;;
 *)
 red "无效输入,请重试" 
 tools ;;
 esac
+return 0
+}
+
+function adbconfig(){
+echo -e "\n\n"
+echo -e "项目地址: https://github.com/MasterDevX/Termux-ADB"
+echo -e "\n\n1 安装 ADB\n"
+echo -e "2 卸载 ADB\n"
+echo -e "3 查看 ADB 版本\n"
+echo -e "0 退出\n"
+echo -en "\t\tEnter an option: "
+read adbinstall
+case $adbinstall in
+1)
+apt update && apt install wget
+wget https://github.com/MasterDevX/Termux-ADB/raw/master/InstallTools.sh
+bash InstallTools.sh
+return 0 ;;
+2)
+apt update
+apt install wget
+wget https://github.com/MasterDevX/Termux-ADB/raw/master/RemoveTools.sh
+bash RemoveTools.sh
+return 0 ;;
+3)
+adb version
+return 0 ;;
+0)
+return 0 ;;
+*)
+red "无效输入,请重试" 
+adbconfig ;;
+esac
+}
+
+function yougetconfig(){
+echo -e "\n\n项目地址: https://github.com/soimort/you-get/\n\n"
+echo -e "1 安装 you-get\n"
+echo -e "2 升级 you-get\n"
+echo -e "3 you-get 使用方法\n"
+echo -e "4 you-get 简易版(适合超小白用户)\n"
+echo -e "5 卸载 you-get\n"
+echo -e "0 退出\n"
+echo -en "\t\tEnter an option: "
+read yougetoption
+case $yougetoption in
+1)
+pip3 install you-get
+green "done!"
+return 0 ;;
+2)
+pip3 install --upgrade you-get
+green "done!"
+return 0 ;;
+3)
+if [ -f "/data/data/com.termux/files/usr/bin/you-get" ];then
+you-get -h
+else
+red "请先安装 you-get"
+fi
+yougetconfig ;;
+4)
+if [ -f "/data/data/com.termux/files/usr/bin/you-get" ];then
+yougeteasy
+else
+red "请先安装 you-get"
+yougetconfig
+fi
+;;
+5)
+yes | pip uninstall you-get
+return 0 ;;
+0)
+return 0 ;;
+*)
+red "无效输入,请重试" 
+yougetconfig ;;
+esac
+}
+
+function youget1(){
+echo -e "\n\n"
+echo "you-get 支持的链接种类请打开这个链接查看: https://github.com/soimort/you-get/wiki/%E4%B8%AD%E6%96%87%E8%AF%B4%E6%98%8E#%E6%94%AF%E6%8C%81%E7%BD%91%E7%AB%99"
+echo "you-get 也可以下载网页上的视频和图片"
+echo -e "请输入您的下载链接(必填)"
+echo -en "\t\tEnter: "
+read yougetlink
+echo -e "请输入您的下载路径(选填,路径默认指向内置存储.比如,如果你输入 Download,则文件会下载至内置存储的 Download 文件夹中)"
+green "看不懂就直接回车"
+echo -en "\t\tEnter: "
+read tmpdiryouget
+echo -e "如果您输入的链接属于某一播放列表里面的一个,您是否想下载该列表里面的所有视频?(y/n)"
+read tmpyougetlist
+if  [ $tmpyougetlist = y ]; then
+yougetlist=-list
+fi
+yougetdownloaddir=/sdcard/$tmpdiryouget
+blue "下载即将开始..."
+you-get -o $yougetdownloaddir $yougetlist $yougetlink
+green "下载已停止!"
+green "这可能是因为所需下载内容已下载完毕,或者下载中断"
 return 0
 }
 
@@ -276,6 +386,7 @@ return 0
 }
 
 function ubuntu(){
+echo "\n安装脚本来自于 AndroNix\n"
 green "是否安装桌面环境?[y/n]"
 echo -en "\t\tEnter an option: "
 read ubuntude
@@ -320,6 +431,7 @@ return 0
 }
 
 function debian(){
+echo "\n安装脚本来自于 AndroNix\n"
 green "是否安装桌面环境?[y/n]"
 echo -en "\t\tEnter an option: "
 read debiande
@@ -364,7 +476,7 @@ return 0
 }
 
 function centos(){
-cd $HOME
+echo "\n安装脚本来自于 AnLinux\n"
 echo -e "\n\n"
 echo -e "1 安装 CentOS\n"
 echo -e "2 卸载 CentOS\n"
@@ -384,6 +496,7 @@ return 0
 }
 
 function kali(){
+echo "安装脚本来自于 Kali 官方 ROOTLESS 安装方法"
 pkg install wget
 wget -O install-nethunter-termux https://offs.ec/2MceZWr
 chmod +x install-nethunter-termux
@@ -392,6 +505,7 @@ return 0
 }
 
 function archlinux(){
+echo -e "\n项目地址: https://github.com/TermuxArch/TermuxArch"
 echo -e "\n\n"
 echo -e "1 安装 Arch Linux\n"
 echo -e "2 修复 Arch Linux 安装\n"
@@ -496,6 +610,7 @@ case $lanchoose in
 				hint ; echo -e "恢复官方源: rm -rf ~/.pip/" ; hint
 				mkdir -p ~/.pip/
 				echo -e "[global]\nindex-url = https://pypi.tuna.tsinghua.edu.cn/simple\n[install]\ntrusted-host=mirrors.aliyun.com" > ~/.pip/pip.conf
+				pip install --upgrade pip
 			else
 				echo -e "请先安装 Python 环境"
 			fi
@@ -538,7 +653,7 @@ ifconfig >> $HOME/logs/tmp_$log
 echo "Disk Usages :" >> $HOME/logs/tmp_$log
 df -h >> $HOME/logs/tmp_$log
 mv -f $HOME/logs/tmp_$log $HOME/logs/$log
-if [ -f "$HOME/logs/$log" ];then
+if [ -f $HOME/logs/$log ];then
       green "日志生成成功!"
 else
       red "日志生成失败!"
