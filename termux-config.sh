@@ -25,17 +25,17 @@ fi
 blue "为确保脚本正常运行，每次运行脚本都将会强制进行初始化"
 blue "给您带来的不便还请见谅"
 green "Initializing……"
-apt update && apt upgrade -y
 green "Completely!!"
 clear
 green "初始化完成!"
 green "确认您的系统信息中……"
 date=$(date)
-log=log_$date.log
+log=log_date.log
 mkdir -p $HOME/logs
 rm -f $HOME/logs/*log_*.log
 touch $HOME/logs/tmp_$log
 echo -e "====Device info====\n\n" >> $HOME/logs/tmp_$log
+echo "$date" >> $HOME/logs/tmp_$log
 echo "<----Props---->" >> $HOME/logs/tmp_$log
 getprop >> $HOME/logs/tmp_$log
 echo -e "\n\n" >> $HOME/logs/tmp_$log
@@ -220,12 +220,18 @@ return 0
 function tools(){
 echo -e "\n\n"
 echo -e "1 Hexo 配置安装"
+echo -e "2 ADB 配置安装"
+echo -e "3 you-get 配置安装"
 echo -e "0 退出"
 echo -en "\t\tEnter an option: "
 read toolsinstall
 case $toolsinstall in
 1)
 hexo ;;
+2)
+adbconfig ;;
+3)
+yougetconfig ;;
 0)
 return 0 ;;
 *)
@@ -425,102 +431,140 @@ fi
 return 0
 }
 
-function language(){
-	echo -e "\n\n\"
-	echo -e " 1   Python\n"
-	sleep 0.016
-	echo -e " 2   Java\n"
-	sleep 0.016
-	echo -e " 3   Go\n"
-	sleep 0.016
-	echo -e " 4   C/C++\n"
-	sleep 0.016
-	echo -e " 5   PHP\n"
-	sleep 0.016
-	echo -e " 6   Node.js\n"
-	sleep 0.016
-	echo -e " 7   pip 更换清华源\n"
-	sleep 0.016
-	echo -e " 8   npm 更换淘宝源\n"
-	sleep 0.016
-	echo -e "                              0   返回\n\n\n"
+
+function adbconfig(){
+echo -e "\n\n"
+echo -e "项目地址: https://github.com/MasterDevX/Termux-ADB"
+echo -e "\n\n1 安装 ADB\n"
+echo -e "2 卸载 ADB\n"
+echo -e "3 查看 ADB 版本\n"
+echo -e "0 退出\n"
 echo -en "\t\tEnter an option: "
-read lanchoose
-case $lanchoose in
-		1)
-			pkg in python -y
-			if [ -f "/data/data/com.termux/files/usr/bin/python3" ];then
-			green "Python 已安装!"
-			else
-			red "Python 安装失败"
-			fi
-			language ;;
-		2)
-            echo "Termux 现原生无法支持 Java"
-            echo "您可以选择安装 Linux 发行版,再在 Linux 发行版中安装 Java"
-            language ;;
-		3)
-			pkg in golang -y
-			if [ -f "/data/data/com.termux/files/usr/bin/go" ];then
-			green "Go 已安装!"
-			else
-			red "Go 安装失败"
-			fi
-			language ;;
-		4 )
-			pkg in clang -y
-			if [ -f "/data/data/com.termux/files/usr/bin/clang" ];then
-			green "C/C++ 已安装!"
-			else
-			red "C/C++ 安装失败"
-			fi
-			language ;;
-		5 )
-			pkg in php -y
-			if [ -f "/data/data/com.termux/files/usr/bin/php" ];then
-			green "PHP 已安装!"
-			else
-			red "PHP 安装失败"
-			fi
-			language ;;
-		6 )
-			pkg in nodejs-lts -y
-			if [ -f "/data/data/com.termux/files/usr/bin/node" ];then
-			green "Node.js 已安装!"
-			else
-			red "Node.js 安装失败"
-			fi
-			language ;;
-		7 )
-			if test -e $PREFIX/bin/pip ; then
-				hint ; echo -e "恢复官方源: rm -rf ~/.pip/" ; hint
-				mkdir -p ~/.pip/
-				echo -e "[global]\nindex-url = https://pypi.tuna.tsinghua.edu.cn/simple\n[install]\ntrusted-host=mirrors.aliyun.com" > ~/.pip/pip.conf
-			else
-				echo -e "请先安装 Python 环境"
-			fi
-			language ;;
-		8 )
-			if test -e $PREFIX/bin/npm ; then
-				hint ; echo -e "恢复官方源: npm config set registry https://registry.npmjs.org/" ; hint
-				npm config set registry https://registry.npm.taobao.org
-			else
-				echo -e "请先安装 Node.js 环境"
-			fi
-			language ;;
-		0 )
-			return 0 ;;
-		* )
-			red "无效输入，请重试"
-			language ;;
-	esac
+read adbinstall
+case $adbinstall in
+1)
+apt update && apt install wget
+wget https://github.com/MasterDevX/Termux-ADB/raw/master/InstallTools.sh
+bash InstallTools.sh
+return 0 ;;
+2)
+apt update
+apt install wget
+wget https://github.com/MasterDevX/Termux-ADB/raw/master/RemoveTools.sh
+bash RemoveTools.sh
+return 0 ;;
+3)
+if [ -f "/data/data/com.termux/files/usr/bin/adb" ];then
+adb version
+else
+red "请先安装 ADB"
+fi
+return 0 ;;
+0)
+return 0 ;;
+*)
+red "无效输入,请重试" 
+adbconfig ;;
+esac
 }
+
+function yougetconfig(){
+echo -e "\n\n项目地址: https://github.com/soimort/you-get/\n\n"
+echo -e "1 安装 you-get\n"
+echo -e "2 升级 you-get\n"
+echo -e "3 you-get 使用方法\n"
+echo -e "4 you-get 简易版(适合超小白用户)\n"
+echo -e "5 卸载 you-get\n"
+echo -e "0 退出\n"
+echo -en "\t\tEnter an option: "
+read yougetoption
+case $yougetoption in
+1)
+pip3 install you-get
+green "done!"
+return 0 ;;
+2)
+pip3 install --upgrade you-get
+green "done!"
+return 0 ;;
+3)
+if [ -f "/data/data/com.termux/files/usr/bin/you-get" ];then
+you-get -h
+else
+red "请先安装 you-get"
+fi
+yougetconfig ;;
+4)
+if [ -f "/data/data/com.termux/files/usr/bin/you-get" ];then
+yougeteasy
+else
+red "请先安装 you-get"
+yougetconfig
+fi
+;;
+5)
+yes | pip uninstall you-get
+return 0 ;;
+0)
+return 0 ;;
+*)
+red "无效输入,请重试" 
+yougetconfig ;;
+esac
+}
+
+function yougeteasy(){
+echo -e "\n\n"
+blue "简易版脚本制作非常粗糙"
+blue "简易版仅面向极端小白用户/终端无操作能力者"
+blue "如果可以,我强烈建议使用原版 you-get 而非简易版"
+echo -e "\n\n"
+echo -e "1 开始\n"
+echo -e "0 退出\n"
+echo -en "\t\tEnter an option: "
+read tmpyouget
+case $tmpyouget in
+1)
+youget1 ;;
+0)
+return 0 ;;
+*)
+red "无效输入,请重试" 
+yougeteasy ;;
+esac 
+}
+function youget1(){
+echo -e "\n\n"
+echo "you-get 支持的链接种类请打开这个链接查看: https://github.com/soimort/you-get/wiki/%E4%B8%AD%E6%96%87%E8%AF%B4%E6%98%8E#%E6%94%AF%E6%8C%81%E7%BD%91%E7%AB%99"
+echo "you-get 也可以下载网页上的视频和图片"
+echo -e "请输入您的下载链接(必填)"
+echo -en "\t\tEnter: "
+read yougetlink
+echo -e "请输入您的下载路径(选填,路径默认指向内置存储.比如,如果你输入 Download,则文件会下载至内置存储的 Download 文件夹中)"
+green "看不懂就直接回车"
+echo -en "\t\tEnter: "
+read tmpdiryouget
+echo -e "如果您输入的链接属于某一播放列表里面的一个,您是否想下载该列表里面的所有视频?(y/n)"
+echo -en "\t\tEnter: "
+read tmpyougetlist
+if  [ $tmpyougetlist = y ]; then
+yougetlist=-list
+fi
+yougetdownloaddir=/sdcard/$tmpdiryouget
+blue "下载即将开始..."
+you-get -o $yougetdownloaddir $yougetlist $yougetlink
+green "下载已停止!"
+green "这可能是因为所需下载内容已下载完毕,或者下载中断"
+return 0
+}
+
 function logsgen(){
 date=$(date)
-log=log_$date.log
+log=log_gen.log
 mkdir -p $HOME/logs
 touch $HOME/logs/tmp_$log
-echo -e "====Device info====\n\n" >> $HOME/logs/tmp_$log
+echo -e "====Device info====\n\n" >> $HOME/lo8gs/tmp_$log
+echo -e "$log" >> $HOME/logs/tmp_$log
 echo "<----Props---->" >> $HOME/logs/tmp_$log
 getprop >> $HOME/logs/tmp_$log
 echo -e "\n\n" >> $HOME/logs/tmp_$log
