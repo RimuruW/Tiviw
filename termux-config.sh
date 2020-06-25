@@ -54,8 +54,8 @@ sh_new_ver=$(wget -qO- -t1 -T3 "https://raw.githubusercontent.com/huanruomengyun
 if [ ! -f "$PREFIX/etc/tconfig/stopupdate" ]; then
 wget -N "https://raw.githubusercontent.com/huanruomengyun/Termux-Tools/master/termux-config.sh" && chmod +x termux-config.sh
 echo -e "脚本已更新为最新版本[ $sh_ver-> $sh_new_ver ]"
-fi
 echo "$sh_ver ->> $sh_new_ver" >> $HOME/logs/update_log.log
+fi
 clear
 green "初始化完成!"
 green "确认您的系统信息中……"
@@ -95,7 +95,8 @@ green "您马上就可以进入脚本!"
 clear
 function menu(){
     blue "==================================="
-    blue "Termux Configure"
+    blue "Termux Tools Pro"
+    echo "          v" $sh_ver
 	echo -e "       By Qingxu (huanruomengyun)"  
 	blue "==================================="
 	echo -e "\n\n"
