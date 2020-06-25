@@ -3,9 +3,10 @@
 # Author: Qingxu (huanruomengyun)
 # Description: Termux Tools
 # Repository Address: https://github.com/huanruomengyun/Termux-Tools
-# Version: 0.1
+# Version: 1.6.26
 # Copyright (c) 2020 Qingxu
 #-----------------------------------
+sh_ver="1.6.26"
 function blue(){
     echo -e "\033[34m\033[01m$1\033[0m"
 }
@@ -22,6 +23,11 @@ if [[ $EUID -eq 0 ]]; then
     red "为了您的设备安全，请避免在任何情况下以 ROOT 用户运行该脚本"
     exit 0
 fi
+if [[ -d /system/app/ && -d /system/priv-app ]]; then
+systeminfo="Android $(getprop ro.build.version.release)"
+else
+red "This operating system is not supported."
+fi
 blue "为确保脚本正常运行，每次运行脚本都将会强制进行初始化"
 blue "给您带来的不便还请见谅"
 green "Initializing……"
@@ -29,6 +35,15 @@ if [ -f "$PREFIX/etc/apt/mirrorstatus" ];then
 apt update && apt upgrade -y
 else
 echo "Skip..."
+fi
+if [ -f "$PREFIX/etc/tconfig/aria2btauto" ];then
+bash <(wget -qO- git.io/tracker.sh) $HOME/.aria2/
+fi
+sh_new_ver=$(wget -qO- -t1 -T3 "https://raw.githubusercontent.com/huanruomengyun/Termux-Tools/master/termux-config.sh" | grep 'sh_ver="' | awk -F "=" '{print $NF}' | sed 's/\"//g' | head -1) && sh_new_type="github"
+[[ -z ${sh_new_ver} ]] && red "无法链接到 Github! 脚本更新失败!" && red "请注意,该脚本绝大多数功能都需要与 GitHub 建立连接,若无法连接 GitHub,则脚本大多数功能无法使用!!" && sleep 2
+if [ ! -f "$PREFIX/etc/tconfig/stopupdate" ]; then
+wget -N "https://raw.githubusercontent.com/huanruomengyun/Termux-Tools/master/termux-config.sh" && chmod +x termux-config.sh
+echo -e "脚本已更新为最新版本[ ${sh_new_ver} ]"
 fi
 clear
 green "初始化完成!"
@@ -47,6 +62,7 @@ echo -e "\n\n" >> $HOME/logs/tmp_$log
 echo "<----System info---->" >> $HOME/logs/tmp_$log
 echo "Logged In users:" >> $HOME/logs/tmp_$log
 whoami >> $HOME/logs/tmp_$log
+echo $systeminfo >> $HOME/logs/tmp_$log
 echo "Package Installed" >> $HOME/logs/tmp_$log
 pkg list-installed >> $HOME/logs/tmp_$log
 echo -e "\n\n" >> $HOME/logs/tmp_$log
