@@ -16,22 +16,32 @@ function green(){
 function red(){
     echo -e "\033[31m\033[01m$1\033[0m"
 }
-if [[ $EUID -eq 0 ]]; then
-    red "检测到您正在尝试使用 ROOT 权限运行该脚本"
-    red "这是不建议且不被允许的"
-    red "该脚本不需要 ROOT 权限,且以 ROOT 权限运行可能会带来一些无法预料的问题"
-    red "为了您的设备安全，请避免在任何情况下以 ROOT 用户运行该脚本"
-    exit 0
+if [[ $EUID -eq 0 ]]; then	
+    red "检测到您正在尝试使用 ROOT 权限运行该脚本"	
+    red "这是不建议且不被允许的"	
+    red "该脚本不需要 ROOT 权限,且以 ROOT 权限运行可能会带来一些无法预料的问题"	
+    red "为了您的设备安全，请避免在任何情况下以 ROOT 用户运行该脚本"	
+    exit 0	
 fi
 if [[ -d /system/app/ && -d /system/priv-app ]]; then
 systeminfo="Android $(getprop ro.build.version.release)"
 else
 red "This operating system is not supported."
+exit 1
+fi
+if [ -f /system/addon.d/99-magisk.sh ]; then
+	testsustatus=`green "MagiskSU"`
+else
+    testsustatus="UNKOWN"
 fi
 blue "为确保脚本正常运行，每次运行脚本都将会强制进行初始化"
 blue "给您带来的不便还请见谅"
 green "Initializing……"
-if [ -f "$PREFIX/etc/apt/mirrorstatus" ];then
+if [ ! -f "$PREFIX/bin/wget" ];then
+pkg in wget
+fi
+mkdir -p $PREFIX/etc/tconfig
+if [ -f "$PREFIX/etc/tconfig/mirrorstatus" ];then
 apt update && apt upgrade -y
 else
 echo "Skip..."
@@ -40,11 +50,12 @@ if [ -f "$PREFIX/etc/tconfig/aria2btauto" ];then
 bash <(wget -qO- git.io/tracker.sh) $HOME/.aria2/
 fi
 sh_new_ver=$(wget -qO- -t1 -T3 "https://raw.githubusercontent.com/huanruomengyun/Termux-Tools/master/termux-config.sh" | grep 'sh_ver="' | awk -F "=" '{print $NF}' | sed 's/\"//g' | head -1) && sh_new_type="github"
-[[ -z ${sh_new_ver} ]] && red "无法链接到 Github! 脚本更新失败!" && red "请注意,该脚本绝大多数功能都需要与 GitHub 建立连接,若无法连接 GitHub,则脚本大多数功能无法使用!!" && sleep 2
+[[ -z ${sh_new_ver} ]] && red "无法链接到 Github! 脚本更新失败!" && red "请注意,该脚本绝大多数功能都需要与 GitHub 建立连接,若无法连接 GitHub,则脚本大多数功能无法使用!!" && sleep 3
 if [ ! -f "$PREFIX/etc/tconfig/stopupdate" ]; then
 wget -N "https://raw.githubusercontent.com/huanruomengyun/Termux-Tools/master/termux-config.sh" && chmod +x termux-config.sh
-echo -e "脚本已更新为最新版本[ ${sh_new_ver} ]"
+echo -e "脚本已更新为最新版本[ $sh_ver-> $sh_new_ver ]"
 fi
+echo "$sh_ver ->> $sh_new_ver" >> $HOME/logs/update_log.log
 clear
 green "初始化完成!"
 green "确认您的系统信息中……"
@@ -60,6 +71,9 @@ echo "<----Props---->" >> $HOME/logs/tmp_$log
 getprop >> $HOME/logs/tmp_$log
 echo -e "\n\n" >> $HOME/logs/tmp_$log
 echo "<----System info---->" >> $HOME/logs/tmp_$log
+if [ -f /system/addon.d/99-magisk.sh ]; then
+	ehco -e "MagiskSU" >> $HOME/logs/tmp_$log
+fi
 echo "Logged In users:" >> $HOME/logs/tmp_$log
 whoami >> $HOME/logs/tmp_$log
 echo $systeminfo >> $HOME/logs/tmp_$log
@@ -119,7 +133,7 @@ function mirrors(){
 sed -i 's@^\(deb.*stable main\)$@#\1\ndeb https://mirrors.tuna.tsinghua.edu.cn/termux/termux-packages-24 stable main@' $PREFIX/etc/apt/sources.list
 sed -i 's@^\(deb.*games stable\)$@#\1\ndeb https://mirrors.tuna.tsinghua.edu.cn/termux/game-packages-24 games stable@' $PREFIX/etc/apt/sources.list.d/game.list
 sed -i 's@^\(deb.*science stable\)$@#\1\ndeb https://mirrors.tuna.tsinghua.edu.cn/termux/science-packages-24 science stable@' $PREFIX/etc/apt/sources.list.d/science.list
-touch $PREFIX/etc/apt/mirrorstatus
+touch $PREFIX/etc/tconfig/mirrorstatus
 apt update && apt upgrade -y
 }
 
@@ -162,6 +176,7 @@ if [ -f "/data/data/com.termux/files/usr/bin/sudo" ];then
 fi
 echo -e "\n\n"
 echo -e "sudo 安装状态:" $sudostatus
+echo -e "SU 状态:" $testsustatus
 echo -e "\n\n"
 echo -e "1 安装 sudo\n"
 echo -e "2 修复 sudo\n"
