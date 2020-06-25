@@ -515,6 +515,7 @@ case $lanchoose in
 			language ;;
 	esac
 }
+
 function logsgen(){
 date=$(date)
 log=log_$date.log
