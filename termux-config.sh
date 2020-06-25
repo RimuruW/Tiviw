@@ -299,6 +299,7 @@ echo -e "1 Hexo 配置安装\n"
 echo -e "2 ADB 配置安装\n"
 echo -e "3 you-get 配置安装\n"
 echo -e "4 区域网内 HTTP 服务器\n"
+echo -e "5 BiliBili 挂机助手\n"
 echo -e "0 退出\n"
 echo -en "\t\tEnter an option: "
 read toolsinstall
@@ -311,11 +312,79 @@ adbconfig ;;
 yougetconfig ;;
 4)
 httpconfig ;;
+5)
+bilibilitools ;;
 0)
 return 0 ;;
 *)
 red "无效输入,请重试" 
 tools ;;
+esac
+}
+
+function bilibilitools(){
+if [ -f "$HOME/bilibilitools/main.py" ];then
+bilibilitoolstatus=`green "true"`
+else
+bilibilitoolstatus=`red "false"`
+fi
+echo -e "\n项目地址: https://github.com/Dawnnnnnn/bilibili-live-tools\nWiki: https://github.com/Dawnnnnnn/bilibili-live-tools/wiki"
+echo -e "\nBiliBli 挂机助手安装状态:" $bilibilitoolstatus
+echo -e "\n\n"
+echo -e "1 安装 BiliBili 挂机助手\n"
+echo -e "2 启动 BiliBili 挂机助手\n"
+echo -e "3 删除 BiliBili 挂机助手\n"
+echo -e "0 退出\n"
+echo -en "\t\tEnter an option: "
+read biliconfig
+case $biliconfig in
+1)
+if [ -f "$HOME/bilibilitools/main.py" ];then
+red "您已安装 BiliBili 挂机助手,无需重复安装\n"
+red "如果您想重新安装,请先删除 BiliBili 挂机助手\n"
+bilibilitools
+fi
+if [ ! -f "/data/data/com.termux/files/usr/bin/python" ];then
+pkg in python -y
+fi
+if [ ! -f "/data/data/com.termux/files/usr/bin/git" ];then
+pkg in git -y
+fi
+touch $HOME/bilibilitoolsinstall.sh
+echo -e "git clone https://github.com/Dawnnnnnn/bilibili-live-tools $HOME/bilibilitools && cd $HOME/bilibilitools && pip install -r requirements.txt" > $HOME/bilibilitoolsinstall.sh
+bash $HOME/bilibilitoolsinstall.sh
+rm -f $HOME/bilibilitoolsinstall.sh
+if [ -f "$HOME/bilibilitools/main.py" ];then
+green "BiliBili 挂机助手已安装成功!"
+else
+red "BiliBili 挂机助手安装失败"
+bilibilitools
+fi
+return 0
+;;
+2)
+if [ ! -f "$HOME/bilibilitools/main.py" ];then
+red "请先安装 BiliBili 挂机助手!"
+return 0
+fi
+if [ ! -f "/data/data/com.termux/files/usr/bin/python" ];then
+pkg in python -y
+fi
+touch $HOME/start-bilibilitools.sh
+echo "cd $HOME/bilibilitools && python main.py" > $HOME/start-bilibilitools.sh
+bash $HOME/start-bilibilitools.sh
+rm -f $HOME/start-bilibilitools.sh
+return 0 ;;
+3)
+echo "开始删除…"
+rm -rf $HOME/bilibilitools
+green "如果一切正常,BiliBili 挂机助手已删除完成!"
+return 0 ;;
+0)
+return 0 ;;
+*)
+red "无效输入,请重试" 
+bilibilitools ;;
 esac
 return 0
 }
