@@ -147,6 +147,7 @@ echo -e "sudo 安装状态:" $sudostatus
 echo -e "\n\n"
 echo -e "1 安装 sudo\n"
 echo -e "2 修复 sudo\n"
+echo -e "3 卸载 sudo\n"
 echo -e "0 退出\n"
 echo -en "\t\tEnter an option: "
 read sudoinstall
@@ -169,6 +170,18 @@ echo "安装脚本运行完毕"
 return 0 ;;
 2)
 echo "脚本开发中,敬请期待"
+return 0 ;;
+3)
+if [ ! -f "/data/data/com.termux/files/usr/bin/sudo" ];then
+red "您并未安装 sudo"
+sudoconfig
+fi
+rm -f /data/data/com.termux/files/usr/bin/sudo
+if [ -f "/data/data/com.termux/files/usr/bin/sudo" ];then
+red "sudo 卸载失败!"
+else
+green "sudo 卸载成功!"
+fi
 return 0 ;;
 0)
 return 0 ;;
@@ -210,10 +223,15 @@ cp $PREFIX/etc/motd $PREFIX/etc/motd.bak
 fi
 echo -e "\n\n"
 echo -e "1 使用编辑器编辑[适合有 Linux 使用经验的用户,默认使用 vim]\n"
+sleep 0.016
 echo -e "2 使用脚本进行修改[适合纯新手]\n"
+sleep 0.016
 echo -e "3 查看当前启动问候语\n"
+sleep 0.016
 echo -e "4 恢复默认启动问候语\n"
+sleep 0.016
 echo -e "0 退出\n"
+sleep 0.016
 echo -en "\t\tEnter an option: "
 read etermuxopen
 case $etermuxopen in
@@ -252,8 +270,11 @@ echo -e "\n\n安装方法来自于 酷安@萌系生物研究员"
 echo -e "\n图形化界面安装状态:" $termuxguistatus
 echo -e "\n\n"
 echo -e "1 安装\n"
+sleep 0.016
 echo -e "2 使用方法\n"
+sleep 0.016
 echo -e "0 退出\n"
+sleep 0.016
 echo -en "\t\tEnter an option: "
 read termuxguiinstall
 case $termuxguiinstall in
@@ -296,11 +317,17 @@ return 0
 function tools(){
 echo -e "\n\n"
 echo -e "1 Hexo 配置安装\n"
+sleep 0.016
 echo -e "2 ADB 配置安装\n"
+sleep 0.016
 echo -e "3 you-get 配置安装\n"
+sleep 0.016
 echo -e "4 区域网内 HTTP 服务器\n"
+sleep 0.016
 echo -e "5 BiliBili 挂机助手\n"
+sleep 0.016
 echo -e "0 退出\n"
+sleep 0.016
 echo -en "\t\tEnter an option: "
 read toolsinstall
 case $toolsinstall in
@@ -332,9 +359,13 @@ echo -e "\n项目地址: https://github.com/Dawnnnnnn/bilibili-live-tools\nWiki:
 echo -e "\nBiliBli 挂机助手安装状态:" $bilibilitoolstatus
 echo -e "\n\n"
 echo -e "1 安装 BiliBili 挂机助手\n"
+sleep 0.016
 echo -e "2 启动 BiliBili 挂机助手\n"
+sleep 0.016
 echo -e "3 删除 BiliBili 挂机助手\n"
+sleep 0.016
 echo -e "0 退出\n"
+sleep 0.016
 echo -en "\t\tEnter an option: "
 read biliconfig
 case $biliconfig in
@@ -399,9 +430,13 @@ echo -e "\n\n"
 echo -e "HTTP 服务器安装状态:" $httpconfigstatus
 echo -e "\n\n"
 echo -e "1 安装 HTTP 服务器\n"
+sleep 0.016
 echo -e "2 启动 HTTP 服务器\n"
+sleep 0.016
 echo -e "3 卸载 HTTP 服务器\n"
+sleep 0.016
 echo -e "0 退出\n"
+sleep 0.016
 echo -en "\t\tEnter an option: "
 read httpserverchoose
 case $httpserverchoose in
@@ -410,14 +445,20 @@ pkg in nodejs-lts
 npm install -g http-server
 green "安装结束!" ;;
 2)
-if [ $httpconfigstatus = false ]; then
+if [ ! -f "/data/data/com.termux/files/usr/lib/node_modules/http-server/bin/http-server" ]; then
 red "请先安装 HTTP 服务器"
 httpconfig
+return 0
 fi
 http-server
 return 0
 ;;
 3)
+if [ ! -f "/data/data/com.termux/files/usr/lib/node_modules/http-server/bin/http-server" ]; then
+red "请先安装 HTTP 服务器"
+httpconfig
+return 0
+fi
 green "开始卸载..."
 npm uninstall http-server -g
 green "卸载完成!" ;;
@@ -432,6 +473,7 @@ esac
 function hexo(){
 pkg in wget -y
 wget https://raw.githubusercontent.comhttpserverchoose/huanruomengyun/Termux-Hexo-installer/master/hexo-installer.sh && sh hexo-installer.sh
+rm -f hexo-installer.sh
 return 0
 }
 
@@ -470,6 +512,7 @@ return 0
 }
 
 function ubuntu(){
+echo "\n\n 安装脚本来自于 Andronix"
 green "是否安装桌面环境?[y/n]"
 echo -en "\t\tEnter an option: "
 read ubuntude
@@ -514,6 +557,7 @@ return 0
 }
 
 function debian(){
+echo "\n\n安装脚本来自于 Andronix"
 green "是否安装桌面环境?[y/n]"
 echo -en "\t\tEnter an option: "
 read debiande
@@ -558,11 +602,14 @@ return 0
 }
 
 function centos(){
-cd $HOME
+echo "\n\n安装脚本来自于 Andronix"
 echo -e "\n\n"
 echo -e "1 安装 CentOS\n"
+sleep 0.016
 echo -e "2 卸载 CentOS\n"
+sleep 0.016
 echo -e "0 退出\n"
+sleep 0.016
 echo -en "\t\tEnter an option: "
 read centosde
 case $centosde in
@@ -588,8 +635,11 @@ return 0
 function archlinux(){
 echo -e "\n\n"
 echo -e "1 安装 Arch Linux\n"
+sleep 0.016
 echo -e "2 修复 Arch Linux 安装\n"
+sleep 0.016
 echo -e "0 退出"
+sleep 0.016
 echo -en "\t\tEnter an option: "
 read archlinuxinstall
 case $archlinuxinstall in
@@ -629,9 +679,13 @@ echo -e "\n\n"
 echo -e "项目地址: https://github.com/MasterDevX/Termux-ADB"
 echo -e "ADB 安装状态:" $adbconfigstatus
 echo -e "\n\n1 安装 ADB\n"
+sleep 0.016
 echo -e "2 卸载 ADB\n"
+sleep 0.016
 echo -e "3 查看 ADB 版本\n"
+sleep 0.016
 echo -e "0 退出\n"
+sleep 0.016
 echo -en "\t\tEnter an option: "
 read adbinstall
 case $adbinstall in
@@ -641,6 +695,10 @@ wget https://github.com/MasterDevX/Termux-ADB/raw/master/InstallTools.sh
 bash InstallTools.sh
 return 0 ;;
 2)
+if [ ! -f "/data/data/com.termux/files/usr/bin/adb" ];then
+red "您并未安装 ADB,无需进行此过程"
+return 0
+fi
 apt update
 apt install wget
 wget https://github.com/MasterDevX/Termux-ADB/raw/master/RemoveTools.sh
@@ -671,11 +729,17 @@ echo -e "\n\n项目地址: https://github.com/soimort/you-get/\n\n"
 echo -e "you-get 安装状态:" $yougetconfigstatus
 echo -e "\n\n"
 echo -e "1 安装 you-get\n"
+sleep 0.016
 echo -e "2 升级 you-get\n"
+sleep 0.016
 echo -e "3 you-get 使用方法\n"
+sleep 0.016
 echo -e "4 you-get 简易版[适合超小白用户]\n"
+sleep 0.016
 echo -e "5 卸载 you-get\n"
+sleep 0.016
 echo -e "0 退出\n"
+sleep 0.016
 echo -en "\t\tEnter an option: "
 read yougetoption
 case $yougetoption in
@@ -699,11 +763,16 @@ if [ -f "/data/data/com.termux/files/usr/bin/you-get" ];then
 yougeteasy
 else
 red "请先安装 you-get"
-yougetconfig
+return 0
 fi
 ;;
 5)
 yes | pip uninstall you-get
+if [ ! -f "/data/data/com.termux/files/usr/bin/you-get" ];then
+green "卸载完成!"
+else
+red "卸载失败!"
+fi
 return 0 ;;
 0)
 return 0 ;;
@@ -769,19 +838,33 @@ blue "注意,该界面部分功能需要安装并授权 Termux:API 才能使用"
 echo "Termux:API 链接: https://play.google.com/store/apps/details?id=com.termux.api"
 echo "需要 Termux:API 支持的选项会标注" $need
 echo -e "\n1 获取电池信息" $need
+sleep 0.016
 echo -e "\n2 获取相机信息" $need
+sleep 0.016
 echo -e "\n3 查看红外载波频率" $need
+sleep 0.016
 echo -e "\n4 获取无线电信息" $need
+sleep 0.016
 echo -e "\n5 获取 tts 语言引擎信息" $need
+sleep 0.016
 echo -e "\n6 获取当前 WiFi 连接信息" $need
+sleep 0.016
 echo -e "\n7 获取 WiFi 扫描信息[高版本 Android 不可用]" $need
+sleep 0.016
 echo -e "\n8 查看当前剪切板内容" $need
+sleep 0.016
 echo -e "\n9 获取手机 IMEI 号[规范的 Android 10 以上设备不可用]"
+sleep 0.016
 echo -e "\n10 获取 CPU 信息"
+sleep 0.016
 echo -e "\n11 内存和交换空间使用状态"
+sleep 0.016
 echo -e "\n12 存储使用状态"
+sleep 0.016
 echo -e "\n99 将所有信息输出到日志" $need
+sleep 0.016
 echo -e "\n0 退出"
+sleep 0.016
 echo -en "\t\tEnter an option: "
 read termuxapichoose
 case $termuxapichoose in
@@ -836,7 +919,7 @@ termuxapi ;;
 0)
 return 0 ;;
 99)
-echo -e"\n请输入您想要保存的 log 的名字[没有请留空]"
+echo -e "\n请输入您想要保存的 log 的名字[没有请留空]"
 echo -en "\t\tEnter: "
 read tmplogsname
 userlogname=$userlogsname.txt
@@ -862,7 +945,7 @@ esac
 }
 function logsgen(){
 date=$(date)
-log=log_init.log
+log=log_gen.log
 mkdir -p $HOME/logs
 touch $HOME/logs/tmp_$log
 echo -e "====Device info====\n\n" >> $HOME/lo8gs/tmp_$log
@@ -899,9 +982,13 @@ green "初始化日志会在每次脚本初始化时自动生成"
 green "旧的初始化日志会在每次脚本初始化时自动删除"
 echo -e "\n\n"
 echo -e "1 查看日志\n"
+sleep 0.016
 echo -e "2 立即生成日志\n"
+sleep 0.016
 echo -e "3 清空日志\n"
+sleep 0.016
 echo -e "0 退出\n"
+sleep 0.016
 echo -en "\t\tEnter an option: "
 read logschoose
 case $logschoose in
