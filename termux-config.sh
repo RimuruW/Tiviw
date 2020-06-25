@@ -25,6 +25,7 @@ fi
 blue "为确保脚本正常运行，每次运行脚本都将会强制进行初始化"
 blue "给您带来的不便还请见谅"
 green "Initializing……"
+apt update && apt upgrade -y
 green "Completely!!"
 clear
 green "初始化完成!"
