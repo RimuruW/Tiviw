@@ -3,9 +3,10 @@
 # Author: Qingxu (huanruomengyun)
 # Description: Termux Tools
 # Repository Address: https://github.com/huanruomengyun/Termux-Tools
-# Version: 0.1
+# Version: 1.6.26
 # Copyright (c) 2020 Qingxu
 #-----------------------------------
+sh_ver="1.6.26"
 function blue(){
     echo -e "\033[34m\033[01m$1\033[0m"
 }
@@ -22,11 +23,28 @@ if [[ $EUID -eq 0 ]]; then
     red "为了您的设备安全，请避免在任何情况下以 ROOT 用户运行该脚本"
     exit 0
 fi
+if [[ -d /system/app/ && -d /system/priv-app ]]; then
+systeminfo="Android $(getprop ro.build.version.release)"
+else
+red "This operating system is not supported."
+fi
 blue "为确保脚本正常运行，每次运行脚本都将会强制进行初始化"
 blue "给您带来的不便还请见谅"
 green "Initializing……"
+if [ -f "$PREFIX/etc/apt/mirrorstatus" ];then
 apt update && apt upgrade -y
-green "Completely!!"
+else
+echo "Skip..."
+fi
+if [ -f "$PREFIX/etc/tconfig/aria2btauto" ];then
+bash <(wget -qO- git.io/tracker.sh) $HOME/.aria2/
+fi
+sh_new_ver=$(wget -qO- -t1 -T3 "https://raw.githubusercontent.com/huanruomengyun/Termux-Tools/master/termux-config.sh" | grep 'sh_ver="' | awk -F "=" '{print $NF}' | sed 's/\"//g' | head -1) && sh_new_type="github"
+[[ -z ${sh_new_ver} ]] && red "无法链接到 Github! 脚本更新失败!" && red "请注意,该脚本绝大多数功能都需要与 GitHub 建立连接,若无法连接 GitHub,则脚本大多数功能无法使用!!" && sleep 2
+if [ ! -f "$PREFIX/etc/tconfig/stopupdate" ]; then
+wget -N "https://raw.githubusercontent.com/huanruomengyun/Termux-Tools/master/termux-config.sh" && chmod +x termux-config.sh
+echo -e "脚本已更新为最新版本[ ${sh_new_ver} ]"
+fi
 clear
 green "初始化完成!"
 green "确认您的系统信息中……"
@@ -44,6 +62,7 @@ echo -e "\n\n" >> $HOME/logs/tmp_$log
 echo "<----System info---->" >> $HOME/logs/tmp_$log
 echo "Logged In users:" >> $HOME/logs/tmp_$log
 whoami >> $HOME/logs/tmp_$log
+echo $systeminfo >> $HOME/logs/tmp_$log
 echo "Package Installed" >> $HOME/logs/tmp_$log
 pkg list-installed >> $HOME/logs/tmp_$log
 echo -e "\n\n" >> $HOME/logs/tmp_$log
@@ -100,6 +119,7 @@ function mirrors(){
 sed -i 's@^\(deb.*stable main\)$@#\1\ndeb https://mirrors.tuna.tsinghua.edu.cn/termux/termux-packages-24 stable main@' $PREFIX/etc/apt/sources.list
 sed -i 's@^\(deb.*games stable\)$@#\1\ndeb https://mirrors.tuna.tsinghua.edu.cn/termux/game-packages-24 games stable@' $PREFIX/etc/apt/sources.list.d/game.list
 sed -i 's@^\(deb.*science stable\)$@#\1\ndeb https://mirrors.tuna.tsinghua.edu.cn/termux/science-packages-24 science stable@' $PREFIX/etc/apt/sources.list.d/science.list
+touch $PREFIX/etc/apt/mirrorstatus
 apt update && apt upgrade -y
 }
 
@@ -120,8 +140,6 @@ return 0
 
 function installzsh(){
             rc=~/.zshrc
-            touch ~/.hushlogin
-            #Zsh
             pkg in zsh git curl -y
             green "如果下面需要您进行确认，请输入 y 确认"
             chsh -s zsh
@@ -147,6 +165,7 @@ echo -e "sudo 安装状态:" $sudostatus
 echo -e "\n\n"
 echo -e "1 安装 sudo\n"
 echo -e "2 修复 sudo\n"
+echo -e "3 卸载 sudo\n"
 echo -e "0 退出\n"
 echo -en "\t\tEnter an option: "
 read sudoinstall
@@ -169,6 +188,18 @@ echo "安装脚本运行完毕"
 return 0 ;;
 2)
 echo "脚本开发中,敬请期待"
+return 0 ;;
+3)
+if [ ! -f "/data/data/com.termux/files/usr/bin/sudo" ];then
+red "您并未安装 sudo"
+sudoconfig
+fi
+rm -f /data/data/com.termux/files/usr/bin/sudo
+if [ -f "/data/data/com.termux/files/usr/bin/sudo" ];then
+red "sudo 卸载失败!"
+else
+green "sudo 卸载成功!"
+fi
 return 0 ;;
 0)
 return 0 ;;
@@ -205,37 +236,107 @@ esac
 }
 
 function termuxopen(){
-if [ ! -f "$PREFIX/etc/motd.bak" ];then
-cp $PREFIX/etc/motd $PREFIX/etc/motd.bak
+if [ -f "$HOME/.hushlogin" ];then
+hushloginstatus=`green "已关闭"`
+else
+hushloginstatus=`red "未关闭"`
+fi
+if [ -f "$PREFIX/etc/termuxopen" ];then
+termuxloginstatus=`green "已修改"`
+else
+termuxloginstatus=`red "未修改"`
 fi
 echo -e "\n\n"
+echo -e "问候语状态:"
+echo -e "问候语" $hushloginstatus
+echo -e "问候语" $termuxloginstatus
+echo -e "\n\n"
 echo -e "1 使用编辑器编辑[适合有 Linux 使用经验的用户,默认使用 vim]\n"
+sleep 0.016
 echo -e "2 使用脚本进行修改[适合纯新手]\n"
+sleep 0.016
 echo -e "3 查看当前启动问候语\n"
+sleep 0.016
 echo -e "4 恢复默认启动问候语\n"
+sleep 0.016
+echo -e "5 关闭问候语\n"
+sleep 0.016
+echo -e "6 开启问候语\n"
+sleep 0.016
 echo -e "0 退出\n"
+sleep 0.016
 echo -en "\t\tEnter an option: "
 read etermuxopen
 case $etermuxopen in
 1)
+if [ ! -f "$PREFIX/etc/motd.bak" ];then
+mv $PREFIX/etc/motd $PREFIX/etc/motd.bak
+else
+rm -f $PREFIX/etc/motd
+touch $PREFIX/etc/motd
+fi
 vim $PREFIX/etc/motd
+touch $PREFIX/etc/termuxopen
 return 0 ;;
 2)
+if [ ! -f "$PREFIX/etc/motd.bak" ];then
+mv $PREFIX/etc/motd $PREFIX/etc/motd.bak
+fi
 echo -e "\n请在下方直接输入您想要更换的启动问候语\n"
 read texttermuxopen
-echo -e "${texttermuxopen}" > $PREFIX/etc/motd
+echo -e "${texttermuxopen}" > $PREFIX/etc/motd.tmp
+if [ ! -f "$PREFIX/etc/motd.bak" ];then
+mv $PREFIX/etc/motd $PREFIX/etc/motd.bak
+else
+rm -f $PREFIX/etc/motd
+fi
+mv -f $PREFIX/etc/motd.tmp $PREFIX/etc/motd
+touch $PREFIX/etc/termuxopen
 green "修改完成!"
 ;;
 3)
 cat $PREFIX/etc/motd
 return 0 ;;
 4)
+if [ ! -f "$PREFIX/etc/termuxopen" ];then
+red "问候语已为默认状态"
+return 0
+fi
 if [ -f "$PREFIX/etc/motd.bak" ];then
 rm -f $PREFIX/etc/motd
 cp $PREFIX/etc/motd.bak $PREFIX/etc/motd
+rm -f $PREFIX/etc/termuxopen
 else
-red "备份丢失,无法恢复默认问候语!"
+red "备份丢失,默认问候语恢复失败!!"
 fi
+;;
+5)
+if [ -f "$HOME/.hushlogin" ];then
+red "您已关闭问候语,无需重复关闭"
+termuxopen
+return 0
+fi
+touch ~/.hushlogin
+if [ ! -f "$HOME/.hushlogin" ];then
+red "问候语关闭失败!"
+termuxopen
+return 0
+fi
+green "问候语关闭成功!"
+;;
+6)
+if [ ! -f "$HOME/.hushlogin" ];then
+red "您已开启问候语,无需重复关闭"
+termuxopen
+return 0
+fi
+rm -f  $HOME/.hushlogin
+if [ -f "$HOME/.hushlogin" ];then
+red "问候语开启失败!"
+termuxopen
+return 0
+fi
+green "问候语开启成功!"
 ;;
 0)
 return 0 ;;
@@ -252,8 +353,11 @@ echo -e "\n\n安装方法来自于 酷安@萌系生物研究员"
 echo -e "\n图形化界面安装状态:" $termuxguistatus
 echo -e "\n\n"
 echo -e "1 安装\n"
+sleep 0.016
 echo -e "2 使用方法\n"
+sleep 0.016
 echo -e "0 退出\n"
+sleep 0.016
 echo -en "\t\tEnter an option: "
 read termuxguiinstall
 case $termuxguiinstall in
@@ -296,11 +400,17 @@ return 0
 function tools(){
 echo -e "\n\n"
 echo -e "1 Hexo 配置安装\n"
+sleep 0.016
 echo -e "2 ADB 配置安装\n"
+sleep 0.016
 echo -e "3 you-get 配置安装\n"
+sleep 0.016
 echo -e "4 区域网内 HTTP 服务器\n"
+sleep 0.016
 echo -e "5 BiliBili 挂机助手\n"
+sleep 0.016
 echo -e "0 退出\n"
+sleep 0.016
 echo -en "\t\tEnter an option: "
 read toolsinstall
 case $toolsinstall in
@@ -332,9 +442,13 @@ echo -e "\n项目地址: https://github.com/Dawnnnnnn/bilibili-live-tools\nWiki:
 echo -e "\nBiliBli 挂机助手安装状态:" $bilibilitoolstatus
 echo -e "\n\n"
 echo -e "1 安装 BiliBili 挂机助手\n"
+sleep 0.016
 echo -e "2 启动 BiliBili 挂机助手\n"
+sleep 0.016
 echo -e "3 删除 BiliBili 挂机助手\n"
+sleep 0.016
 echo -e "0 退出\n"
+sleep 0.016
 echo -en "\t\tEnter an option: "
 read biliconfig
 case $biliconfig in
@@ -399,9 +513,13 @@ echo -e "\n\n"
 echo -e "HTTP 服务器安装状态:" $httpconfigstatus
 echo -e "\n\n"
 echo -e "1 安装 HTTP 服务器\n"
+sleep 0.016
 echo -e "2 启动 HTTP 服务器\n"
+sleep 0.016
 echo -e "3 卸载 HTTP 服务器\n"
+sleep 0.016
 echo -e "0 退出\n"
+sleep 0.016
 echo -en "\t\tEnter an option: "
 read httpserverchoose
 case $httpserverchoose in
@@ -410,14 +528,20 @@ pkg in nodejs-lts
 npm install -g http-server
 green "安装结束!" ;;
 2)
-if [ $httpconfigstatus = false ]; then
+if [ ! -f "/data/data/com.termux/files/usr/lib/node_modules/http-server/bin/http-server" ]; then
 red "请先安装 HTTP 服务器"
 httpconfig
+return 0
 fi
 http-server
 return 0
 ;;
 3)
+if [ ! -f "/data/data/com.termux/files/usr/lib/node_modules/http-server/bin/http-server" ]; then
+red "请先安装 HTTP 服务器"
+httpconfig
+return 0
+fi
 green "开始卸载..."
 npm uninstall http-server -g
 green "卸载完成!" ;;
@@ -432,6 +556,7 @@ esac
 function hexo(){
 pkg in wget -y
 wget https://raw.githubusercontent.comhttpserverchoose/huanruomengyun/Termux-Hexo-installer/master/hexo-installer.sh && sh hexo-installer.sh
+rm -f hexo-installer.sh
 return 0
 }
 
@@ -470,6 +595,7 @@ return 0
 }
 
 function ubuntu(){
+echo "\n\n 安装脚本来自于 Andronix"
 green "是否安装桌面环境?[y/n]"
 echo -en "\t\tEnter an option: "
 read ubuntude
@@ -514,6 +640,7 @@ return 0
 }
 
 function debian(){
+echo "\n\n安装脚本来自于 Andronix"
 green "是否安装桌面环境?[y/n]"
 echo -en "\t\tEnter an option: "
 read debiande
@@ -558,11 +685,14 @@ return 0
 }
 
 function centos(){
-cd $HOME
+echo "\n\n安装脚本来自于 Andronix"
 echo -e "\n\n"
 echo -e "1 安装 CentOS\n"
+sleep 0.016
 echo -e "2 卸载 CentOS\n"
+sleep 0.016
 echo -e "0 退出\n"
+sleep 0.016
 echo -en "\t\tEnter an option: "
 read centosde
 case $centosde in
@@ -588,8 +718,11 @@ return 0
 function archlinux(){
 echo -e "\n\n"
 echo -e "1 安装 Arch Linux\n"
+sleep 0.016
 echo -e "2 修复 Arch Linux 安装\n"
+sleep 0.016
 echo -e "0 退出"
+sleep 0.016
 echo -en "\t\tEnter an option: "
 read archlinuxinstall
 case $archlinuxinstall in
@@ -629,9 +762,13 @@ echo -e "\n\n"
 echo -e "项目地址: https://github.com/MasterDevX/Termux-ADB"
 echo -e "ADB 安装状态:" $adbconfigstatus
 echo -e "\n\n1 安装 ADB\n"
+sleep 0.016
 echo -e "2 卸载 ADB\n"
+sleep 0.016
 echo -e "3 查看 ADB 版本\n"
+sleep 0.016
 echo -e "0 退出\n"
+sleep 0.016
 echo -en "\t\tEnter an option: "
 read adbinstall
 case $adbinstall in
@@ -641,6 +778,10 @@ wget https://github.com/MasterDevX/Termux-ADB/raw/master/InstallTools.sh
 bash InstallTools.sh
 return 0 ;;
 2)
+if [ ! -f "/data/data/com.termux/files/usr/bin/adb" ];then
+red "您并未安装 ADB,无需进行此过程"
+return 0
+fi
 apt update
 apt install wget
 wget https://github.com/MasterDevX/Termux-ADB/raw/master/RemoveTools.sh
@@ -671,11 +812,17 @@ echo -e "\n\n项目地址: https://github.com/soimort/you-get/\n\n"
 echo -e "you-get 安装状态:" $yougetconfigstatus
 echo -e "\n\n"
 echo -e "1 安装 you-get\n"
+sleep 0.016
 echo -e "2 升级 you-get\n"
+sleep 0.016
 echo -e "3 you-get 使用方法\n"
+sleep 0.016
 echo -e "4 you-get 简易版[适合超小白用户]\n"
+sleep 0.016
 echo -e "5 卸载 you-get\n"
+sleep 0.016
 echo -e "0 退出\n"
+sleep 0.016
 echo -en "\t\tEnter an option: "
 read yougetoption
 case $yougetoption in
@@ -690,6 +837,7 @@ return 0 ;;
 3)
 if [ -f "/data/data/com.termux/files/usr/bin/you-get" ];then
 you-get -h
+return 0
 else
 red "请先安装 you-get"
 fi
@@ -699,11 +847,16 @@ if [ -f "/data/data/com.termux/files/usr/bin/you-get" ];then
 yougeteasy
 else
 red "请先安装 you-get"
-yougetconfig
+return 0
 fi
 ;;
 5)
 yes | pip uninstall you-get
+if [ ! -f "/data/data/com.termux/files/usr/bin/you-get" ];then
+green "卸载完成!"
+else
+red "卸载失败!"
+fi
 return 0 ;;
 0)
 return 0 ;;
@@ -769,19 +922,33 @@ blue "注意,该界面部分功能需要安装并授权 Termux:API 才能使用"
 echo "Termux:API 链接: https://play.google.com/store/apps/details?id=com.termux.api"
 echo "需要 Termux:API 支持的选项会标注" $need
 echo -e "\n1 获取电池信息" $need
+sleep 0.016
 echo -e "\n2 获取相机信息" $need
+sleep 0.016
 echo -e "\n3 查看红外载波频率" $need
+sleep 0.016
 echo -e "\n4 获取无线电信息" $need
+sleep 0.016
 echo -e "\n5 获取 tts 语言引擎信息" $need
+sleep 0.016
 echo -e "\n6 获取当前 WiFi 连接信息" $need
+sleep 0.016
 echo -e "\n7 获取 WiFi 扫描信息[高版本 Android 不可用]" $need
+sleep 0.016
 echo -e "\n8 查看当前剪切板内容" $need
-echo -e "\n9 获取手机 IMEI 号[规范的 Android 10 以上设备不可用]"
+sleep 0.016
+echo -e "\n9 获取手机 IMEI 号[规范的 Android 10 及以上设备不可用]"
+sleep 0.016
 echo -e "\n10 获取 CPU 信息"
+sleep 0.016
 echo -e "\n11 内存和交换空间使用状态"
+sleep 0.016
 echo -e "\n12 存储使用状态"
+sleep 0.016
 echo -e "\n99 将所有信息输出到日志" $need
+sleep 0.016
 echo -e "\n0 退出"
+sleep 0.016
 echo -en "\t\tEnter an option: "
 read termuxapichoose
 case $termuxapichoose in
@@ -836,7 +1003,7 @@ termuxapi ;;
 0)
 return 0 ;;
 99)
-echo -e"\n请输入您想要保存的 log 的名字[没有请留空]"
+echo -e "\n请输入您想要保存的 log 的名字[没有请留空]"
 echo -en "\t\tEnter: "
 read tmplogsname
 userlogname=$userlogsname.txt
@@ -862,7 +1029,7 @@ esac
 }
 function logsgen(){
 date=$(date)
-log=log_init.log
+log=log_gen.log
 mkdir -p $HOME/logs
 touch $HOME/logs/tmp_$log
 echo -e "====Device info====\n\n" >> $HOME/lo8gs/tmp_$log
@@ -899,9 +1066,13 @@ green "初始化日志会在每次脚本初始化时自动生成"
 green "旧的初始化日志会在每次脚本初始化时自动删除"
 echo -e "\n\n"
 echo -e "1 查看日志\n"
+sleep 0.016
 echo -e "2 立即生成日志\n"
+sleep 0.016
 echo -e "3 清空日志\n"
+sleep 0.016
 echo -e "0 退出\n"
+sleep 0.016
 echo -en "\t\tEnter an option: "
 read logschoose
 case $logschoose in
