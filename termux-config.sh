@@ -83,7 +83,7 @@ function menu(){
 	sleep 0.016
 	echo -e " 6   实用工具安装\n"
 	sleep 0.016
-	echo -e " 7   配置编程环境\n"
+	echo -e " 7   获取手机信息\n"
 	sleep 0.016
 	echo -e " 8   Linux 发行版安装           99   日志管理\n"
 	sleep 0.016
@@ -637,7 +637,7 @@ do
     6)
         tools ;;
     7)
-        language ;;
+        termuxapi ;;
     8)
         Linux ;;
     99) 
