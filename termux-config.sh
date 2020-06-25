@@ -25,8 +25,11 @@ fi
 blue "为确保脚本正常运行，每次运行脚本都将会强制进行初始化"
 blue "给您带来的不便还请见谅"
 green "Initializing……"
+if [ -f "$PREFIX/etc/apt/mirrorstatus" ];then
 apt update && apt upgrade -y
-green "Completely!!"
+else
+echo "Skip..."
+fi
 clear
 green "初始化完成!"
 green "确认您的系统信息中……"
@@ -100,6 +103,7 @@ function mirrors(){
 sed -i 's@^\(deb.*stable main\)$@#\1\ndeb https://mirrors.tuna.tsinghua.edu.cn/termux/termux-packages-24 stable main@' $PREFIX/etc/apt/sources.list
 sed -i 's@^\(deb.*games stable\)$@#\1\ndeb https://mirrors.tuna.tsinghua.edu.cn/termux/game-packages-24 games stable@' $PREFIX/etc/apt/sources.list.d/game.list
 sed -i 's@^\(deb.*science stable\)$@#\1\ndeb https://mirrors.tuna.tsinghua.edu.cn/termux/science-packages-24 science stable@' $PREFIX/etc/apt/sources.list.d/science.list
+touch $PREFIX/etc/apt/mirrorstatus
 apt update && apt upgrade -y
 }
 
@@ -120,8 +124,6 @@ return 0
 
 function installzsh(){
             rc=~/.zshrc
-            touch ~/.hushlogin
-            #Zsh
             pkg in zsh git curl -y
             green "如果下面需要您进行确认，请输入 y 确认"
             chsh -s zsh
@@ -218,9 +220,20 @@ esac
 }
 
 function termuxopen(){
-if [ ! -f "$PREFIX/etc/motd.bak" ];then
-cp $PREFIX/etc/motd $PREFIX/etc/motd.bak
+if [ -f "$HOME/.hushlogin" ];then
+hushloginstatus=`green "已关闭"`
+else
+hushloginstatus=`red "未关闭"`
 fi
+if [ -f "$PREFIX/etc/termuxopen" ];then
+termuxloginstatus=`green "已修改"`
+else
+termuxloginstatus=`red "未修改"`
+fi
+echo -e "\n\n"
+echo -e "问候语状态:"
+echo -e "问候语" $hushloginstatus
+echo -e "问候语" $termuxloginstatus
 echo -e "\n\n"
 echo -e "1 使用编辑器编辑[适合有 Linux 使用经验的用户,默认使用 vim]\n"
 sleep 0.016
@@ -230,30 +243,84 @@ echo -e "3 查看当前启动问候语\n"
 sleep 0.016
 echo -e "4 恢复默认启动问候语\n"
 sleep 0.016
+echo -e "5 关闭问候语\n"
+sleep 0.016
+echo -e "6 开启问候语\n"
+sleep 0.016
 echo -e "0 退出\n"
 sleep 0.016
 echo -en "\t\tEnter an option: "
 read etermuxopen
 case $etermuxopen in
 1)
+if [ ! -f "$PREFIX/etc/motd.bak" ];then
+mv $PREFIX/etc/motd $PREFIX/etc/motd.bak
+else
+rm -f $PREFIX/etc/motd
+touch $PREFIX/etc/motd
+fi
 vim $PREFIX/etc/motd
+touch $PREFIX/etc/termuxopen
 return 0 ;;
 2)
+if [ ! -f "$PREFIX/etc/motd.bak" ];then
+mv $PREFIX/etc/motd $PREFIX/etc/motd.bak
+fi
 echo -e "\n请在下方直接输入您想要更换的启动问候语\n"
 read texttermuxopen
-echo -e "${texttermuxopen}" > $PREFIX/etc/motd
+echo -e "${texttermuxopen}" > $PREFIX/etc/motd.tmp
+if [ ! -f "$PREFIX/etc/motd.bak" ];then
+mv $PREFIX/etc/motd $PREFIX/etc/motd.bak
+else
+rm -f $PREFIX/etc/motd
+fi
+mv -f $PREFIX/etc/motd.tmp $PREFIX/etc/motd
+touch $PREFIX/etc/termuxopen
 green "修改完成!"
 ;;
 3)
 cat $PREFIX/etc/motd
 return 0 ;;
 4)
+if [ ! -f "$PREFIX/etc/termuxopen" ];then
+red "问候语已为默认状态"
+return 0
+fi
 if [ -f "$PREFIX/etc/motd.bak" ];then
 rm -f $PREFIX/etc/motd
 cp $PREFIX/etc/motd.bak $PREFIX/etc/motd
+rm -f $PREFIX/etc/termuxopen
 else
-red "备份丢失,无法恢复默认问候语!"
+red "备份丢失,默认问候语恢复失败!!"
 fi
+;;
+5)
+if [ -f "$HOME/.hushlogin" ];then
+red "您已关闭问候语,无需重复关闭"
+termuxopen
+return 0
+fi
+touch ~/.hushlogin
+if [ ! -f "$HOME/.hushlogin" ];then
+red "问候语关闭失败!"
+termuxopen
+return 0
+fi
+green "问候语关闭成功!"
+;;
+6)
+if [ ! -f "$HOME/.hushlogin" ];then
+red "您已开启问候语,无需重复关闭"
+termuxopen
+return 0
+fi
+rm -f  $HOME/.hushlogin
+if [ -f "$HOME/.hushlogin" ];then
+red "问候语开启失败!"
+termuxopen
+return 0
+fi
+green "问候语开启成功!"
 ;;
 0)
 return 0 ;;
@@ -754,6 +821,7 @@ return 0 ;;
 3)
 if [ -f "/data/data/com.termux/files/usr/bin/you-get" ];then
 you-get -h
+return 0
 else
 red "请先安装 you-get"
 fi
@@ -853,7 +921,7 @@ echo -e "\n7 获取 WiFi 扫描信息[高版本 Android 不可用]" $need
 sleep 0.016
 echo -e "\n8 查看当前剪切板内容" $need
 sleep 0.016
-echo -e "\n9 获取手机 IMEI 号[规范的 Android 10 以上设备不可用]"
+echo -e "\n9 获取手机 IMEI 号[规范的 Android 10 及以上设备不可用]"
 sleep 0.016
 echo -e "\n10 获取 CPU 信息"
 sleep 0.016
