@@ -31,18 +31,21 @@ clear
 green "初始化完成!"
 green "确认您的系统信息中……"
 date=$(date)
-log=log_date.log
+log=log_init.log
 mkdir -p $HOME/logs
 rm -f $HOME/logs/*log_*.log
 touch $HOME/logs/tmp_$log
-echo -e "====Device info====\n\n" >> $HOME/logs/tmp_$log
-echo "$date" >> $HOME/logs/tmp_$log
+echo -e "====Device info====\n" >> $HOME/logs/tmp_$log
+echo "Date:" >> $HOME/logs/tmp_$log
+echo "$date\n\n" >> $HOME/logs/tmp_$log
 echo "<----Props---->" >> $HOME/logs/tmp_$log
 getprop >> $HOME/logs/tmp_$log
 echo -e "\n\n" >> $HOME/logs/tmp_$log
 echo "<----System info---->" >> $HOME/logs/tmp_$log
 echo "Logged In users:" >> $HOME/logs/tmp_$log
 whoami >> $HOME/logs/tmp_$log
+echo "Package Installed" >> $HOME/logs/tmp_$log
+pkg list-installed >> $HOME/logs/tmp_$log
 echo -e "\n\n" >> $HOME/logs/tmp_$log
 echo "<----Hardware info---->" >> $HOME/logs/tmp_$log
 echo "CPU info:"
@@ -106,9 +109,7 @@ return 0
 }
 
 function board(){
-if test -d ~/.termux/ ; then
-				:
-			else
+if test !-d ~/.termux/ ; then
 				mkdir -p ~/.termux/
 			fi
 			echo -e "extra-keys = [['TAB','>','-','~','/','*','$'],['ESC','(','HOME','UP','END',')','PGUP'],['CTRL','[','LEFT','DOWN','RIGHT',']','PGDN']]" > ~/.termux/termux.properties
@@ -137,12 +138,12 @@ function installzsh(){
 
 function sudoconfig(){
 if [ -f "/data/data/com.termux/files/usr/bin/sudo" ];then
-  sudostatus=true
+  sudostatus=`green "true"`
   else
-  sudostatus=false
+  sudostatus=`red "false"`
 fi
 echo -e "\n\n"
-blue "sudo 安装状态: $sudostatus"
+echo -e "sudo 安装状态:" $sudostatus
 echo -e "\n\n"
 echo -e "1 安装 sudo\n"
 echo -e "2 修复 sudo\n"
@@ -151,7 +152,7 @@ echo -en "\t\tEnter an option: "
 read sudoinstall
 case $sudoinstall in
 1)
-if  [ $sudostatus = true ]; then
+if [ -f "/data/data/com.termux/files/usr/bin/sudo" ];then
     blue "您已安装 sudo,请勿重复安装"
     blue "如果 sudo 使用出现问题,请选择 修复sudo"
     return 0
@@ -178,9 +179,11 @@ esac
 }
 
 function termuxplugin(){
-echo -e "1 sudo 安装\n"
+echo -e "1 修改启动问候语\n"
 sleep 0.016
-echo -e "2 图形化界面安装\n"
+echo -e "2 sudo 安装\n"
+sleep 0.016
+echo -e "3 图形化界面安装\n"
 sleep 0.016
 echo -e "0 退出\n"
 sleep 0.016
@@ -188,8 +191,10 @@ echo -en "\t\tEnter an option: "
 read termuxchoose
 case $termuxchoose in
 1)
-sudoconfig ;;
+termuxopen ;;
 2)
+sudoconfig ;;
+3)
 termuxgui ;;
 0)
 return 0 ;;
@@ -199,7 +204,64 @@ termuxplugin ;;
 esac
 }
 
+function termuxopen(){
+if [ ! -f "$PREFIX/etc/motd.bak" ];then
+cp $PREFIX/etc/motd $PREFIX/etc/motd.bak
+fi
+echo -e "\n\n"
+echo -e "1 使用编辑器编辑[适合有 Linux 使用经验的用户,默认使用 vim]\n"
+echo -e "2 使用脚本进行修改[适合纯新手]\n"
+echo -e "3 查看当前启动问候语\n"
+echo -e "4 恢复默认启动问候语\n"
+echo -e "0 退出\n"
+echo -en "\t\tEnter an option: "
+read etermuxopen
+case $etermuxopen in
+1)
+vim $PREFIX/etc/motd
+return 0 ;;
+2)
+echo -e "\n请在下方直接输入您想要更换的启动问候语\n"
+read texttermuxopen
+echo -e "${texttermuxopen}" > $PREFIX/etc/motd
+green "修改完成!"
+;;
+3)
+cat $PREFIX/etc/motd
+return 0 ;;
+4)
+if [ -f "$PREFIX/etc/motd.bak" ];then
+rm -f $PREFIX/etc/motd
+cp $PREFIX/etc/motd.bak $PREFIX/etc/motd
+else
+red "备份丢失,无法恢复默认问候语!"
+fi
+;;
+0)
+return 0 ;;
+esac
+}
+
 function termuxgui(){
+if [ -f "/data/data/com.termux/files/usr/bin/startvnc" ];then
+  termuxguistatus=`green "true"`
+  else
+  termuxguistatus=`red "false"`
+fi
+echo -e "\n\n安装方法来自于 酷安@萌系生物研究员"
+echo -e "\n图形化界面安装状态:" $termuxguistatus
+echo -e "\n\n"
+echo -e "1 安装\n"
+echo -e "2 使用方法\n"
+echo -e "0 退出\n"
+echo -en "\t\tEnter an option: "
+read termuxguiinstall
+case $termuxguiinstall in
+1)
+if [ -f "/data/data/com.termux/files/usr/bin/startvnc" ];then
+    blue "您已安装图形化界面,不必重复进行安装"
+    return 0
+fi
 pkg i -y x11-repo
 pkg up -y
 pkg i -y xfce tigervnc openbox aterm
@@ -215,15 +277,29 @@ green "下载链接: https://play.google.com/store/apps/details?id=com.realvnc.v
 else
 echo "Termux GUI 安装失败"
 fi
+;;
+2)
+green "输入 startvnc 即可启动 VNC 服务"
+green "输入 Ctrl+C 即可终止 VNC 服务"
+green "在启动 VNC 服务前，请安装 VNC Viewer"
+green "下载链接: https://play.google.com/store/apps/details?id=com.realvnc.viewer.android"
+;;
+0)
+return 0 ;;
+*)
+red "无效输入,请重试" 
+termuxgui ;;
+esac
 return 0
 }
 
 function tools(){
 echo -e "\n\n"
-echo -e "1 Hexo 配置安装"
-echo -e "2 ADB 配置安装"
-echo -e "3 you-get 配置安装"
-echo -e "0 退出"
+echo -e "1 Hexo 配置安装\n"
+echo -e "2 ADB 配置安装\n"
+echo -e "3 you-get 配置安装\n"
+echo -e "4 区域网内 HTTP 服务器\n"
+echo -e "0 退出\n"
 echo -en "\t\tEnter an option: "
 read toolsinstall
 case $toolsinstall in
@@ -233,6 +309,8 @@ hexo ;;
 adbconfig ;;
 3)
 yougetconfig ;;
+4)
+httpconfig ;;
 0)
 return 0 ;;
 *)
@@ -242,9 +320,49 @@ esac
 return 0
 }
 
+function httpconfig(){
+if [ -f "/data/data/com.termux/files/usr/lib/node_modules/http-server/bin/http-server" ];then
+httpconfigstatus=`green "true"`
+else
+httpconfigstatus=`red "false"`
+fi
+echo -e "\n\n"
+echo -e "HTTP 服务器安装状态:" $httpconfigstatus
+echo -e "\n\n"
+echo -e "1 安装 HTTP 服务器\n"
+echo -e "2 启动 HTTP 服务器\n"
+echo -e "3 卸载 HTTP 服务器\n"
+echo -e "0 退出\n"
+echo -en "\t\tEnter an option: "
+read httpserverchoose
+case $httpserverchoose in
+1)
+pkg in nodejs-lts
+npm install -g http-server
+green "安装结束!" ;;
+2)
+if [ $httpconfigstatus = false ]; then
+red "请先安装 HTTP 服务器"
+httpconfig
+fi
+http-server
+return 0
+;;
+3)
+green "开始卸载..."
+npm uninstall http-server -g
+green "卸载完成!" ;;
+0)
+return 0 ;;
+*)
+red "无效输入,请重试"
+httpconfig ;;
+esac
+}
+
 function hexo(){
 pkg in wget -y
-wget https://raw.githubusercontent.com/huanruomengyun/Termux-Hexo-installer/master/hexo-installer.sh && sh hexo-installer.sh
+wget https://raw.githubusercontent.comhttpserverchoose/huanruomengyun/Termux-Hexo-installer/master/hexo-installer.sh && sh hexo-installer.sh
 return 0
 }
 
@@ -432,10 +550,15 @@ fi
 return 0
 }
 
-
 function adbconfig(){
+if [ -f "/data/data/com.termux/files/usr/bin/adb.bin" ];then
+adbconfigstatus=`green "true"`
+else
+adbconfigstatus=`red "false"`
+fi
 echo -e "\n\n"
 echo -e "项目地址: https://github.com/MasterDevX/Termux-ADB"
+echo -e "ADB 安装状态:" $adbconfigstatus
 echo -e "\n\n1 安装 ADB\n"
 echo -e "2 卸载 ADB\n"
 echo -e "3 查看 ADB 版本\n"
@@ -470,11 +593,18 @@ esac
 }
 
 function yougetconfig(){
+if [ -f "/data/data/com.termux/files/usr/bin/you-get" ];then
+yougetconfigstatus=`green "true"`
+else
+yougetconfigstatus=`red "false"`
+fi
 echo -e "\n\n项目地址: https://github.com/soimort/you-get/\n\n"
+echo -e "you-get 安装状态:" $yougetconfigstatus
+echo -e "\n\n"
 echo -e "1 安装 you-get\n"
 echo -e "2 升级 you-get\n"
 echo -e "3 you-get 使用方法\n"
-echo -e "4 you-get 简易版(适合超小白用户)\n"
+echo -e "4 you-get 简易版[适合超小白用户]\n"
 echo -e "5 卸载 you-get\n"
 echo -e "0 退出\n"
 echo -en "\t\tEnter an option: "
@@ -534,22 +664,23 @@ red "无效输入,请重试"
 yougeteasy ;;
 esac 
 }
+
 function youget1(){
 echo -e "\n\n"
-echo "you-get 支持的链接种类请打开这个链接查看: https://github.com/soimort/you-get/wiki/%E4%B8%AD%E6%96%87%E8%AF%B4%E6%98%8E#%E6%94%AF%E6%8C%81%E7%BD%91%E7%AB%99"
+echo "you-get 支持的链接种类: https://github.com/soimort/you-get/wiki/%E4%B8%AD%E6%96%87%E8%AF%B4%E6%98%8E#%E6%94%AF%E6%8C%81%E7%BD%91%E7%AB%99"
 echo "you-get 也可以下载网页上的视频和图片"
-echo -e "请输入您的下载链接(必填)"
+echo -e "请输入您的下载链接[必填]"
 echo -en "\t\tEnter: "
 read yougetlink
-echo -e "请输入您的下载路径(选填,路径默认指向内置存储.比如,如果你输入 Download,则文件会下载至内置存储的 Download 文件夹中)"
+echo -e "请输入您的下载路径[选填,路径默认指向内置存储.比如,如果你输入 Download,则文件会下载至内置存储的 Download 文件夹中]"
 green "看不懂就直接回车"
 echo -en "\t\tEnter: "
 read tmpdiryouget
-echo -e "如果您输入的链接属于某一播放列表里面的一个,您是否想下载该列表里面的所有视频?(y/n)"
+echo -e "如果您输入的链接属于某一播放列表里面的一个,您是否想下载该列表里面的所有视频?[y/n]"
 echo -en "\t\tEnter: "
 read tmpyougetlist
 if  [ $tmpyougetlist = y ]; then
-yougetlist=-list
+yougetlist=--playlist
 fi
 yougetdownloaddir=/sdcard/$tmpdiryouget
 blue "下载即将开始..."
@@ -559,9 +690,110 @@ green "这可能是因为所需下载内容已下载完毕,或者下载中断"
 return 0
 }
 
+function termuxapi(){
+if [ ! -f "/data/data/com.termux/files/usr/libexec/termux-api" ];then
+pkg in termux-api
+fi
+need=`blue "Need"`
+echo -e "\n\n"
+blue "注意,该界面部分功能需要安装并授权 Termux:API 才能使用"
+echo "Termux:API 链接: https://play.google.com/store/apps/details?id=com.termux.api"
+echo "需要 Termux:API 支持的选项会标注" $need
+echo -e "\n1 获取电池信息" $need
+echo -e "\n2 获取相机信息" $need
+echo -e "\n3 查看红外载波频率" $need
+echo -e "\n4 获取无线电信息" $need
+echo -e "\n5 获取 tts 语言引擎信息" $need
+echo -e "\n6 获取当前 WiFi 连接信息" $need
+echo -e "\n7 获取 WiFi 扫描信息[高版本 Android 不可用]" $need
+echo -e "\n8 查看当前剪切板内容" $need
+echo -e "\n9 获取手机 IMEI 号[规范的 Android 10 以上设备不可用]"
+echo -e "\n10 获取 CPU 信息"
+echo -e "\n11 内存和交换空间使用状态"
+echo -e "\n12 存储使用状态"
+echo -e "\n99 将所有信息输出到日志" $need
+echo -e "\n0 退出"
+echo -en "\t\tEnter an option: "
+read termuxapichoose
+case $termuxapichoose in
+1)
+termux-battery-status
+sleep 3
+termuxapi ;;
+2)
+termux-camera-info
+sleep 3
+termuxapi ;;
+3)
+termux-infrared-frequencies
+sleep 3
+termuxapi ;;
+4)
+termux-telephony-cellinfo
+sleep 3
+termuxapi ;;
+5)
+termux-tts-engines
+sleep 3
+termuxapi ;;
+6)
+termux-wifi-connectioninfo
+sleep 3
+termuxapi ;;
+7)
+termux-wifi-scaninfo
+sleep 3
+termuxapi ;;
+8)
+termux-clipboard-get
+sleep 3
+termuxapi ;;
+9)
+getprop |grep imei
+sleep 3
+termuxapi ;;
+10)
+lscpu
+sleep 3
+termuxapi ;;
+11)
+free -h
+sleep 3
+termuxapi ;;
+12)
+df -h
+sleep 3
+termuxapi ;;
+0)
+return 0 ;;
+99)
+echo -e"\n请输入您想要保存的 log 的名字[没有请留空]"
+echo -en "\t\tEnter: "
+read tmplogsname
+userlogname=$userlogsname.txt
+logspwdname=$HOME/logs/$userlogname
+mkdir -p $HOME/logs
+green "正在写入日志…"
+green "如果未安装 Termux:API 并授权则会一直卡在该界面"
+termux-battery-status >> $logspwdname
+termux-camera-info >> $logspwdname
+termux-infrared-frequencies >> $logspwdname
+termux-telephony-cellinfo >> $logspwdname
+termux-tts-engines >> $logspwdname
+termux-wifi-connectioninfo >> $logspwdname
+termux-wifi-scaninfo >> $logspwdname
+termux-clipboard-get >> $logspwdname
+getprop |grep imei >> $logspwdname
+lscpu >> $logspwdname
+free -h >> $logspwdname
+df -h >> $logspwdname
+green "日志写入完成!"
+termuxapi ;;
+esac
+}
 function logsgen(){
 date=$(date)
-log=log_gen.log
+log=log_init.log
 mkdir -p $HOME/logs
 touch $HOME/logs/tmp_$log
 echo -e "====Device info====\n\n" >> $HOME/lo8gs/tmp_$log
@@ -592,9 +824,10 @@ return 0
 }
 
 function logs(){
+mkdir -p $HOME/logs
 red "请不要在任何非必要的情况下将日志发送给任何人!!"
-green "日志会在每次脚本初始化时自动生成"
-green "旧的日志会在每次脚本初始化时自动删除"
+green "初始化日志会在每次脚本初始化时自动生成"
+green "旧的初始化日志会在每次脚本初始化时自动删除"
 echo -e "\n\n"
 echo -e "1 查看日志\n"
 echo -e "2 立即生成日志\n"
@@ -604,12 +837,18 @@ echo -en "\t\tEnter an option: "
 read logschoose
 case $logschoose in
 1)
-cat $HOME/logs/$log
+echo -e "\n日志列表如下:\n"
+ls $HOME/logs/
+echo "请输入您想要查看的日志的名字"
+echo -en "\t\tEnter: "
+read logsname
+cat $HOME/logs/$logsname
 return 0 ;;
 2)
 logsgen ;;
 3)
-rm -f $HOME/logs/*log_*.log 
+rm -rf $HOME/logs
+mkdir $HOME/logs
 return 0 ;;
 0)
 return 0 ;;
