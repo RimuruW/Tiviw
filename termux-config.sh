@@ -16,6 +16,13 @@ function green(){
 function red(){
     echo -e "\033[31m\033[01m$1\033[0m"
 }
+if [[ $EUID -eq 0 ]]; then	
+    red "检测到您正在尝试使用 ROOT 权限运行该脚本"	
+    red "这是不建议且不被允许的"	
+    red "该脚本不需要 ROOT 权限,且以 ROOT 权限运行可能会带来一些无法预料的问题"	
+    red "为了您的设备安全，请避免在任何情况下以 ROOT 用户运行该脚本"	
+    exit 0	
+fi
 if [[ -d /system/app/ && -d /system/priv-app ]]; then
 systeminfo="Android $(getprop ro.build.version.release)"
 else
