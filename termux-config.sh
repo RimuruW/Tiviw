@@ -29,7 +29,7 @@ else
 red "This operating system is not supported."
 exit 1
 fi
-if [ -f /system/addon.d/99-magisk.sh ]; then
+if [ -f /system/addon.d/*magisk* ]; then
 	testsustatus=`green "MagiskSU"`
 else
     testsustatus="UNKOWN"
