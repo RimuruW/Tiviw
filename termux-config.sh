@@ -53,7 +53,11 @@ sh_new_ver=$(wget -qO- -t1 -T3 "https://raw.githubusercontent.com/huanruomengyun
 [[ -z ${sh_new_ver} ]] && red "无法链接到 Github! 脚本更新失败!" && red "请注意,该脚本绝大多数功能都需要与 GitHub 建立连接,若无法连接 GitHub,则脚本大多数功能无法使用!!" && sleep 3
 if [ ! -f "$PREFIX/etc/tconfig/stopupdate" ]; then
 wget -N "https://raw.githubusercontent.com/huanruomengyun/Termux-Tools/master/termux-config.sh" && chmod +x termux-config.sh
-echo -e "脚本已更新为最新版本[ $sh_ver-> $sh_new_ver ]"
+echo -e "脚本已更新为最新版本[ $sh_ver --> $sh_new_ver ]"
+fi
+if [ $sh_ver=$sh_new_ver ]; then
+   echo "脚本已为最新版本"
+else
 echo "$sh_ver ->> $sh_new_ver" >> $HOME/logs/update_log.log
 fi
 clear
