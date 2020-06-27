@@ -46,11 +46,7 @@ if [ -f "$PREFIX/etc/tconfig/mirrorstatus" ];then
 else
 	echo "Skip..."
 fi
-[[ -f "$PREFIX/etc/tconfig/aria2btauto" ]] && {
-        bash <(wget -qO- git.io/tracker.sh) $HOME/.aria2/aria2.conf
-    } || {
-        bash <(wget -qO- git.io/tracker.sh) $HOME/.aria2/aria2.conf RPC
-    }
+[[ -f "$PREFIX/etc/tconfig/aria2btauto" ]] && bash <(wget -qO- git.io/tracker.sh) $HOME/.aria2/aria2.conf
 sh_new_ver=$(wget -qO- -t1 -T3 "https://raw.githubusercontent.com/huanruomengyun/Termux-Tools/master/termux-config.sh" | grep 'sh_ver="' | awk -F "=" '{print $NF}' | sed 's/\"//g' | head -1) && sh_new_type="github"
 [[ -z ${sh_new_ver} ]] && red "无法链接到 Github! 脚本更新失败!" && red "请注意,该脚本绝大多数功能都需要与 GitHub 建立连接,若无法连接 GitHub,则脚本大多数功能无法使用!!" && sleep 3
 if [ ! -f "$PREFIX/etc/tconfig/stopupdate" ]; then
@@ -427,9 +423,11 @@ function tools(){
 	sleep 0.016
 	echo -e "3 you-get 配置安装\n"
 	sleep 0.016
-	echo -e "4 区域网内 HTTP 服务器\n"
+	echo -e "4 HTTP 服务器搭建\n"
 	sleep 0.016
 	echo -e "5 BiliBili 挂机助手\n"
+	sleep 0.016
+	echo -e "6 Aria2 安装配置\n"
 	sleep 0.016
 	echo -e "0 退出\n"
 	sleep 0.016
@@ -446,6 +444,8 @@ function tools(){
 			httpconfig ;;
 		5)
 			bilibilitools ;;
+		6)
+			aria2config ;;
 		0)
 			return 0 ;;
 		*)
@@ -454,6 +454,64 @@ function tools(){
 	esac
 }
 
+function aria2config(){
+	if [ -f "$PREFIX/bin/aria2c" ];then
+		aria2status=`green "true"`
+	else
+		aria2status=`red "false"`
+	fi
+	echo "\n\n"
+	echo "项目地址: https://github.com/huanruomengyun/Aria2-Termux"
+	echo "\n\n"
+	echo "Aria2 安装状态: " $aria2status
+	echo "\n\n"
+	echo "1 Aria2 安装与管理\n"
+	sleep 0.016
+	echo "2 AriaNG 启动\n"
+	sleep 0.016
+	echo "0 退出"
+	sleep 0.016
+	echo -en "\t\tEnter an option: "
+	read aria2choose
+	case $aria2choose in
+		1)
+			[[ ! -f "$PREFIX/etc/tconfig/aria2.sh" ]] && wget -P $PREFIX/etc/tconfig https://raw.githubusercontent.com/huanruomengyun/Aria2-Termux/master/aria2.sh && chmod +x $PREFIX/etc/tconfig/aria2.sh
+			[[ ! -f "$PREFIX/etc/tconfig/aria2.sh" ]] && red "Aria2 一键安装管理脚本下载失败！请检查您是否能正常连接 GitHub！" && echo "请回车确认" && read tmp && aria2config
+			bash $PREFIX/etc/tconfig/aria2.sh
+			;;
+		2)
+			ariang ;;
+		0)
+			return 0 ;;
+		*)
+			red "无效输入，请重试"
+			aria2config
+			;;
+	esac
+}
+function ariang(){
+	[[ ! -f "$PREFIX/bin/aria2c" ]] && red "请先安装 Aria2" && echo "请回车确认" && read tmp && aria2config
+	blue "AriaNG 只是一个静态网页,直接打开在线网页和使用本地客户端在功能上并没有什么不同."
+	blue "但是对于 Android 用户，我推荐安装 AriaNG GUI 客户端以便于连接和管理 Aria2"
+	blue "故此，该界面给出了两个选择，您可以根据您的需求和使用偏好选择对于您来说的最佳选项."
+	echo "1 安装 AriaNG 客户端［该选项会自动跳转客户端下载网页]"
+	echo "2 直接打开在线网页"
+	echo "0 退出"
+	echo -en "您的选择是："
+	read ariangconfig
+	case $ariangconfig in
+		1)
+			termux-open-url https://github.com/Xmader/aria-ng-gui-android/releases ;;
+		2)
+			termux-open-url http://ariang.mayswind.net/latest ;;
+		0)
+			aria2config ;;
+		*)
+			red "无效输入，请重试" 
+			ariang
+			;;
+	esac
+}
 function bilibilitools(){
 	if [ -f "$HOME/bilibilitools/main.py" ];then
 		bilibilitoolstatus=`green "true"`
