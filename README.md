@@ -1,5 +1,5 @@
 # Termux-Tools
-一个集合众多工具的 Termux 扩展脚本
+一个集成众多工具的 Termux 扩展脚本
 
 ## 使用方法
 ```

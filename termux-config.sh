@@ -3,10 +3,10 @@
 # Author: Qingxu (huanruomengyun)
 # Description: Termux Tools
 # Repository Address: https://github.com/huanruomengyun/Termux-Tools
-# Version: 1.6.26
+# Version: 1.6.27
 # Copyright (c) 2020 Qingxu
 #-----------------------------------
-sh_ver="1.6.26"
+sh_ver="1.6.27"
 function blue(){
 	echo -e "\033[34m\033[01m$1\033[0m"
 }
