@@ -46,9 +46,11 @@ if [ -f "$PREFIX/etc/tconfig/mirrorstatus" ];then
 else
 	echo "Skip..."
 fi
-if [ -f "$PREFIX/etc/tconfig/aria2btauto" ];then
-	bash <(wget -qO- git.io/tracker.sh) $HOME/.aria2/
-fi
+[[ -f "$PREFIX/etc/tconfig/aria2btauto" ]] && {
+        bash <(wget -qO- git.io/tracker.sh) $HOME/.aria2/aria2.conf
+    } || {
+        bash <(wget -qO- git.io/tracker.sh) $HOME/.aria2/aria2.conf RPC
+    }
 sh_new_ver=$(wget -qO- -t1 -T3 "https://raw.githubusercontent.com/huanruomengyun/Termux-Tools/master/termux-config.sh" | grep 'sh_ver="' | awk -F "=" '{print $NF}' | sed 's/\"//g' | head -1) && sh_new_type="github"
 [[ -z ${sh_new_ver} ]] && red "无法链接到 Github! 脚本更新失败!" && red "请注意,该脚本绝大多数功能都需要与 GitHub 建立连接,若无法连接 GitHub,则脚本大多数功能无法使用!!" && sleep 3
 if [ ! -f "$PREFIX/etc/tconfig/stopupdate" ]; then
@@ -76,7 +78,7 @@ getprop >> $HOME/logs/tmp_$log
 echo -e "\n\n" >> $HOME/logs/tmp_$log
 echo "<----System info---->" >> $HOME/logs/tmp_$log
 if [ -f /system/addon.d/*magisk* ]; then
-	ehco -e "MagiskSU" >> $HOME/logs/tmp_$log
+	echo -e "MagiskSU" >> $HOME/logs/tmp_$log
 fi
 echo "Logged In users:" >> $HOME/logs/tmp_$log
 whoami >> $HOME/logs/tmp_$log
