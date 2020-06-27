@@ -38,27 +38,27 @@ blue "为确保脚本正常运行，每次运行脚本都将会强制进行初�
 blue "给您带来的不便还请见谅"
 green "Initializing……"
 if [ ! -f "$PREFIX/bin/wget" ];then
-pkg in wget
+	pkg in wget
 fi
 mkdir -p $PREFIX/etc/tconfig
 if [ -f "$PREFIX/etc/tconfig/mirrorstatus" ];then
-apt update && apt upgrade -y
+	apt update && apt upgrade -y
 else
-echo "Skip..."
+	echo "Skip..."
 fi
 if [ -f "$PREFIX/etc/tconfig/aria2btauto" ];then
-bash <(wget -qO- git.io/tracker.sh) $HOME/.aria2/
+	bash <(wget -qO- git.io/tracker.sh) $HOME/.aria2/
 fi
 sh_new_ver=$(wget -qO- -t1 -T3 "https://raw.githubusercontent.com/huanruomengyun/Termux-Tools/master/termux-config.sh" | grep 'sh_ver="' | awk -F "=" '{print $NF}' | sed 's/\"//g' | head -1) && sh_new_type="github"
 [[ -z ${sh_new_ver} ]] && red "无法链接到 Github! 脚本更新失败!" && red "请注意,该脚本绝大多数功能都需要与 GitHub 建立连接,若无法连接 GitHub,则脚本大多数功能无法使用!!" && sleep 3
 if [ ! -f "$PREFIX/etc/tconfig/stopupdate" ]; then
-wget -N "https://raw.githubusercontent.com/huanruomengyun/Termux-Tools/master/termux-config.sh" && chmod +x termux-config.sh
-echo -e "脚本已更新为最新版本[ $sh_ver --> $sh_new_ver ]"
+	wget -N "https://raw.githubusercontent.com/huanruomengyun/Termux-Tools/master/termux-config.sh" && chmod +x termux-config.sh
+	echo -e "脚本已更新为最新版本[ $sh_ver --> $sh_new_ver ]"
 fi
 if [ $sh_ver=$sh_new_ver ]; then
-   echo "脚本已为最新版本"
+	echo "脚本已为最新版本"
 else
-echo "$sh_ver ->> $sh_new_ver" >> $HOME/logs/update_log.log
+	echo "$sh_ver ->> $sh_new_ver" >> $HOME/logs/update_log.log
 fi
 clear
 green "初始化完成!"
@@ -75,7 +75,7 @@ echo "<----Props---->" >> $HOME/logs/tmp_$log
 getprop >> $HOME/logs/tmp_$log
 echo -e "\n\n" >> $HOME/logs/tmp_$log
 echo "<----System info---->" >> $HOME/logs/tmp_$log
-if [ -f /system/addon.d/99-magisk.sh ]; then
+if [ -f /system/addon.d/*magisk* ]; then
 	ehco -e "MagiskSU" >> $HOME/logs/tmp_$log
 fi
 echo "Logged In users:" >> $HOME/logs/tmp_$log
@@ -99,7 +99,7 @@ green "您马上就可以进入脚本!"
 clear
 function menu(){
     blue "==================================="
-    blue "Termux Tools Pro"
+    blue "Termux Config Pro"
     echo "          v" $sh_ver
 	echo -e "       By Qingxu (huanruomengyun)"  
 	blue "==================================="
@@ -135,26 +135,26 @@ function menu(){
 }
 
 function mirrors(){
-sed -i 's@^\(deb.*stable main\)$@#\1\ndeb https://mirrors.tuna.tsinghua.edu.cn/termux/termux-packages-24 stable main@' $PREFIX/etc/apt/sources.list
-sed -i 's@^\(deb.*games stable\)$@#\1\ndeb https://mirrors.tuna.tsinghua.edu.cn/termux/game-packages-24 games stable@' $PREFIX/etc/apt/sources.list.d/game.list
-sed -i 's@^\(deb.*science stable\)$@#\1\ndeb https://mirrors.tuna.tsinghua.edu.cn/termux/science-packages-24 science stable@' $PREFIX/etc/apt/sources.list.d/science.list
-touch $PREFIX/etc/tconfig/mirrorstatus
-apt update && apt upgrade -y
+	sed -i 's@^\(deb.*stable main\)$@#\1\ndeb https://mirrors.tuna.tsinghua.edu.cn/termux/termux-packages-24 stable main@' $PREFIX/etc/apt/sources.list
+	sed -i 's@^\(deb.*games stable\)$@#\1\ndeb https://mirrors.tuna.tsinghua.edu.cn/termux/game-packages-24 games stable@' $PREFIX/etc/apt/sources.list.d/game.list
+	sed -i 's@^\(deb.*science stable\)$@#\1\ndeb https://mirrors.tuna.tsinghua.edu.cn/termux/science-packages-24 science stable@' $PREFIX/etc/apt/sources.list.d/science.list
+	touch $PREFIX/etc/tconfig/mirrorstatus
+	apt update && apt upgrade -y
 }
 
 function storage(){
-termux-setup-storage
-return 0
+	termux-setup-storage
+	return 0
 }
 
 function board(){
-if test !-d ~/.termux/ ; then
+	if test !-d ~/.termux/ ; then
 				mkdir -p ~/.termux/
 			fi
 			echo -e "extra-keys = [['TAB','>','-','~','/','*','$'],['ESC','(','HOME','UP','END',')','PGUP'],['CTRL','[','LEFT','DOWN','RIGHT',']','PGDN']]" > ~/.termux/termux.properties
 			termux-reload-settings
-green  "请重启终端使小键盘显示正常"
-return 0
+			green  "请重启终端使小键盘显示正常"
+			return 0
 }
 
 function installzsh(){
@@ -174,247 +174,247 @@ function installzsh(){
 }
 
 function sudoconfig(){
-if [ -f "/data/data/com.termux/files/usr/bin/sudo" ];then
-  sudostatus=`green "true"`
-  else
-  sudostatus=`red "false"`
-fi
-echo -e "\n\n"
-echo -e "sudo 安装状态:" $sudostatus
-echo -e "SU 状态:" $testsustatus
-echo -e "\n\n"
-echo -e "1 安装 sudo\n"
-echo -e "2 修复 sudo\n"
-echo -e "3 卸载 sudo\n"
-echo -e "0 退出\n"
-echo -en "\t\tEnter an option: "
-read sudoinstall
-case $sudoinstall in
-1)
-if [ -f "/data/data/com.termux/files/usr/bin/sudo" ];then
-    blue "您已安装 sudo,请勿重复安装"
-    blue "如果 sudo 使用出现问题,请选择 修复sudo"
-    return 0
-fi
-git clone https://gitlab.com/st42/termux-sudo.git $HOME/termux-sudo
-cat $HOME/termux-sudo/sudo > /data/data/com.termux/files/usr/bin/sudo
-chmod 700 /data/data/com.termux/files/usr/bin/sudo
-if [ -f "/data/data/com.termux/files/usr/bin/sudo" ];then
-  green "sudo 已成功安装到了您的 Termux"
-  else
-  green "脚本运行失败!请检查网络连接或提交日志"
-fi
-echo "安装脚本运行完毕"
-return 0 ;;
-2)
-echo "脚本开发中,敬请期待"
-return 0 ;;
-3)
-if [ ! -f "/data/data/com.termux/files/usr/bin/sudo" ];then
-red "您并未安装 sudo"
-sudoconfig
-fi
-rm -f /data/data/com.termux/files/usr/bin/sudo
-if [ -f "/data/data/com.termux/files/usr/bin/sudo" ];then
-red "sudo 卸载失败!"
-else
-green "sudo 卸载成功!"
-fi
-return 0 ;;
-0)
-return 0 ;;
-*)
-red "无效输入,请重试"
-sudoconfig ;;
-esac
+	if [ -f "/data/data/com.termux/files/usr/bin/sudo" ];then
+		sudostatus=`green "true"`
+	else
+		sudostatus=`red "false"`
+	fi
+	echo -e "\n\n"
+	echo -e "sudo 安装状态:" $sudostatus
+	echo -e "SU 状态:" $testsustatus
+	echo -e "\n\n"
+	echo -e "1 安装 sudo\n"
+	echo -e "2 修复 sudo\n"
+	echo -e "3 卸载 sudo\n"
+	echo -e "0 退出\n"
+	echo -en "\t\tEnter an option: "
+	read sudoinstall
+	case $sudoinstall in
+		1)
+			if [ -f "/data/data/com.termux/files/usr/bin/sudo" ];then
+				blue "您已安装 sudo,请勿重复安装"
+				blue "如果 sudo 使用出现问题,请选择 修复sudo"
+				return 0
+			fi
+			git clone https://gitlab.com/st42/termux-sudo.git $HOME/termux-sudo
+			cat $HOME/termux-sudo/sudo > /data/data/com.termux/files/usr/bin/sudo
+			chmod 700 /data/data/com.termux/files/usr/bin/sudo
+			if [ -f "/data/data/com.termux/files/usr/bin/sudo" ];then
+				green "sudo 已成功安装到了您的 Termux"
+			else
+				green "脚本运行失败!请检查网络连接或提交日志"
+			fi
+			echo "安装脚本运行完毕"
+			return 0 ;;
+		2)
+			echo "脚本开发中,敬请期待"
+			return 0 ;;
+		3)
+			if [ ! -f "/data/data/com.termux/files/usr/bin/sudo" ];then
+				red "您并未安装 sudo"
+				sudoconfig
+			fi
+			rm -f /data/data/com.termux/files/usr/bin/sudo
+			if [ -f "/data/data/com.termux/files/usr/bin/sudo" ];then
+				red "sudo 卸载失败!"
+			else
+				green "sudo 卸载成功!"
+			fi
+			return 0 ;;
+		0)
+			return 0 ;;
+		*)
+			red "无效输入,请重试"
+			sudoconfig ;;
+	esac
 }
 
 function termuxplugin(){
-echo -e "1 修改启动问候语\n"
-sleep 0.016
-echo -e "2 sudo 安装\n"
-sleep 0.016
-echo -e "3 图形化界面安装\n"
-sleep 0.016
-echo -e "0 退出\n"
-sleep 0.016
-echo -en "\t\tEnter an option: "
-read termuxchoose
-case $termuxchoose in
-1)
-termuxopen ;;
-2)
-sudoconfig ;;
-3)
-termuxgui ;;
-0)
-return 0 ;;
-*)
-red "无效输入,请重试" 
-termuxplugin ;;
+	echo -e "1 修改启动问候语\n"
+	sleep 0.016
+	echo -e "2 sudo 安装\n"
+	sleep 0.016
+	echo -e "3 图形化界面安装\n"
+	sleep 0.016
+	echo -e "0 退出\n"
+	sleep 0.016
+	echo -en "\t\tEnter an option: "
+	read termuxchoose
+	case $termuxchoose in
+	1)
+		termuxopen ;;
+	2)
+		sudoconfig ;;
+	3)
+		termuxgui ;;
+	0)
+		return 0 ;;
+	*)
+		red "无效输入,请重试" 
+		termuxplugin ;;
 esac
 }
 
 function termuxopen(){
-if [ -f "$HOME/.hushlogin" ];then
-hushloginstatus=`green "已关闭"`
-else
-hushloginstatus=`red "未关闭"`
-fi
-if [ -f "$PREFIX/etc/termuxopen" ];then
-termuxloginstatus=`green "已修改"`
-else
-termuxloginstatus=`red "未修改"`
-fi
-echo -e "\n\n"
-echo -e "问候语状态:"
-echo -e "问候语" $hushloginstatus
-echo -e "问候语" $termuxloginstatus
-echo -e "\n\n"
-echo -e "1 使用编辑器编辑[适合有 Linux 使用经验的用户,默认使用 vim]\n"
-sleep 0.016
-echo -e "2 使用脚本进行修改[适合纯新手]\n"
-sleep 0.016
-echo -e "3 查看当前启动问候语\n"
-sleep 0.016
-echo -e "4 恢复默认启动问候语\n"
-sleep 0.016
-echo -e "5 关闭问候语\n"
-sleep 0.016
-echo -e "6 开启问候语\n"
-sleep 0.016
-echo -e "0 退出\n"
-sleep 0.016
-echo -en "\t\tEnter an option: "
-read etermuxopen
-case $etermuxopen in
-1)
-if [ ! -f "$PREFIX/etc/motd.bak" ];then
-mv $PREFIX/etc/motd $PREFIX/etc/motd.bak
-else
-rm -f $PREFIX/etc/motd
-touch $PREFIX/etc/motd
-fi
-vim $PREFIX/etc/motd
-touch $PREFIX/etc/termuxopen
-return 0 ;;
-2)
-if [ ! -f "$PREFIX/etc/motd.bak" ];then
-mv $PREFIX/etc/motd $PREFIX/etc/motd.bak
-fi
-echo -e "\n请在下方直接输入您想要更换的启动问候语\n"
-read texttermuxopen
-echo -e "${texttermuxopen}" > $PREFIX/etc/motd.tmp
-if [ ! -f "$PREFIX/etc/motd.bak" ];then
-mv $PREFIX/etc/motd $PREFIX/etc/motd.bak
-else
-rm -f $PREFIX/etc/motd
-fi
-mv -f $PREFIX/etc/motd.tmp $PREFIX/etc/motd
-touch $PREFIX/etc/termuxopen
-green "修改完成!"
-;;
-3)
-cat $PREFIX/etc/motd
-return 0 ;;
-4)
-if [ ! -f "$PREFIX/etc/termuxopen" ];then
-red "问候语已为默认状态"
-return 0
-fi
-if [ -f "$PREFIX/etc/motd.bak" ];then
-rm -f $PREFIX/etc/motd
-cp $PREFIX/etc/motd.bak $PREFIX/etc/motd
-rm -f $PREFIX/etc/termuxopen
-else
-red "备份丢失,默认问候语恢复失败!!"
-fi
-;;
-5)
-if [ -f "$HOME/.hushlogin" ];then
-red "您已关闭问候语,无需重复关闭"
-termuxopen
-return 0
-fi
-touch ~/.hushlogin
-if [ ! -f "$HOME/.hushlogin" ];then
-red "问候语关闭失败!"
-termuxopen
-return 0
-fi
-green "问候语关闭成功!"
-;;
-6)
-if [ ! -f "$HOME/.hushlogin" ];then
-red "您已开启问候语,无需重复关闭"
-termuxopen
-return 0
-fi
-rm -f  $HOME/.hushlogin
-if [ -f "$HOME/.hushlogin" ];then
-red "问候语开启失败!"
-termuxopen
-return 0
-fi
-green "问候语开启成功!"
-;;
-0)
-return 0 ;;
-esac
+	if [ -f "$HOME/.hushlogin" ];then
+		hushloginstatus=`green "已关闭"`
+	else
+		hushloginstatus=`red "未关闭"`
+	fi
+	if [ -f "$PREFIX/etc/termuxopen" ];then
+		termuxloginstatus=`green "已修改"`
+	else
+		termuxloginstatus=`red "未修改"`
+	fi
+	echo -e "\n\n"
+	echo -e "问候语状态:"
+	echo -e "问候语" $hushloginstatus
+	echo -e "问候语" $termuxloginstatus
+	echo -e "\n\n"
+	echo -e "1 使用编辑器编辑[适合有 Linux 使用经验的用户,默认使用 vim]\n"
+	sleep 0.016
+	echo -e "2 使用脚本进行修改[适合纯新手]\n"
+	sleep 0.016
+	echo -e "3 查看当前启动问候语\n"
+	sleep 0.016
+	echo -e "4 恢复默认启动问候语\n"
+	sleep 0.016
+	echo -e "5 关闭问候语\n"
+	sleep 0.016
+	echo -e "6 开启问候语\n"
+	sleep 0.016
+	echo -e "0 退出\n"
+	sleep 0.016
+	echo -en "\t\tEnter an option: "
+	read etermuxopen
+	case $etermuxopen in
+		1)
+			if [ ! -f "$PREFIX/etc/motd.bak" ];then
+				mv $PREFIX/etc/motd $PREFIX/etc/motd.bak
+			else
+				rm -f $PREFIX/etc/motd
+				touch $PREFIX/etc/motd
+			fi
+			vim $PREFIX/etc/motd
+			touch $PREFIX/etc/termuxopen
+			return 0 ;;
+		2)
+			if [ ! -f "$PREFIX/etc/motd.bak" ];then
+				mv $PREFIX/etc/motd $PREFIX/etc/motd.bak
+			fi
+			echo -e "\n请在下方直接输入您想要更换的启动问候语\n"
+			read texttermuxopen
+			echo -e "${texttermuxopen}" > $PREFIX/etc/motd.tmp
+			if [ ! -f "$PREFIX/etc/motd.bak" ];then
+				mv $PREFIX/etc/motd $PREFIX/etc/motd.bak
+			else
+				rm -f $PREFIX/etc/motd
+			fi
+			mv -f $PREFIX/etc/motd.tmp $PREFIX/etc/motd
+			touch $PREFIX/etc/termuxopen
+			green "修改完成!"
+			;;
+		3)
+			cat $PREFIX/etc/motd
+			return 0 ;;
+		4)
+			if [ ! -f "$PREFIX/etc/termuxopen" ];then
+				red "问候语已为默认状态"
+				return 0
+			fi
+			if [ -f "$PREFIX/etc/motd.bak" ];then
+				rm -f $PREFIX/etc/motd
+				cp $PREFIX/etc/motd.bak $PREFIX/etc/motd
+				rm -f $PREFIX/etc/termuxopen
+			else
+				red "备份丢失,默认问候语恢复失败!!"
+			fi
+			;;
+		5)
+			if [ -f "$HOME/.hushlogin" ];then
+				red "您已关闭问候语,无需重复关闭"
+				termuxopen
+				return 0
+			fi
+			touch ~/.hushlogin
+			if [ ! -f "$HOME/.hushlogin" ];then
+				red "问候语关闭失败!"
+				termuxopen
+				return 0
+			fi
+			green "问候语关闭成功!"
+			;;
+		6)
+			if [ ! -f "$HOME/.hushlogin" ];then
+				red "您已开启问候语,无需重复关闭"
+				termuxopen
+				return 0
+			fi
+			rm -f  $HOME/.hushlogin
+			if [ -f "$HOME/.hushlogin" ];then
+				red "问候语开启失败!"
+				termuxopen
+				return 0
+			fi
+			green "问候语开启成功!"
+			;;
+		0)
+			return 0 ;;
+	esac
 }
 
 function termuxgui(){
-if [ -f "/data/data/com.termux/files/usr/bin/startvnc" ];then
-  termuxguistatus=`green "true"`
-  else
-  termuxguistatus=`red "false"`
-fi
-echo -e "\n\n安装方法来自于 酷安@萌系生物研究员"
-echo -e "\n图形化界面安装状态:" $termuxguistatus
-echo -e "\n\n"
-echo -e "1 安装\n"
-sleep 0.016
-echo -e "2 使用方法\n"
-sleep 0.016
-echo -e "0 退出\n"
-sleep 0.016
-echo -en "\t\tEnter an option: "
-read termuxguiinstall
-case $termuxguiinstall in
-1)
-if [ -f "/data/data/com.termux/files/usr/bin/startvnc" ];then
-    blue "您已安装图形化界面,不必重复进行安装"
-    return 0
-fi
-pkg i -y x11-repo
-pkg up -y
-pkg i -y xfce tigervnc openbox aterm
-echo -e "#\!/bin/bash -e\nam start com.realvnc.viewer.android/com.realvnc.viewer.android.app.ConnectionChooserActivity\nexport DISPLAY=:1\nXvnc -geometry 720x1440 --SecurityTypes=None \$DISPLAY&\nsleep 1s\nopenbox-session&\nthunar&\nstartxfce4">~/startvnc
-chmod +x ~/startvnc
-mv -f ~/startvnc $PREFIX/bin/
-if [ -f "$PREFIX/bin/startvnc" ];then
-echo "Termux GUI 安装完成!"
-green "输入 startvnc 即可启动 VNC 服务"
-green "输入 Ctrl+C 即可终止 VNC 服务"
-green "在启动 VNC 服务前，请安装 VNC Viewer"
-green "下载链接: https://play.google.com/store/apps/details?id=com.realvnc.viewer.android"
-else
-echo "Termux GUI 安装失败"
-fi
-;;
-2)
-green "输入 startvnc 即可启动 VNC 服务"
-green "输入 Ctrl+C 即可终止 VNC 服务"
-green "在启动 VNC 服务前，请安装 VNC Viewer"
-green "下载链接: https://play.google.com/store/apps/details?id=com.realvnc.viewer.android"
-;;
-0)
-return 0 ;;
-*)
-red "无效输入,请重试" 
-termuxgui ;;
-esac
-return 0
+	if [ -f "/data/data/com.termux/files/usr/bin/startvnc" ];then
+		termuxguistatus=`green "true"`
+	else
+		termuxguistatus=`red "false"`
+	fi
+	echo -e "\n\n安装方法来自于 酷安@萌系生物研究员"
+	echo -e "\n图形化界面安装状态:" $termuxguistatus
+	echo -e "\n\n"
+	echo -e "1 安装\n"
+	sleep 0.016
+	echo -e "2 使用方法\n"
+	sleep 0.016
+	echo -e "0 退出\n"
+	sleep 0.016
+	echo -en "\t\tEnter an option: "
+	read termuxguiinstall
+	case $termuxguiinstall in
+		1)
+			if [ -f "/data/data/com.termux/files/usr/bin/startvnc" ];then
+				blue "您已安装图形化界面,不必重复进行安装"
+				return 0
+			fi
+			pkg i -y x11-repo
+			pkg up -y
+			pkg i -y xfce tigervnc openbox aterm
+			echo -e "#\!/bin/bash -e\nam start com.realvnc.viewer.android/com.realvnc.viewer.android.app.ConnectionChooserActivity\nexport DISPLAY=:1\nXvnc -geometry 720x1440 --SecurityTypes=None \$DISPLAY&\nsleep 1s\nopenbox-session&\nthunar&\nstartxfce4">~/startvnc
+			chmod +x ~/startvnc
+			mv -f ~/startvnc $PREFIX/bin/
+			if [ -f "$PREFIX/bin/startvnc" ];then
+				echo "Termux GUI 安装完成!"
+				green "输入 startvnc 即可启动 VNC 服务"
+				green "输入 Ctrl+C 即可终止 VNC 服务"
+				green "在启动 VNC 服务前，请安装 VNC Viewer"
+				green "下载链接: https://play.google.com/store/apps/details?id=com.realvnc.viewer.android"
+			else
+				echo "Termux GUI 安装失败"
+			fi
+			;;
+		2)
+			green "输入 startvnc 即可启动 VNC 服务"
+			green "输入 Ctrl+C 即可终止 VNC 服务"
+			green "在启动 VNC 服务前，请安装 VNC Viewer"
+			green "下载链接: https://play.google.com/store/apps/details?id=com.realvnc.viewer.android"
+			;;
+		0)
+			return 0 ;;
+		*)
+			red "无效输入,请重试" 
+			termuxgui ;;
+	esac
+	return 0
 }
 
 function tools(){
