@@ -73,9 +73,6 @@ echo "<----Props---->" >> $HOME/logs/tmp_$log
 getprop >> $HOME/logs/tmp_$log
 echo -e "\n\n" >> $HOME/logs/tmp_$log
 echo "<----System info---->" >> $HOME/logs/tmp_$log
-if [ -f /system/addon.d/*magisk* ]; then
-	echo -e "MagiskSU" >> $HOME/logs/tmp_$log
-fi
 echo "Logged In users:" >> $HOME/logs/tmp_$log
 whoami >> $HOME/logs/tmp_$log
 echo $systeminfo >> $HOME/logs/tmp_$log
@@ -104,7 +101,7 @@ function menu(){
 	echo -e "\n\n"
 	blue "月落乌啼霜满天，江枫渔火对愁眠"
 	blue "                  姑苏城外寒山寺，夜半钟声到客船"
-#	if  [ $(which fortune) = /data/data/com.termux/files/usr/bin/fortune ]; then
+#if  [ $(which fortune) = /data/data/com.termux/files/usr/bin/fortune ]; then
 #    fortune
 #else
 #    pkg in fortune -y
@@ -489,6 +486,7 @@ function aria2config(){
 			;;
 	esac
 }
+
 function ariang(){
 	[[ ! -f "$PREFIX/bin/aria2c" ]] && red "请先安装 Aria2" && echo "请回车确认" && read tmp && aria2config
 	blue "AriaNG 只是一个静态网页,直接打开在线网页和使用本地客户端在功能上并没有什么不同."
