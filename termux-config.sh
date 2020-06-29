@@ -48,7 +48,7 @@ else
 fi
 [[ -f "$PREFIX/etc/tconfig/aria2btauto" ]] && bash <(wget -qO- git.io/tracker.sh) $HOME/.aria2/aria2.conf
 sh_new_ver=$(wget -qO- -t1 -T3 "https://raw.githubusercontent.com/huanruomengyun/Termux-Tools/master/termux-config.sh" | grep 'sh_ver="' | awk -F "=" '{print $NF}' | sed 's/\"//g' | head -1) && sh_new_type="github"
-[[ -z ${sh_new_ver} ]] && red "无法链接到 Github! 脚本更新失败!" && red "请注意,该脚本绝大多数功能都需要与 GitHub 建立连接,若无法连接 GitHub,则脚本大多数功能无法使用!!" && sleep 3
+[[ -z ${sh_new_ver} ]] && red "无法链接到 Github! 脚本最新版本信息获取失败!" && red "请注意,该脚本绝大多数功能都需要与 GitHub 建立连接,若无法连接 GitHub,则脚本大多数功能无法使用!!" && sleep 3
 if [ ! -f "$PREFIX/etc/tconfig/stopupdate" ]; then
 	wget -N "https://raw.githubusercontent.com/huanruomengyun/Termux-Tools/master/termux-config.sh" && chmod +x termux-config.sh
 	echo -e "脚本已更新为最新版本[ $sh_ver --> $sh_new_ver ]"
@@ -108,7 +108,7 @@ function menu(){
 #    fortune
 #fi
     echo -e "\n\n\n"
-	echo -e " 1   更换清华源\n"
+	echo -e " 1   镜像源管理\n"
 	sleep 0.016
 	echo -e " 2   底部小键盘扩展\n"
 	sleep 0.016
@@ -122,19 +122,71 @@ function menu(){
 	sleep 0.016
 	echo -e " 7   获取手机信息\n"
 	sleep 0.016
-	echo -e " 8   Linux 发行版安装           99   日志管理\n"
+	echo -e " 8   Linux 发行版安装\n"
 	sleep 0.016
-	echo -e "                              0   退出\n\n\n"
+	echo -e " 9   终端小游戏          	 99 关于脚本  \n"
+	sleep 0.016
+	echo -e "                                0   退出\n\n\n"
 	echo -en "\t\tEnter an option: "
     read option
 }
 
 function mirrors(){
-	sed -i 's@^\(deb.*stable main\)$@#\1\ndeb https://mirrors.tuna.tsinghua.edu.cn/termux/termux-packages-24 stable main@' $PREFIX/etc/apt/sources.list
-	sed -i 's@^\(deb.*games stable\)$@#\1\ndeb https://mirrors.tuna.tsinghua.edu.cn/termux/game-packages-24 games stable@' $PREFIX/etc/apt/sources.list.d/game.list
-	sed -i 's@^\(deb.*science stable\)$@#\1\ndeb https://mirrors.tuna.tsinghua.edu.cn/termux/science-packages-24 science stable@' $PREFIX/etc/apt/sources.list.d/science.list
-	touch $PREFIX/etc/tconfig/mirrorstatus
-	apt update && apt upgrade -y
+	if [ -f "$PREFIX/etc/tconfig/mirrorstatus" ]; then
+		tsinghua=`green "true"`
+	else
+		tsinghua=`red "false"`
+	fi
+	if [ -f "$PREFIX/etc/tconfig/npmmirrorsstatus" ]; then
+		npmmirrorsstatus=`green "true"`
+	else
+		npmmirrorsstatus=`red "false"`
+	fi
+	if [ -d $HOME/.pip ]; then
+		pipmirrorsstatus=`green "true"`
+	else
+		pipmirrorsstatus=`red "false"`
+	fi
+	echo "\n\n"
+	echo "Termux 清华源状态：" $tsinghua
+	echo "NPM 淘宝源状态:" $npmmirrorsstatus
+	echo "pip 清华源状态:" $pipmirrorsstatus
+	echo "\n\n"
+	echo "1 Termux 清华源"
+	sleep 0.016
+	echo "2 NPM 淘宝源"
+	sleep 0.016
+	echo "3 pip 清华源"
+	sleep 0.016
+	echo "0 退出"
+	echo -en "\t\tEnter an option: "
+	read mirrorschoose
+	case $mirrorschoose in
+		1)
+			[[ -f "$PREFIX/etc/tconfig/mirrorstatus" ]] && red "您已更换清华源，无需重复更换" && return 0
+			sed -i 's@^\(deb.*stable main\)$@#\1\ndeb https://mirrors.tuna.tsinghua.edu.cn/termux/termux-packages-24 stable main@' $PREFIX/etc/apt/sources.list
+			sed -i 's@^\(deb.*games stable\)$@#\1\ndeb https://mirrors.tuna.tsinghua.edu.cn/termux/game-packages-24 games stable@' $PREFIX/etc/apt/sources.list.d/game.list
+			sed -i 's@^\(deb.*science stable\)$@#\1\ndeb https://mirrors.tuna.tsinghua.edu.cn/termux/science-packages-24 science stable@' $PREFIX/etc/apt/sources.list.d/science.list
+			touch $PREFIX/etc/tconfig/mirrorstatus
+			apt update && apt upgrade -y
+			;;
+		2)
+			[[ ! -f "$PREFIX/bin/npm" ]] && red "请先安装 Node.js" && return 0
+			npm config set registry https://registry.npm.taobao.org
+			touch $PREFIX/etc/tconfig/npmmirrorsstatus
+			;;
+		3)
+			[[ ! -f "$PREFIX/bin/python" ]] && red "请先安装 Python " && return 0
+			[[ -d $HOME/.pip ]] && red "您已更换清华源，无需重复更换" && return 0
+			mkdir -p ~/.pip/
+			echo -e "[global]\nindex-url = https://pypi.tuna.tsinghua.edu.cn/simple\n[install]\ntrusted-host=mirrors.aliyun.com" > ~/.pip/pip.conf
+			;;
+		0)
+			return 0 ;;
+		*)
+			red "无效输入,请重试"
+			mirrors ;;
+	esac
 }
 
 function storage(){
@@ -1086,7 +1138,7 @@ function termuxapi(){
 		0)
 			return 0 ;;
 		99)
-			echo -e "\n请输入您想要保存的 log 的名字[没有请留空]"
+			echo -e "\n请输入您想要保存的 log 的名字[必填]"
 			echo -en "\t\tEnter: "
 			read tmplogsname
 			userlogname=$userlogsname.txt
