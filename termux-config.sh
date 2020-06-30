@@ -8,14 +8,29 @@
 #-----------------------------------
 sh_ver="1.6.27"
 function blue(){
-	echo -e "\033[34m\033[01m$1\033[0m"
+	echo "\033[34m\033[01m$1\033[0m"
 }
 function green(){
-	echo -e "\033[32m\033[01m$1\033[0m"
+	echo "\033[32m\033[01m$1\033[0m"
 }
 function red(){
-	echo -e "\033[31m\033[01m$1\033[0m"
+	echo "\033[31m\033[01m$1\033[0m"
 }
+if [ -t 1 ]; then
+	RED=$(printf '\033[31m')
+	GREEN=$(printf '\033[32m')
+	YELLOW=$(printf '\033[33m')
+	BLUE=$(printf '\033[34m')
+	BOLD=$(printf '\033[1m')
+	RESET=$(printf '\033[m')
+else
+	RED=""
+	GREEN=""
+	YELLOW=""
+	BLUE=""
+	BOLD=""
+	RESET=""
+fi
 if [[ $EUID -eq 0 ]]; then	
 	red "检测到您正在尝试使用 ROOT 权限运行该脚本"	
 	red "这是不建议且不被允许的"	
@@ -93,14 +108,17 @@ green "系统信息确认完毕!!"
 green "您马上就可以进入脚本!"
 clear
 function menu(){
-    blue "==================================="
-    blue "Termux Config Pro"
-    echo "          v" $sh_ver
-	echo -e "       By Qingxu (huanruomengyun)"  
-	blue "==================================="
-	echo -e "\n\n"
-	blue "月落乌啼霜满天，江枫渔火对愁眠"
-	blue "                  姑苏城外寒山寺，夜半钟声到客船"
+	printf "$BLUE"
+	cat <<-'EOF'
+_____                                _____           _      
+|_   _|__ _ __ _ __ ___  _   ___  __ |_   _|__   ___ | |___  
+  | |/ _ \ '__| '_ ` _ \| | | \ \/ /   | |/ _ \ / _ \| / __| 
+  | |  __/ |  | | | | | | |_| |>  <    | | (_) | (_) | \__ \ 
+  |_|\___|_|  |_| |_| |_|\__,_/_/\_\   |_|\___/ \___/|_|___/ 
+	EOF
+	printf "$RESET"
+        echo -e "\t\t\t\t\t\tv" $sh_ver
+	echo -e "\t\t\t\tBy Qingxu (huanruomengyun)"
 #if  [ $(which fortune) = /data/data/com.termux/files/usr/bin/fortune ]; then
 #    fortune
 #else
