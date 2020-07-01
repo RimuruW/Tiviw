@@ -3,10 +3,10 @@
 # Author: Qingxu (huanruomengyun)
 # Description: Termux Tools
 # Repository Address: https://github.com/huanruomengyun/Termux-Tools
-# Version: 1.6.27
+# Version: 1.6.30
 # Copyright (c) 2020 Qingxu
 #-----------------------------------
-sh_ver="1.6.27"
+sh_ver="1.6.30"
 function blue(){
 	echo "\033[34m\033[01m$1\033[0m"
 }
@@ -110,7 +110,7 @@ clear
 function menu(){
 	printf "$BLUE"
 	cat <<-'EOF'
-_____                                _____           _      
+ _____                                _____           _      
 |_   _|__ _ __ _ __ ___  _   ___  __ |_   _|__   ___ | |___  
   | |/ _ \ '__| '_ ` _ \| | | \ \/ /   | |/ _ \ / _ \| / __| 
   | |  __/ |  | | | | | | |_| |>  <    | | (_) | (_) | \__ \ 
@@ -213,9 +213,7 @@ function storage(){
 }
 
 function board(){
-	if test !-d ~/.termux/ ; then
-		mkdir -p ~/.termux/
-	fi
+	mkdir -p ~/.termux
 	echo -e "extra-keys = [['TAB','>','-','~','/','*','$'],['ESC','(','HOME','UP','END',')','PGUP'],['CTRL','[','LEFT','DOWN','RIGHT',']','PGDN']]" > ~/.termux/termux.properties
 	termux-reload-settings
 	green  "请重启终端使小键盘显示正常"
@@ -226,9 +224,7 @@ function installzsh(){
        	rc=~/.zshrc
         pkg in zsh git curl -y
         green "如果下面需要您进行确认，请输入 y 确认"
-        chsh -s zsh
         sh -c "$(sed -e "/exec zsh -l/d" <<< $(curl -fsSL https://raw.github.com/ohmyzsh/ohmyzsh/master/tools/install.sh))"
-        #Plugins
         git clone https://github.com/zsh-users/zsh-autosuggestions ~/.oh-my-zsh/custom/plugins/zsh-autosuggestions
         git clone https://github.com/zsh-users/zsh-completions ~/.oh-my-zsh/custom/plugins/zsh-completions
         git clone https://github.com/zsh-users/zsh-syntax-highlighting.git ~/.oh-my-zsh/custom/plugins/zsh-syntax-highlighting
@@ -321,6 +317,7 @@ esac
 }
 
 function termuxopen(){
+	rm -f $PREFIX/etc/motd.tmp
 	if [ -f "$HOME/.hushlogin" ];then
 		hushloginstatus=`green "已关闭"`
 	else
@@ -331,6 +328,7 @@ function termuxopen(){
 	else
 		termuxloginstatus=`red "未修改"`
 	fi
+	[[ ! -f "$PREFIX/etc/motd.init" ]] && cp $PREFIX/etc/motd $PREFIX/etc/motd.init
 	echo -e "\n\n"
 	echo -e "问候语状态:"
 	echo -e "问候语" $hushloginstatus
@@ -338,7 +336,7 @@ function termuxopen(){
 	echo -e "\n\n"
 	echo -e "1 使用编辑器编辑[适合有 Linux 使用经验的用户,默认使用 vim]\n"
 	sleep 0.016
-	echo -e "2 使用脚本进行修改[适合纯新手]\n"
+	echo -e "2 使用简易编辑器进行修改[适合纯新手]\n"
 	sleep 0.016
 	echo -e "3 查看当前启动问候语\n"
 	sleep 0.016
@@ -367,17 +365,35 @@ function termuxopen(){
 			if [ ! -f "$PREFIX/etc/motd.bak" ];then
 				mv $PREFIX/etc/motd $PREFIX/etc/motd.bak
 			fi
-			echo -e "\n请在下方直接输入您想要更换的启动问候语\n"
-			read texttermuxopen
-			echo -e "${texttermuxopen}" > $PREFIX/etc/motd.tmp
-			if [ ! -f "$PREFIX/etc/motd.bak" ];then
-				mv $PREFIX/etc/motd $PREFIX/etc/motd.bak
-			else
-				rm -f $PREFIX/etc/motd
-			fi
-			mv -f $PREFIX/etc/motd.tmp $PREFIX/etc/motd
-			touch $PREFIX/etc/termuxopen
-			green "修改完成!"
+			echo -e "\n请在下方直接输入您想要更换的启动问候语\n可以直接回车换行,输入 wq 保存退出,输入 q 直接退出\n"
+			while [ 1 ]
+			do
+				echo -en "\033[34m\033[01m--> ~  \033[0m"
+				read texttermuxopen
+				case $texttermuxopen in
+					wq)
+						green "已保存"
+						if [ ! -f "$PREFIX/etc/motd.bak" ];then
+							mv $PREFIX/etc/motd $PREFIX/etc/motd.bak
+							mv $PREFIX/etc/motd.tmp $PREFIX/etc/motd
+						else
+							rm -f $PREFIX/etc/motd.bak
+							mv $PREFIX/etc/motd $PREFIX/etc/motd.bak
+			mv $PREFIX/etc/motd.tmp $PREFIX/etc/motd
+						fi
+						touch $PREFIX/etc/termuxopen
+						green "修改完成!"
+						return 0 ;;
+					q)
+						rm -f $PREFIX/etc/motd.tmp
+						echo "已退出"
+						return 0
+						;;
+					*)
+						echo -e "${texttermuxopen}" >> $PREFIX/etc/motd.tmp
+						;;
+				esac
+			done
 			;;
 		3)
 			cat $PREFIX/etc/motd
@@ -387,10 +403,11 @@ function termuxopen(){
 				red "问候语已为默认状态"
 				return 0
 			fi
-			if [ -f "$PREFIX/etc/motd.bak" ];then
+			if [ -f "$PREFIX/etc/motd.init" ];then
 				rm -f $PREFIX/etc/motd
-				cp $PREFIX/etc/motd.bak $PREFIX/etc/motd
+				cp $PREFIX/etc/motd.init $PREFIX/etc/motd
 				rm -f $PREFIX/etc/termuxopen
+				green "恢复成功!"
 			else
 				red "备份丢失,默认问候语恢复失败!!"
 			fi
@@ -426,6 +443,22 @@ function termuxopen(){
 		0)
 			return 0 ;;
 	esac
+}
+
+function adc(){
+	if [ -f "$PREFIX/etc/motd.tmp" ]; then
+		if [ ! -f "$PREFIX/etc/motd.bak" ];then
+			mv $PREFIX/etc/motd $PREFIX/etc/motd.bak
+			mv $PREFIX/etc/motd.tmp $PREFIX/etc/motd
+		else
+			rm -f $PREFIX/etc/motd.bak
+			mv $PREFIX/etc/motd $PREFIX/etc/motd.bak
+			mv $PREFIX/etc/motd.tmp $PREFIX/etc/motd
+		fi
+		touch $PREFIX/etc/termuxopen
+		green "修改完成!"
+	fi
+	exit 0
 }
 
 function termuxgui(){
@@ -1276,7 +1309,7 @@ do
 	    8)
 	    	    Linux ;;
 	    99) 
-	    	    logs ;;
+	    	    about ;;
 	    *)
 		    red "无效输入，请重试" ;;
     esac
