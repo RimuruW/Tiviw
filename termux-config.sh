@@ -8,13 +8,13 @@
 #-----------------------------------
 sh_ver="1.6.30"
 function blue(){
-	echo "\033[34m\033[01m$1\033[0m"
+	echo -e "\033[34m\033[01m$1\033[0m"
 }
 function green(){
-	echo "\033[32m\033[01m$1\033[0m"
+	echo -e "\033[32m\033[01m$1\033[0m"
 }
 function red(){
-	echo "\033[31m\033[01m$1\033[0m"
+	echo -e "\033[31m\033[01m$1\033[0m"
 }
 if [ -t 1 ]; then
 	RED=$(printf '\033[31m')
@@ -31,29 +31,16 @@ else
 	BOLD=""
 	RESET=""
 fi
-if [[ $EUID -eq 0 ]]; then	
-	red "检测到您正在尝试使用 ROOT 权限运行该脚本"	
-	red "这是不建议且不被允许的"	
-	red "该脚本不需要 ROOT 权限,且以 ROOT 权限运行可能会带来一些无法预料的问题"	
-	red "为了您的设备安全，请避免在任何情况下以 ROOT 用户运行该脚本"	
-	exit 0	
-fi
-if [[ -d /system/app/ && -d /system/priv-app ]]; then
-	systeminfo="Android $(getprop ro.build.version.release)"
-else
-	red "This operating system is not supported."
-	exit 1
-fi
 if [ -f /system/addon.d/*magisk* ]; then
 	testsustatus=`green "MagiskSU"`
 else
-	testsustatus="red `UNKOWN`"
+	testsustatus=`red "UNKOWN"`
 fi
 blue "为确保脚本正常运行，每次运行脚本都将会强制进行初始化"
 blue "给您带来的不便还请见谅"
 green "Initializing……"
 if [ ! -f "$PREFIX/bin/wget" ];then
-	pkg in wget
+	pkg in wget -y
 fi
 mkdir -p $PREFIX/etc/tconfig
 if [ -f "$PREFIX/etc/tconfig/mirrorstatus" ];then
@@ -63,7 +50,7 @@ else
 fi
 [[ -f "$PREFIX/etc/tconfig/aria2btauto" ]] && bash <(wget -qO- git.io/tracker.sh) $HOME/.aria2/aria2.conf
 sh_new_ver=$(wget -qO- -t1 -T3 "https://raw.githubusercontent.com/huanruomengyun/Termux-Tools/master/termux-config.sh" | grep 'sh_ver="' | awk -F "=" '{print $NF}' | sed 's/\"//g' | head -1) && sh_new_type="github"
-[[ -z ${sh_new_ver} ]] && red "无法链接到 Github! 脚本最新版本信息获取失败!" && red "请注意,该脚本绝大多数功能都需要与 GitHub 建立连接,若无法连接 GitHub,则脚本大多数功能无法使用!!" && sleep 3
+[[ -z ${sh_new_ver} ]] && red "无法链接到 Github! 脚本最新版本信息获取失败!" && red "请注意,该脚本绝大多数功能都需要与 GitHub 建立连接,若无法连接 GitHub,则脚本大多数功能无法使用!!" && echo -en "\n\n\t\t\t点击任意键以继续" && read -n 1 line
 if [ ! -f "$PREFIX/etc/tconfig/stopupdate" ]; then
 	wget -N "https://raw.githubusercontent.com/huanruomengyun/Termux-Tools/master/termux-config.sh" && chmod +x termux-config.sh
 	echo -e "脚本已更新为最新版本[ $sh_ver --> $sh_new_ver ]"
@@ -297,6 +284,8 @@ function termuxplugin(){
 	sleep 0.016
 	echo -e "3 图形化界面安装\n"
 	sleep 0.016
+	echo -e "4 生成无效文件占据存储空间\n"
+	sleep 0.016
 	echo -e "0 退出\n"
 	sleep 0.016
 	echo -en "\t\tEnter an option: "
@@ -308,6 +297,8 @@ function termuxplugin(){
 		sudoconfig ;;
 	3)
 		termuxgui ;;
+	4)
+		aaa ;;
 	0)
 		return 0 ;;
 	*)
@@ -359,7 +350,11 @@ function termuxopen(){
 				touch $PREFIX/etc/motd
 			fi
 			vim $PREFIX/etc/motd
-			touch $PREFIX/etc/termuxopen
+			if [ ! -f "$PREFIX/etc/motd" ];then
+				mv $PREFIX/etc/motd.bak $PREFIX/etc/motd
+			else
+				touch $PREFIX/etc/termuxopen
+			fi
 			return 0 ;;
 		2)
 			if [ ! -f "$PREFIX/etc/motd.bak" ];then
@@ -445,22 +440,6 @@ function termuxopen(){
 	esac
 }
 
-function adc(){
-	if [ -f "$PREFIX/etc/motd.tmp" ]; then
-		if [ ! -f "$PREFIX/etc/motd.bak" ];then
-			mv $PREFIX/etc/motd $PREFIX/etc/motd.bak
-			mv $PREFIX/etc/motd.tmp $PREFIX/etc/motd
-		else
-			rm -f $PREFIX/etc/motd.bak
-			mv $PREFIX/etc/motd $PREFIX/etc/motd.bak
-			mv $PREFIX/etc/motd.tmp $PREFIX/etc/motd
-		fi
-		touch $PREFIX/etc/termuxopen
-		green "修改完成!"
-	fi
-	exit 0
-}
-
 function termuxgui(){
 	if [ -f "/data/data/com.termux/files/usr/bin/startvnc" ];then
 		termuxguistatus=`green "true"`
@@ -511,6 +490,45 @@ function termuxgui(){
 		*)
 			red "无效输入,请重试" 
 			termuxgui ;;
+	esac
+	return 0
+}
+
+function aaa(){
+	echo -e "\n\n"
+	blue "该功能可以在 Termux 的私有文件夹下持续生成某无实际意义的文件以占用存储空间"
+	blue "该功能并没有任何实际意义，实质上只是一个极为无聊的功能"
+	blue "就像有这个无聊的功能一样，说不定也会有一个无聊的人需要它呢？"
+	red "注意，使用本功能的风险由用户自行承担，脚本作者不承担与之相应的任何责任！"
+	echo -e "\n\n"
+	echo -e "1 生成无效文件\n"
+	sleep 0.016
+	echo -e "2 删除无效文件\n"
+	sleep 0.016
+	echo -e "0 退出\n"
+	echo -en "\t\tEnter an option: "
+	read aaachoose
+	case $aaachoose in
+		1)
+			red "请密切关注您设备的剩余存储空间!"
+			red "在设备剩余存储空间不足时建议立即按 Ctrl + C 中止！"
+			echo -en "\n\n\t\t请回车以示您已阅读完毕"
+			read -n 1 line
+			yes >> $PREFIX/etc/tconfig/aaa.txt
+			return 0 ;;
+		2)
+			rm -f $PREFIX/etc/tconfig/aaa.txt
+			if [ ! -f $PREFIX/etc/tconfig/aaa.txt ];then
+				green "删除完成！"
+			else
+				ref "删除失败！"
+			fi
+			return 0 ;;
+		0)
+			return 0 ;;
+		*)
+			red "无效输入,请重试"
+			aaa ;;
 	esac
 	return 0
 }
@@ -705,7 +723,7 @@ function httpconfig(){
 	read httpserverchoose
 	case $httpserverchoose in
 		1)
-			pkg in nodejs-lts
+			pkg in nodejs-lts -y
 			npm install -g http-server
 			green "安装结束!" ;;
 		2)
@@ -736,7 +754,6 @@ function httpconfig(){
 }
 
 function hexo(){
-	pkg in wget -y
 	wget https://raw.githubusercontent.comhttpserverchoose/huanruomengyun/Termux-Hexo-installer/master/hexo-installer.sh && sh hexo-installer.sh
 	rm -f hexo-installer.sh
 	return 0
@@ -807,11 +824,11 @@ function ubuntudechoose(){
 	read udechoose
 	case $udechoose in
 		1)
-			pkg update -y && pkg install wget curl proot tar -y && wget https://raw.githubusercontent.com/AndronixApp/AndronixOrigin/master/Installer/Ubuntu/ubuntu-xfce.sh && chmod +x ubuntu-xfce.sh && bash ubuntu-xfce.sh ;;
+			pkg update -y && pkg install curl proot tar -y && wget https://raw.githubusercontent.com/AndronixApp/AndronixOrigin/master/Installer/Ubuntu/ubuntu-xfce.sh && chmod +x ubuntu-xfce.sh && bash ubuntu-xfce.sh ;;
 		2)
-			pkg update -y && pkg install wget curl proot tar -y && wget https://raw.githubusercontent.com/AndronixApp/AndronixOrigin/master/Installer/Ubuntu/ubuntu-lxde.sh && chmod +x ubuntu-lxde.sh && bash ubuntu-lxde.sh ;;
+			pkg update -y && pkg install curl proot tar -y && wget https://raw.githubusercontent.com/AndronixApp/AndronixOrigin/master/Installer/Ubuntu/ubuntu-lxde.sh && chmod +x ubuntu-lxde.sh && bash ubuntu-lxde.sh ;;
 		3)
-			pkg update -y && pkg install wget curl proot tar -y && wget https://raw.githubusercontent.com/AndronixApp/AndronixOrigin/master/Installer/Ubuntu/ubuntu-lxqt.sh && chmod +x ubuntu-lxqt.sh && bash ubuntu-lxqt.sh ;;
+			pkg update -y && pkg install curl proot tar -y && wget https://raw.githubusercontent.com/AndronixApp/AndronixOrigin/master/Installer/Ubuntu/ubuntu-lxqt.sh && chmod +x ubuntu-lxqt.sh && bash ubuntu-lxqt.sh ;;
 		0)
 			return 0 ;;
 		*)
@@ -830,7 +847,7 @@ function debian(){
 		y)
 			debiandechoose ;;
 		n)
-			pkg update -y && pkg install wget curl proot tar -y && wget https://raw.githubusercontent.com/AndronixApp/AndronixOrigin/master/Installer/Debian/debian.sh && chmod +x debian.sh && bash debian.sh ;;
+			pkg update -y && pkg install curl proot tar -y && wget https://raw.githubusercontent.com/AndronixApp/AndronixOrigin/master/Installer/Debian/debian.sh && chmod +x debian.sh && bash debian.sh ;;
 		t)
 			echo "Working" ;;
 		*)
@@ -852,11 +869,11 @@ function debiandechoose(){
 	read ddechoose
 	case $ddechoose in
 		1)
-			pkg update -y && pkg install wget curl proot tar -y && wget https://raw.githubusercontent.com/AndronixApp/AndronixOrigin/master/Installer/Debian/debian-xfce.sh && chmod +x debian-xfce.sh &&  bash debian-xfce.sh ;;
+			pkg update -y && pkg install curl proot tar -y && wget https://raw.githubusercontent.com/AndronixApp/AndronixOrigin/master/Installer/Debian/debian-xfce.sh && chmod +x debian-xfce.sh &&  bash debian-xfce.sh ;;
 		2)
-			pkg update -y && pkg install wget curl proot tar -y && wget https://raw.githubusercontent.com/AndronixApp/AndronixOrigin/master/Installer/Debian/debian-lxde.sh && chmod +x debian-lxde.sh bash debian-lxde.sh ;;
+			pkg update -y && pkg install curl proot tar -y && wget https://raw.githubusercontent.com/AndronixApp/AndronixOrigin/master/Installer/Debian/debian-lxde.sh && chmod +x debian-lxde.sh bash debian-lxde.sh ;;
 		3)
-			pkg update -y && pkg install wget curl proot tar -y && wget https://raw.githubusercontent.com/AndronixApp/AndronixOrigin/master/Installer/Debian/debian-lxqt.sh && chmod +x debian-lxqt.sh bash debian-lxqt.sh ;;
+			pkg update -y && pkg install curl proot tar -y && wget https://raw.githubusercontent.com/AndronixApp/AndronixOrigin/master/Installer/Debian/debian-lxqt.sh && chmod +x debian-lxqt.sh bash debian-lxqt.sh ;;
 		0)
 			return 0 ;;
 		*)
@@ -879,7 +896,7 @@ function centos(){
 	read centosde
 	case $centosde in
 		1)
-			pkg install wget openssl-tool proot tar -y && hash -r && wget https://raw.githubusercontent.com/EXALAB/AnLinux-Resources/master/Scripts/Installer/CentOS/centos.sh && bash centos.sh ;;
+			pkg install openssl-tool proot tar -y && hash -r && wget https://raw.githubusercontent.com/EXALAB/AnLinux-Resources/master/Scripts/Installer/CentOS/centos.sh && bash centos.sh ;;
 		2)
 			wget https://raw.githubusercontent.com/EXALAB/AnLinux-Resources/master/Scripts/Uninstaller/CentOS/UNI-centos.sh && bash UNI-centos.sh ;;
 		*)
@@ -890,7 +907,6 @@ function centos(){
 }
 
 function kali(){
-	pkg install wget
 	wget -O install-nethunter-termux https://offs.ec/2MceZWr
 	chmod +x install-nethunter-termux
 	./install-nethunter-termux
@@ -922,7 +938,7 @@ function archlinux(){
 }
 
 function termuxarch(){
-	pkg i bsdtar nano proot wget
+	pkg i bsdtar nano proot
 	wget -c https://raw.githubusercontent.com/TermuxArch/TermuxArch/master/setupTermuxArch.bash 
 	bash setupTermuxArch.bash
 	cp ~/arch/startarch $PREFIX/bin/startarch
@@ -955,7 +971,7 @@ function adbconfig(){
 	read adbinstall
 	case $adbinstall in
 		1)
-			apt update && apt install wget
+			apt update
 			wget https://github.com/MasterDevX/Termux-ADB/raw/master/InstallTools.sh
 			bash InstallTools.sh
 			return 0 ;;
@@ -965,7 +981,6 @@ function adbconfig(){
 				return 0
 			fi
 			apt update
-			apt install wget
 			wget https://github.com/MasterDevX/Termux-ADB/raw/master/RemoveTools.sh
 			bash RemoveTools.sh
 			return 0 ;;
@@ -1080,7 +1095,7 @@ function youget1(){
 	echo -e "请输入您的下载链接[必填]"
 	echo -en "\t\tEnter: "
 	read yougetlink
-	echo -e "请输入您的下载路径[选填,路径默认指向内置存储.比如,如果你输入 Download,则文件会下载至内置存储的 Download 文件夹中]"
+	echo -e "请输入您的下载路径[选填,路径默认指向内置存储.比如,如果您输入 Download,则文件会下载至内置存储的 Download 文件夹中]"
 	green "看不懂就直接回车"
 	echo -en "\t\tEnter: "
 	read tmpdiryouget
