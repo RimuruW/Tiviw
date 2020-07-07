@@ -38,12 +38,6 @@ if [[ $EUID -eq 0 ]]; then
 	red "为了您的设备安全，请避免在任何情况下以 ROOT 用户运行该脚本"
 	exit 0
 fi
-if [[ -d /system/app && -d /system/priv-app ]]; then
-	systeminfo="Android $(getprop ro.build.version.release)"
-else
-	red "This operating system is not supported."
-	exit 1
-fi
 blue "为确保脚本正常运行，每次运行脚本都将会强制进行初始化"
 blue "给您带来的不便还请见谅"
 green "Initializing……"
@@ -59,25 +53,9 @@ fi
 [[ -f "$PREFIX/etc/tconfig/aria2btauto" ]] && bash <(wget -qO- git.io/tracker.sh) $HOME/.aria2/aria2.conf
 sh_new_ver=$(wget -qO- -t1 -T3 "https://raw.githubusercontent.com/huanruomengyun/Termux-Tools/master/termux-config.sh" | grep 'sh_ver="' | awk -F "=" '{print $NF}' | sed 's/\"//g' | head -1) && sh_new_type="github"
 [[ -z ${sh_new_ver} ]] && red "无法链接到 Github! 脚本最新版本信息获取失败!" && red "请注意,该脚本绝大多数功能都需要与 GitHub 建立连接,若无法连接 GitHub,则脚本大多数功能无法使用!!" && echo -en "\n\n\t\t\t点击任意键以继续" && read -n 1 line
-[[ $sh_new_ver -le $sh_ver ]] && red "警告！本地脚本版本号高于云端版本号。\n这可能是因为您正在使用 dev 分支，而脚本默认拉取 master 分支。\n建议不要在任何情况下使用 dev 分支以获取更佳的使用体验\n" && canautoupdate=warning
-if [ -f "$PREFIX/etc/tconfig/startautoupdate" ]; then
-	if [ $canautoupdate = warning ]; then
-		red "本地版本号高于云端版本号，是否仍然拉取云端最新版本覆盖本地？"
-		echo -en "\t\t [y/N] 默认 N :"
-		read updatecover
-		case $updatecover in
-			y)
-				wget -N "https://raw.githubusercontent.com/huanruomengyun/Termux-Tools/master/termux-config.sh" && chmod +x termux-config.sh
-				echo -e "脚本更新为云端最新[ $sh_ver --> $sh_new_ver ]"
-				;;
-			*)
-				echo "Skip..."
-				;;
-		esac
-	else
-		wget -N "https://raw.githubusercontent.com/huanruomengyun/Termux-Tools/master/termux-config.sh" && chmod +x termux-config.sh
-		echo -e "脚本更新为云端最新[ $sh_ver --> $sh_new_ver ]"
-	fi
+if [ ! -f "$PREFIX/etc/tconfig/stopupdate" ]; then
+	wget -N "https://raw.githubusercontent.com/huanruomengyun/Termux-Tools/master/termux-config.sh" && chmod +x termux-config.sh
+	echo -e "脚本已更新为最新版本[ $sh_ver --> $sh_new_ver ]"
 fi
 if [ $sh_ver=$sh_new_ver ]; then
 	echo "脚本已为最新版本"
@@ -87,6 +65,11 @@ fi
 clear
 green "初始化完成!"
 green "确认您的系统信息中……"
+if [ -d /system/xbin ]; then
+	busyboxstatus=`green "true"`
+else
+	busyboxstatus=`red "false"`
+fi
 date=$(date)
 log=log_init.log
 mkdir -p $HOME/logs
@@ -121,15 +104,16 @@ clear
 function menu(){
 	printf "$BLUE"
 	cat <<-'EOF'
- _____                                _____           _      
-|_   _|__ _ __ _ __ ___  _   ___  __ |_   _|__   ___ | |___  
-  | |/ _ \ '__| '_ ` _ \| | | \ \/ /   | |/ _ \ / _ \| / __| 
-  | |  __/ |  | | | | | | |_| |>  <    | | (_) | (_) | \__ \ 
-  |_|\___|_|  |_| |_| |_|\__,_/_/\_\   |_|\___/ \___/|_|___/ 
+  ________  ___    ______            __    
+ /_  __/  |/  /   /_  __/___  ____  / /____
+  / / / /|_/ /_____/ / / __ \/ __ \/ / ___/
+ / / / /  / /_____/ / / /_/ / /_/ / (__  ) 
+/_/ /_/  /_/     /_/  \____/\____/_/____/  
+                                           
 	EOF
 	printf "$RESET"
-        echo -e "\t\t\t\t\t\tv" $sh_ver
-	echo -e "\t\t\t\tBy Qingxu (huanruomengyun)"
+        echo -e "\t\t\tv" $sh_ver
+	echo -e "\t\tBy Qingxu (huanruomengyun)"
 #if  [ $(which fortune) = /data/data/com.termux/files/usr/bin/fortune ]; then
 #    fortune
 #else
@@ -253,7 +237,7 @@ function sudoconfig(){
 	fi
 	echo -e "\n\n"
 	echo -e "sudo 安装状态:" $sudostatus
-	echo -e "SU 状态:" $testsustatus
+	echo -e "Busybox 状态:" $busyboxstatus
 	echo -e "\n\n"
 	echo -e "1 安装 sudo\n"
 	echo -e "2 修复 sudo\n"
@@ -571,6 +555,8 @@ function tools(){
 	sleep 0.016
 	echo -e "6 Aria2 安装配置\n"
 	sleep 0.016
+	echo -e "7 Annie 安装配置\n"
+	sleep 0.016
 	echo -e "0 退出\n"
 	sleep 0.016
 	echo -en "\t\tEnter an option: "
@@ -588,6 +574,8 @@ function tools(){
 			bilibilitools ;;
 		6)
 			aria2config ;;
+		7)
+			annieconfig ;;
 		0)
 			return 0 ;;
 		*)
@@ -596,6 +584,58 @@ function tools(){
 	esac
 }
 
+function annieconfig(){
+	echo -e "\n\n"
+	echo -e "项目地址:  https://github.com/iawia002/annie"
+	echo -e "\n\n"
+	echo -e "1 安装 Annie\n"
+	sleep 0.016
+	echo -e "2 Annie 使用帮助\n"
+	sleep 0.016
+	echo -e "3 删除 Annie\n"
+	sleep 0.016
+	echo -e "0 退出\n"
+	read anniechoose
+	case $anniechoose in
+		1)
+			annidinstall
+			rush45
+function annieinstall(){5
+	pkg in -y golang git f:q
+	fmpeg
+	echo -e "cd\ngit clone https://github.com/iawia002/annie.git\ncd annie/\nGOOS=android GOARCH=arm64 go build -o $PREFIX/bin/annie main.go\ncd\nchmod -Rf 777 go\nrm -rf annie go" > annieinstall.sh
+	chmod +x annieinstall.sh && ./annieinstall.sh
+	rm -f annieinstall.sh
+}
+function aria2config(){
+	if [ -f "$PREFIX/bin/aria2c" ];then
+		aria2status=`green "true"`
+	else
+		aria2status=`red "false"`
+	fi
+	echo "\n\n"
+	echo "项目地址: https://github.com/huanruomengyun/Aria2-Termux"
+	echo "\n\n"
+	echo "Aria2 安装状态: " $aria2status
+	echo "\n\n"
+	echo "1 Aria2 安装与管理\n"
+	sleep 0.016
+	echo "2 AriaNG 启动\n"
+	sleep 0.016
+	echo "0 退出"
+	sleep 0.016
+	echo -en "\t\tEnter an option: "
+	read aria2choose
+	case $aria2choose in
+		1)
+			pkg in -y golang git fmpeg
+			echo -e "cd\ngit clone https://github.com/iawia002/annie.git\ncd annie/\nGOOS=android GOARCH=arm64 go build -o $PREFIX/bin/annie main.go\ncd\nchmod -Rf 777 go\nrm -rf annie go" > annieinstall.sh
+			chmod +x annieinstall.sh && ./annieinstall.sh
+			rm -f annieinstall.sh
+			;;
+		2)
+
+}
 function aria2config(){
 	if [ -f "$PREFIX/bin/aria2c" ];then
 		aria2status=`green "true"`
@@ -778,7 +818,7 @@ function httpconfig(){
 }
 
 function hexo(){
-	wget https://raw.githubusercontent.comhttpserverchoose/huanruomengyun/Termux-Hexo-installer/master/hexo-installer.sh && sh hexo-installer.sh
+	wget https://raw.githubusercontent.com/huanruomengyun/Termux-Hexo-installer/master/hexo-installer.sh && sh hexo-installer.sh
 	rm -f hexo-installer.sh
 	return 0
 }
@@ -1170,6 +1210,8 @@ function termuxapi(){
 	sleep 0.016
 	echo -e "\n12 存储使用状态"
 	sleep 0.016
+	echo -e "\n13 获取 IP 地址"
+	sleep 0.016
 	echo -e "\n99 将所有信息输出到日志" $need
 	sleep 0.016
 	echo -e "\n0 退出"
@@ -1225,6 +1267,9 @@ function termuxapi(){
 			df -h
 			sleep 3
 			termuxapi ;;
+		13)
+			ip -br -c addr
+			termuxapi ;;
 		0)
 			return 0 ;;
 		99)
@@ -1241,32 +1286,6 @@ function termuxapi(){
 			termux-infrared-frequencies >> $logspwdname
 			termux-telephony-cellinfo >> $logspwdname
 			termux-tts-engines >> $logspwdname
-			termux-wifi-connectioninfo >> $logspwdname
-			termux-wifi-scaninfo >> $logspwdname
-			termux-clipboard-get >> $logspwdname
-			getprop |grep imei >> $logspwdname
-			lscpu >> $logspwdname
-			free -h >> $logspwdname
-			df -h >> $logspwdname
-			green "日志写入完成!"
-			termuxapi ;;
-	esac
-}
-
-function logsgen(){
-	date=$(date)
-	log=log_gen.log
-	mkdir -p $HOME/logs
-	touch $HOME/logs/tmp_$log
-	echo -e "====Device info====\n\n" >> $HOME/lo8gs/tmp_$log
-	echo -e "$log" >> $HOME/logs/tmp_$log
-	echo "<----Props---->" >> $HOME/logs/tmp_$log
-	getprop >> $HOME/logs/tmp_$log
-	echo -e "\n\n" >> $HOME/logs/tmp_$log
-	echo "<----System info---->" >> $HOME/logs/tmp_$log
-	echo "Logged In users:" >> $HOME/logs/tmp_$log
-	whoami >> $HOME/logs/tmp_$log
-	echo -e "\n\n" >> $HOME/logs/tmp_$log
 	echo "<----Hardware info---->" >> $HOME/logs/tmp_$log
 	echo "CPU info:"
 	lscpu >> $HOME/logs/tmp_$log
