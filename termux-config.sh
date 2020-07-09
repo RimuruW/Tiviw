@@ -1,4 +1,4 @@
-#!/bin/bash
+#$PREFIX/bin/bash
 #-----------------------------------
 # Author: Qingxu (huanruomengyun)
 # Description: Termux Tools
@@ -86,7 +86,7 @@ else
 fi
 clear
 green "初始化完成!"
-green "确认您的系统信息中……"
+green "确认您的设备信息中……"
 date=$(date)
 log=log_init.log
 mkdir -p $HOME/logs
@@ -308,7 +308,7 @@ function termuxplugin(){
 	sleep 0.016
 	echo -e "3 图形化界面安装\n"
 	sleep 0.016
-	echo -e "4 生成无效文件占据存储空间\n"
+	echo -e "4 生成无效文件填充存储空间\n"
 	sleep 0.016
 	echo -e "0 退出\n"
 	sleep 0.016
@@ -759,7 +759,6 @@ function httpconfig(){
 				return 0
 			fi
 			http-server
-
 			return 0
 			;;
 		3)
@@ -829,8 +828,6 @@ function ubuntu(){
 			ubuntudechoose ;;
 		n)
 			pkg update -y && pkg install wget curl proot tar -y && wget https://raw.githubusercontent.com/AndronixApp/AndronixOrigin/master/Installer/Ubuntu/ubuntu.sh && chmod +x ubuntu.sh && bash ubuntu.sh ;;
-		t)
-			echo "Working" ;;
 		*)
 			echo "无效输入，请重试" ;;
 	esac
@@ -1033,7 +1030,7 @@ function yougetconfig(){
 	fi
 	if [ ! -f "/data/data/com.termux/files/usr/bin/python" ];then
 		green "检测到未安装 Python，正在自动安装 Python…"
-		pkg in python
+		pkg in python -y
 	fi
 	echo -e "\n\n项目地址: https://github.com/soimort/you-get/\n\n"
 	echo -e "you-get 安装状态:" $yougetconfigstatus
@@ -1122,11 +1119,12 @@ function youget1(){
 	echo -e "请输入您的下载链接[必填]"
 	echo -en "\t\tEnter: "
 	read yougetlink
-	echo -e "请输入您的下载路径[选填,路径默认指向内置存储.比如,如果您输入 Download,则文件会下载至内置存储的 Download 文件夹中]"
+	echo -e "请输入您的下载路径[选填,路径默认指向内置存储.比如，如果您输入 Download，则文件会下载至内置存储的 Download 文件夹中]"
 	green "看不懂就直接回车"
 	echo -en "\t\tEnter: "
 	read tmpdiryouget
 	echo -e "如果您输入的链接属于某一播放列表里面的一个,您是否想下载该列表里面的所有视频?[y/n]"
+	green "看不懂就直接回车"
 	echo -en "\t\tEnter: "
 	read tmpyougetlist
 	if  [ $tmpyougetlist = y ]; then
