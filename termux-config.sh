@@ -52,7 +52,7 @@ if [ ! -f "$PREFIX/bin/wget" ];then
 fi
 mkdir -p $PREFIX/etc/tconfig
 if [ -f "$PREFIX/etc/tconfig/mirrorstatus" ];then
-	apt update && apt upgrade -y
+	apt update
 else
 	echo "Skip..."
 fi
@@ -60,7 +60,7 @@ fi
 sh_new_ver=$(wget -qO- -t1 -T3 "https://raw.githubusercontent.com/huanruomengyun/Termux-Tools/master/termux-config.sh" | grep 'sh_ver="' | awk -F "=" '{print $NF}' | sed 's/\"//g' | head -1) && sh_new_type="github"
 [[ -z ${sh_new_ver} ]] && red "无法链接到 Github! 脚本最新版本信息获取失败!" && red "请注意,该脚本绝大多数功能都需要与 GitHub 建立连接,若无法连接 GitHub,则脚本大多数功能无法使用!!" && echo -en "\n\n\t\t\t点击任意键以继续" && read -n 1 line
 #[[ $sh_new_ver -lt $sh_ver ]] && red "警告！本地脚本版本号高于云端版本号。\n这可能是因为您正在使用 dev 分支，而脚本默认拉取 master 分支。\n建议不要在任何情况下使用 dev 分支以获取更佳的使用体验\n" && canautoupdate=warning
-if [ -f "$PREFIX/etc/tconfig/startautoupdate" ]; then
+#if [ -f "$PREFIX/etc/tconfig/startautoupdate" ]; then
 	#if [ $canautoupdate = warning ]; then
 	#	red "本地版本号高于云端版本号，是否仍然拉取云端最新版本覆盖本地？"
 	#	echo -en "\t\t [y/N] 默认 N :"
@@ -78,7 +78,7 @@ if [ -f "$PREFIX/etc/tconfig/startautoupdate" ]; then
 	#	wget -N "https://raw.githubusercontent.com/huanruomengyun/Termux-Tools/master/termux-config.sh" && chmod +x termux-config.sh
 	#	echo -e "脚本更新为云端最新[ $sh_ver --> $sh_new_ver ]"
 	#fi
-fi
+#fi
 if [ $sh_ver=$sh_new_ver ]; then
 	echo "脚本已为最新版本"
 else
@@ -121,15 +121,16 @@ clear
 function menu(){
 	printf "$BLUE"
 	cat <<-'EOF'
- _____                                _____           _      
-|_   _|__ _ __ _ __ ___  _   ___  __ |_   _|__   ___ | |___  
-  | |/ _ \ '__| '_ ` _ \| | | \ \/ /   | |/ _ \ / _ \| / __| 
-  | |  __/ |  | | | | | | |_| |>  <    | | (_) | (_) | \__ \ 
-  |_|\___|_|  |_| |_| |_|\__,_/_/\_\   |_|\___/ \___/|_|___/ 
+ _______  __   _____           _     
+|_   _\ \/ /  |_   _|__   ___ | |___ 
+  | |  \  /_____| |/ _ \ / _ \| / __|
+  | |  /  \_____| | (_) | (_) | \__ \
+  |_| /_/\_\    |_|\___/ \___/|_|___/
+                                     
 	EOF
 	printf "$RESET"
-        echo -e "\t\t\t\t\t\tv" $sh_ver
-	echo -e "\t\t\t\tBy Qingxu (huanruomengyun)"
+        echo -e "\t\t\t\t\tv" $sh_ver
+	echo -e "\t\t\tBy Qingxu (huanruomengyun)"
 #if  [ $(which fortune) = /data/data/com.termux/files/usr/bin/fortune ]; then
 #    fortune
 #else
