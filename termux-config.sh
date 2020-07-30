@@ -83,39 +83,39 @@ sh_new_ver=$(wget -qO- -t1 -T3 "https://raw.githubusercontent.com/huanruomengyun
 if [ $sh_ver=$sh_new_ver ]; then
 	echo "脚本已为最新版本"
 else
-	echo "$sh_ver ->> $sh_new_ver" >> $HOME/logs/update_log.log
+	echo "$sh_ver ->> $sh_new_ver" >> $PREFIX/etc/tconfig/logs/update_log.log
 fi
 clear
 green "初始化完成!"
 green "确认您的设备信息中……"
 date=$(date)
 log=log_init.log
-mkdir -p $HOME/logs
-rm -f $HOME/logs/*log_*.log
-touch $HOME/logs/tmp_$log
-echo -e "====Device info====\n" >> $HOME/logs/tmp_$log
-echo "Date:" >> $HOME/logs/tmp_$log
-echo "$date\n\n" >> $HOME/logs/tmp_$log
-echo "<----Props---->" >> $HOME/logs/tmp_$log
-getprop >> $HOME/logs/tmp_$log
-echo -e "\n\n" >> $HOME/logs/tmp_$log
-echo "<----System info---->" >> $HOME/logs/tmp_$log
-echo "Logged In users:" >> $HOME/logs/tmp_$log
-whoami >> $HOME/logs/tmp_$log
-echo $systeminfo >> $HOME/logs/tmp_$log
-echo "Package Installed" >> $HOME/logs/tmp_$log
-pkg list-installed >> $HOME/logs/tmp_$log
-echo -e "\n\n" >> $HOME/logs/tmp_$log
-echo "<----Hardware info---->" >> $HOME/logs/tmp_$log
-echo "CPU info:"
-lscpu >> $HOME/logs/tmp_$log
-echo "Memory and Swap info:" >> $HOME/logs/tmp_$log
-free -h >> $HOME/logs/tmp_$log
-echo "Internet info:" >> $HOME/logs/tmp_$log
-ifconfig >> $HOME/logs/tmp_$log
-echo "Disk Usages :" >> $HOME/logs/tmp_$log
-df -h >> $HOME/logs/tmp_$log
-mv -f $HOME/logs/tmp_$log $HOME/logs/$log
+mkdir -p $PREFIX/etc/tconfig/logs
+rm -f $PREFIX/etc/tconfig/logs/*log_*.log
+touch $PREFIX/etc/tconfig/logs/tmp_$log
+echo -e "====Device info====\n" >> $PREFIX/etc/tconfig/logs/tmp_$log
+echo "Date:" >> $PREFIX/etc/tconfig/logs/tmp_$log
+echo "$date\n\n" >> $PREFIX/etc/tconfig/logs/tmp_$log
+echo "<----Props---->" >> $PREFIX/etc/tconfig/logs/tmp_$log
+getprop >> $PREFIX/etc/tconfig/logs/tmp_$log
+echo -e "\n\n" >> $PREFIX/etc/tconfig/logs/tmp_$log
+echo "<----System info---->" >> $PREFIX/etc/tconfig/logs/tmp_$log
+echo "Logged In users:" >> $PREFIX/etc/tconfig/logs/tmp_$log
+whoami >> $PREFIX/etc/tconfig/logs/tmp_$log
+echo $systeminfo >> $PREFIX/etc/tconfig/logs/tmp_$log
+echo "Package Installed" >> $PREFIX/etc/tconfig/logs/tmp_$log
+pkg list-installed >> $PREFIX/etc/tconfig/logs/tmp_$log
+echo -e "\n\n" >> $PREFIX/etc/tconfig/logs/tmp_$log
+echo "<----Hardware info---->" >> $PREFIX/etc/tconfig/logs/tmp_$log
+echo "CPU info:" >> $PREFIX/etc/tconfig/logs/tmp_$log
+lscpu >> $PREFIX/etc/tconfig/logs/tmp_$log
+echo "Memory and Swap info:" >> $PREFIX/etc/tconfig/logs/tmp_$log
+free -h >> $PREFIX/etc/tconfig/logs/tmp_$log
+echo "Internet info:" >> $PREFIX/etc/tconfig/logs/tmp_$log
+ifconfig >> $PREFIX/etc/tconfig/logs/tmp_$log
+echo "Disk Usages :" >> $PREFIX/etc/tconfig/logs/tmp_$log
+df -h >> $PREFIX/etc/tconfig/logs/tmp_$log
+mv -f $PREFIX/etc/tconfig/logs/tmp_$log $PREFIX/etc/tconfig/logs/$log
 green "系统信息确认完毕!!"
 green "您马上就可以进入脚本!"
 clear
@@ -159,7 +159,7 @@ function menu(){
 	sleep 0.016
 	echo -e "                                0   退出\n\n\n"
 	echo -en "\t\tEnter an option: "
-    read option
+	read option
 }
 
 function mirrors(){
@@ -226,27 +226,25 @@ function storage(){
 }
 
 function board(){
-	[[ -f "$HOME/.termux/termux.properties"]] && boardreset && return 0
+	if [ -f "$HOME/.termux/termux.properties" ]; then
+		red "检测到您已经修改了小键盘，继续操作将会覆盖您的自定义设置，是否继续？[y/n]"
+		echo -en "\t\tEnter an option: "
+		read boardresetchoose
+		case $boardresetchoose in
+			y)
+				rm -f $HOME/.termux/termux.properties
+				;;
+			*)
+				echo "操作终止"
+				return 0
+				;;
+		esac
+	fi
 	mkdir -p ~/.termux
 	echo -e "extra-keys = [['TAB','>','-','~','/','*','$'],['ESC','(','HOME','UP','END',')','PGUP'],['CTRL','[','LEFT','DOWN','RIGHT',']','PGDN']]" > ~/.termux/termux.properties
 	termux-reload-settings
 	green  "请重启终端使小键盘显示正常"
 	return 0
-}
-
-function boardreset(){
-	red "检测到您已经修改了小键盘，继续操作将会覆盖您的自定义设置，是否继续？[y/n]"
-	echo -en "\t\tEnter an option: "
-	read boardresetchoose
-	case $boardresetchoose in
-		y)
-			rm -f $HOME/.termux/termux.properties
-			board
-			;;
-		*)
-			echo "操作终止"
-			;;
-	esac
 }
 
 function installzsh(){
@@ -1199,51 +1197,63 @@ function termuxapi(){
 	case $termuxapichoose in
 		1)
 			termux-battery-status
-			sleep 3
+			echo -en "\n\n\t\t\t点击任意键以继续"
+			read -n 1 line
 			termuxapi ;;
 		2)
 			termux-camera-info
-			sleep 3
+			echo -en "\n\n\t\t\t点击任意键以继续"
+			read -n 1 line
 			termuxapi ;;
 		3)
 			termux-infrared-frequencies
-			sleep 3
+			echo -en "\n\n\t\t\t点击任意键以继续"
+			read -n 1 line
 			termuxapi ;;
 		4)
 			termux-telephony-cellinfo
-			sleep 3
+			echo -en "\n\n\t\t\t点击任意键以继续"
+			read -n 1 line
 			termuxapi ;;
 		5)
 			termux-tts-engines
-			sleep 3
+			echo -en "\n\n\t\t\t点击任意键以继续"
+			read -n 1 line
 			termuxapi ;;
 		6)
 			termux-wifi-connectioninfo
-			sleep 3
+			echo -en "\n\n\t\t\t点击任意键以继续"
+			read -n 1 line
 			termuxapi ;;
 		7)
 			termux-wifi-scaninfo
-			sleep 3
+			echo -en "\n\n\t\t\t点击任意键以继续"
+			read -n 1 line
 			termuxapi ;;
 		8)
 			termux-clipboard-get
-			sleep 3
+			echo -en "\n\n\t\t\t点击任意键以继续"
+			read -n 1 line
 			termuxapi ;;
 		9)
 			getprop |grep imei
-			sleep 3
+			echo -en "\n\n\t\t\t点击任意键以继续"
+			read -n 1 line
 			termuxapi ;;
 		10)
 			lscpu
-			sleep 3
+			echo -en "\n\n\t\t\t点击任意键以继续"
+			read -n 1 line
 			termuxapi ;;
 		11)
 			free -h
-			sleep 3
+			echo -en "\n\n\t\t\t点击任意键以继续"
+			read -n 1 line
 			termuxapi ;;
 		12)
 			df -h
-			sleep 3
+			echo -en "\n\n\t\t\t点击任意键以继续"
+			read -n 1 line
 			termuxapi ;;
 		0)
 			return 0 ;;
@@ -1324,18 +1334,22 @@ function logs(){
 	case $logschoose in
 		1)
 			echo -e "\n日志列表如下:\n"
-			ls $HOME/logs/
+			ls $HOME/logs/ $PREFIX/etc/tconfig/logs/
 			echo "请输入您想要查看的日志的名字"
 			echo -en "\t\tEnter: "
 			read logsname
-			cat $HOME/logs/$logsname
+			if [ -f "$HOME/logs/$logsname" ]; then
+				cat $HOME/logs/$logsname
+			else
+				cat $PREFIX/etc/tconfig/logs/$logsname
+			fi
 			return 0 ;;
 		2)
 			logsgen
 		        return 0 ;;
 		3)
-			rm -rf $HOME/log
-			mkdir $HOME/logs
+			rm -rf $HOME/logs $PREFIX/etc/tconfig/logs/*
+			mkdir $HOME/logs 
 			return 0 ;;
 		0)
 			return 0 ;;
