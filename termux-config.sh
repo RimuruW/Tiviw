@@ -6,6 +6,7 @@
 # Version: 1.6.30
 # Copyright (c) 2020 Qingxu
 #-----------------------------------
+name="TX-Tools"
 sh_ver="1.6.30"
 function blue(){
 	echo -e "\033[34m\033[01m$1\033[0m"
@@ -57,7 +58,7 @@ else
 	echo "Skip..."
 fi
 [[ -f "$PREFIX/etc/tconfig/aria2btauto" ]] && bash <(wget -qO- git.io/tracker.sh) $HOME/.aria2/aria2.conf
-sh_new_ver=$(wget -qO- -t1 -T3 "https://raw.githubusercontent.com/huanruomengyun/Termux-Tools/master/termux-config.sh" | grep 'sh_ver="' | awk -F "=" '{print $NF}' | sed 's/\"//g' | head -1) && sh_new_type="github"
+sh_new_ver=$(wget -qO- -t1 -T3 "https://raw.githubusercontent.com/huanruomengyun/$name/master/termux-config.sh" | grep 'sh_ver="' | awk -F "=" '{print $NF}' | sed 's/\"//g' | head -1) && sh_new_type="github"
 [[ -z ${sh_new_ver} ]] && red "无法链接到 Github! 脚本最新版本信息获取失败!" && red "请注意,该脚本绝大多数功能都需要与 GitHub 建立连接,若无法连接 GitHub,则脚本大多数功能无法使用!!" && echo -en "\n\n\t\t\t点击任意键以继续" && read -n 1 line
 #[[ $sh_new_ver -lt $sh_ver ]] && red "警告！本地脚本版本号高于云端版本号。\n这可能是因为您正在使用 dev 分支，而脚本默认拉取 master 分支。\n建议不要在任何情况下使用 dev 分支以获取更佳的使用体验\n" && canautoupdate=warning
 #if [ -f "$PREFIX/etc/tconfig/startautoupdate" ]; then
@@ -225,6 +226,7 @@ function storage(){
 }
 
 function board(){
+	[[ -f "$HOME/.termux/termux.properties"]] && boardreset && return 0
 	mkdir -p ~/.termux
 	echo -e "extra-keys = [['TAB','>','-','~','/','*','$'],['ESC','(','HOME','UP','END',')','PGUP'],['CTRL','[','LEFT','DOWN','RIGHT',']','PGDN']]" > ~/.termux/termux.properties
 	termux-reload-settings
@@ -232,7 +234,23 @@ function board(){
 	return 0
 }
 
+function boardreset(){
+	red "检测到您已经修改了小键盘，继续操作将会覆盖您的自定义设置，是否继续？[y/n]"
+	echo -en "\t\tEnter an option: "
+	read boardresetchoose
+	case $boardresetchoose in
+		y)
+			rm -f $HOME/.termux/termux.properties
+			board
+			;;
+		*)
+			echo "操作终止"
+			;;
+	esac
+}
+
 function installzsh(){
+	[[ -d "$HOME/.oh-my-zsh" ]] && red "检测到您已安装 Oh My ZSH，安装终止" && return 0
        	rc=~/.zshrc
         pkg in zsh git curl -y
         green "如果下面需要您进行确认，请输入 y 确认"
@@ -1141,7 +1159,7 @@ function youget1(){
 
 function termuxapi(){
 	if [ ! -f "/data/data/com.termux/files/usr/libexec/termux-api" ];then
-		pkg in termux-api
+		pkg in termux-api -y
 	fi
 	need=`blue "Need"`
 	echo -e "\n\n"
