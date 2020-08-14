@@ -6,8 +6,8 @@
 # Version: 1.6.30
 # Copyright (c) 2020 Qingxu
 #-----------------------------------
-name="TX-Tools"
-sh_ver="1.6.30"
+name="Fly-Tools"
+sh_ver="1.8.14"
 function blue(){
 	echo -e "\033[34m\033[01m$1\033[0m"
 }
@@ -53,11 +53,11 @@ if [ ! -f "$PREFIX/bin/wget" ];then
 fi
 mkdir -p $PREFIX/etc/tconfig
 if [ -f "$PREFIX/etc/tconfig/mirrorstatus" ];then
-	apt update
+	apt-get update >/dev/null
 else
 	echo "Skip..."
 fi
-[[ -f "$PREFIX/etc/tconfig/aria2btauto" ]] && bash <(wget -qO- git.io/tracker.sh) $HOME/.aria2/aria2.conf
+[[ -f "$PREFIX/etc/tconfig/aria2btauto" ]] && bash <(wget -qO- git.io/tracker.sh) $HOME/.aria2/aria2.conf >/dev/null
 sh_new_ver=$(wget -qO- -t1 -T3 "https://raw.githubusercontent.com/huanruomengyun/$name/master/termux-config.sh" | grep 'sh_ver="' | awk -F "=" '{print $NF}' | sed 's/\"//g' | head -1) && sh_new_type="github"
 [[ -z ${sh_new_ver} ]] && red "无法链接到 Github! 脚本最新版本信息获取失败!" && red "请注意,该脚本绝大多数功能都需要与 GitHub 建立连接,若无法连接 GitHub,则脚本大多数功能无法使用!!" && echo -en "\n\n\t\t\t点击任意键以继续" && read -n 1 line
 #[[ $sh_new_ver -lt $sh_ver ]] && red "警告！本地脚本版本号高于云端版本号。\n这可能是因为您正在使用 dev 分支，而脚本默认拉取 master 分支。\n建议不要在任何情况下使用 dev 分支以获取更佳的使用体验\n" && canautoupdate=warning
@@ -85,7 +85,6 @@ if [ $sh_ver=$sh_new_ver ]; then
 else
 	echo "$sh_ver ->> $sh_new_ver" >> $PREFIX/etc/tconfig/logs/update_log.log
 fi
-clear
 green "初始化完成!"
 green "确认您的设备信息中……"
 date=$(date)
@@ -104,7 +103,7 @@ echo "Logged In users:" >> $PREFIX/etc/tconfig/logs/tmp_$log
 whoami >> $PREFIX/etc/tconfig/logs/tmp_$log
 echo $systeminfo >> $PREFIX/etc/tconfig/logs/tmp_$log
 echo "Package Installed" >> $PREFIX/etc/tconfig/logs/tmp_$log
-pkg list-installed >> $PREFIX/etc/tconfig/logs/tmp_$log
+pkg list-installed >> $PREFIX/etc/tconfig/logs/tmp_$log 2>/dev/null
 echo -e "\n\n" >> $PREFIX/etc/tconfig/logs/tmp_$log
 echo "<----Hardware info---->" >> $PREFIX/etc/tconfig/logs/tmp_$log
 echo "CPU info:" >> $PREFIX/etc/tconfig/logs/tmp_$log
@@ -112,7 +111,7 @@ lscpu >> $PREFIX/etc/tconfig/logs/tmp_$log
 echo "Memory and Swap info:" >> $PREFIX/etc/tconfig/logs/tmp_$log
 free -h >> $PREFIX/etc/tconfig/logs/tmp_$log
 echo "Internet info:" >> $PREFIX/etc/tconfig/logs/tmp_$log
-ifconfig >> $PREFIX/etc/tconfig/logs/tmp_$log
+ifconfig >> $PREFIX/etc/tconfig/logs/tmp_$log 2>/dev/null
 echo "Disk Usages :" >> $PREFIX/etc/tconfig/logs/tmp_$log
 df -h >> $PREFIX/etc/tconfig/logs/tmp_$log
 mv -f $PREFIX/etc/tconfig/logs/tmp_$log $PREFIX/etc/tconfig/logs/$log
@@ -178,11 +177,11 @@ function mirrors(){
 	else
 		pipmirrorsstatus=`red "false"`
 	fi
-	echo "\n\n"
+	echo -e "\n\n"
 	echo "Termux 清华源状态：" $tsinghua
 	echo "NPM 淘宝源状态:" $npmmirrorsstatus
 	echo "pip 清华源状态:" $pipmirrorsstatus
-	echo "\n\n"
+	echo -e "\n\n"
 	echo "1 Termux 清华源"
 	sleep 0.016
 	echo "2 NPM 淘宝源"
@@ -252,7 +251,10 @@ function installzsh(){
        	rc=~/.zshrc
         pkg in zsh git curl -y
         green "如果下面需要您进行确认，请输入 y 确认"
+	if [ -z ${sh_new_ver} ]; then
+		  
         sh -c "$(sed -e "/exec zsh -l/d" <<< $(curl -fsSL https://raw.github.com/ohmyzsh/ohmyzsh/master/tools/install.sh))"
+	fi
         git clone https://github.com/zsh-users/zsh-autosuggestions ~/.oh-my-zsh/custom/plugins/zsh-autosuggestions
         git clone https://github.com/zsh-users/zsh-completions ~/.oh-my-zsh/custom/plugins/zsh-completions
         git clone https://github.com/zsh-users/zsh-syntax-highlighting.git ~/.oh-my-zsh/custom/plugins/zsh-syntax-highlighting
@@ -1159,6 +1161,8 @@ function termuxapi(){
 	if [ ! -f "/data/data/com.termux/files/usr/libexec/termux-api" ];then
 		pkg in termux-api -y
 	fi
+	unset termuxapichoose
+	[[ ! -z $termuxapichoose ]] && red "程序出现了内部错误，强制返回标题界面" && echo -en "\n\n\t\t\t请回车以继续" && read -n 1 line &&  menu
 	need=`blue "Need"`
 	echo -e "\n\n"
 	blue "注意,该界面部分功能需要安装并授权 Termux:API 才能使用"
@@ -1261,6 +1265,7 @@ function termuxapi(){
 			echo -e "\n请输入您想要保存的 log 的名字[必填]"
 			echo -en "\t\tEnter: "
 			read tmplogsname
+			[[ -z $tmplogsname ]] && red "请输入 log 的名字" && echo -en "\n\n\t\t\t请回车以继续" && read -n 1 line && termuxapi
 			userlogname=$userlogsname.txt
 			logspwdname=$HOME/logs/$userlogname
 			mkdir -p $HOME/logs
