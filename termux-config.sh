@@ -2,12 +2,13 @@
 #-----------------------------------
 # Author: Qingxu (huanruomengyun)
 # Description: Termux Tools
-# Repository Address: https://github.com/huanruomengyun/Termux-Tools
+# Repository Address: https://github.com/huanruomengyun/Fly-Tools
 # Version: 1.6.30
 # Copyright (c) 2020 Qingxu
 #-----------------------------------
 name="Fly-Tools"
 sh_ver="1.8.14"
+ToolPATH=$PREFIX/etc/tconfig
 function blue(){
 	echo -e "\033[34m\033[01m$1\033[0m"
 }
@@ -80,6 +81,10 @@ sh_new_ver=$(wget -qO- -t1 -T3 "https://raw.githubusercontent.com/huanruomengyun
 	#	echo -e "脚本更新为云端最新[ $sh_ver --> $sh_new_ver ]"
 	#fi
 #fi
+if [ -f "$PREFIX/etc/tconfig/autoupdate" ]; then
+	wget -N "https://raw.githubusercontent.com/huanruomengyun/Termux-Tools/master/termux-config.sh" && chmod +x termux-config.sh
+	echo -e "脚本已更新为最新版本[ $sh_ver --> $sh_new_ver ]"
+fi
 if [ $sh_ver=$sh_new_ver ]; then
 	echo "脚本已为最新版本"
 else
