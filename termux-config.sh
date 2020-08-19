@@ -1,4 +1,4 @@
-#$PREFIX/bin/bash
+#!$PREFIX/bin/bash
 #-----------------------------------
 # Author: Qingxu (huanruomengyun)
 # Description: Termux Tools
@@ -49,23 +49,38 @@ fi
 blue "为确保脚本正常运行，每次运行脚本都将会强制进行初始化"
 blue "给您带来的不便还请见谅"
 green "Initializing……"
+
+if [ ! -f "$PREFIX/etc/tconfig/branch" ]; then
+	branch="master"
+else
+	branch=$(cat $PREFIX/etc/tconfig/branch)
+fi
+
 if [ ! -f "$PREFIX/bin/wget" ];then
 	pkg in wget -y >/dev/null
 fi
-mkdir -p $PREFIX/etc/tconfig
+
+mkdir -p $ToolPATH
+
 if [ -f "$PREFIX/etc/tconfig/mirrorstatus" ];then
 	apt-get update >/dev/null
 else
 	echo "Skip..."
 fi
-if [ -f /system/addon.d/*magisk* ]; then
-	testsustatus=`green "MagiskSU"`
-else
-	testsustatus=`red "UNKOWN"`
+
+sh_new_ver=$(wget -qO- -t1 -T3 "https://raw.githubusercontent.com/huanruomengyun/$name/$branch/tconfig" | grep 'sh_ver="' | awk -F "=" '{print $NF}' | sed 's/\"//g' | head -1) && sh_new_type="github"
+
+if [ -z ${sh_new_ver} ]; then
+	echo "****************"
+	echo "无法链接到 Github!"
+	echo "请注意,该脚本绝大多数功能都需要与 GitHub 建立连接,若无法连接 GitHub,则脚本大多数功能无法使用!!"
+	echo "****************"
+	echo -en "\n\n\t\t\t点击任意键以继续"
+	read -n 1 line
+	sh_new_ver=$(wget -qO- -t1 -T3 "gh.qingxu.ga/https://raw.githubusercontent.com/huanruomengyun/$name/$branch/termux-config.sh"
+| grep 'sh_ver="' | awk -F "=" '{print $NF}' | sed 's/\"//g' | head -1) && sh_new_type="github"
 fi
-[[ -f "$PREFIX/etc/tconfig/aria2btauto" ]] && bash <(wget -qO- git.io/tracker.sh) $HOME/.aria2/aria2.conf >/dev/null
-sh_new_ver=$(wget -qO- -t1 -T3 "https://raw.githubusercontent.com/huanruomengyun/$name/master/termux-config.sh" | grep 'sh_ver="' | awk -F "=" '{print $NF}' | sed 's/\"//g' | head -1) && sh_new_type="github"
-[[ -z ${sh_new_ver} ]] && red "无法链接到 Github! 脚本最新版本信息获取失败!" && red "请注意,该脚本绝大多数功能都需要与 GitHub 建立连接,若无法连接 GitHub,则脚本大多数功能无法使用!!" && echo -en "\n\n\t\t\t点击任意键以继续" && read -n 1 line
+
 #[[ $sh_new_ver -lt $sh_ver ]] && red "警告！本地脚本版本号高于云端版本号。\n这可能是因为您正在使用 dev 分支，而脚本默认拉取 master 分支。\n建议不要在任何情况下使用 dev 分支以获取更佳的使用体验\n" && canautoupdate=warning
 #if [ -f "$PREFIX/etc/tconfig/startautoupdate" ]; then
 	#if [ $canautoupdate = warning ]; then
@@ -86,15 +101,31 @@ sh_new_ver=$(wget -qO- -t1 -T3 "https://raw.githubusercontent.com/huanruomengyun
 	#	echo -e "脚本更新为云端最新[ $sh_ver --> $sh_new_ver ]"
 	#fi
 #fi
-if [ -f "$PREFIX/etc/tconfig/autoupdate" ]; then
-	wget -N "https://raw.githubusercontent.com/huanruomengyun/Termux-Tools/master/termux-config.sh" && chmod +x termux-config.sh
+if [ -f "$PREFIX/etc/tconfig/autoupdate" && ! -z ${sh_new_ver} ]; then
+	wget -N "https://raw.githubusercontent.com/huanruomengyun/$name/$branch/termux-config.sh" -P $PREFIX/etc/tconfig/
+	chmod +x $PREFIX/etc/tconfig/termux-config.sh
 	echo -e "脚本已更新为最新版本[ $sh_ver --> $sh_new_ver ]"
 fi
+
+if [ -f "$PREFIX/etc/tconfig/autoupdate" && -z ${sh_new_ver} ]; then
+	wget -N "gh.qingxu.ga/https://raw.githubusercontent.com/huanruomengyun/$name/$branch/termux-config.sh" -P $PREFIX/etc/tconfig/
+	chmod +x $PREFIX/etc/tconfig/termux-config.sh
+	echo -e "脚本已更新为最新版本[ $sh_ver --> $sh_new_ver ]"
+fi
+
 if [ $sh_ver=$sh_new_ver ]; then
 	echo "脚本已为最新版本"
 else
 	echo "$sh_ver ->> $sh_new_ver" >> $PREFIX/etc/tconfig/logs/update_log.log
 fi
+
+mkdir -p $PREFIX/etc/tconfig
+if [ -f /system/addon.d/*magisk* ]; then
+	testsustatus=`green "MagiskSU"`
+else
+	testsustatus=`red "UNKOWN"`
+fi
+[[ -f "$PREFIX/etc/tconfig/aria2btauto" ]] && bash <(wget -qO- git.io/tracker.sh) $HOME/.aria2/aria2.conf >/dev/null
 green "初始化完成!"
 green "确认您的设备信息中……"
 date=$(date)

@@ -1,20 +1,27 @@
+#!/data/data/com.termux/files/usr/bin/sh
 name="Tokka"
-if [ ! -f "$PREFIX/etc/tconfig/termux-tools.sh" ]; then
-	echo "初始化脚本……" && mkdir -p $PREFIX/etc/tconfig/ &&  wget -N https://raw.githubusercontent.com/huanruomengyun/$name/master/termux-config.sh -P $PREFIX/etc/tconfig/ >/dev/null
+
+if [ ! -f "$PREFIX/etc/tconfig/branch" ]; then
+	branch="master"
+else
+	branch=$(cat $PREFIX/etc/tconfig/branch)
 fi
 
-if [ ! -f "$PREFIX/etc/tconfig/termux-tools.sh" ]; then
-	mv -f $PREFIX/etc/hosts $PREFIX/etc/sts.tconfig
-	echo "raw.githubusercontent.com 151.101.76.133" > $PREFIX/etc/hosts
-	wget -N https://raw.githubusercontent.com/huanruomengyun/$name/master/termux-config.sh -P $PREFIX/etc/tconfig/ >/dev/null
-	mv -f $PREFIX/etc/sts.tconfig $PREFIX/etc/hosts
+if [ ! -f "$PREFIX/etc/tconfig/termux-config.sh" ]; then
+	echo "初始化脚本……"
+	mkdir -p $PREFIX/etc/tconfig/
+	wget -N https://raw.githubusercontent.com/huanruomengyun/$name/$branch/termux-config.sh -P $PREFIX/etc/tconfig/ >/dev/null
+fi
+
+if [ ! -f "$PREFIX/etc/tconfig/termux-config.sh" ]; then
+	wget -N gh.qingxu.ga/https://raw.githubusercontent.com/huanruomengyun/$name/$branch/termux-config.sh -P $PREFIX/etc/tconfig/ >/dev/null
 fi
 
 if [ ! -f "$PREFIX/bin/bash" ]; then
 	pkg in bash -y >/dev/null
 fi
 
-if [[ -f "$PREFIX/etc/tconfig/termux-tools.sh" || "$PREFIX/bin/bash" ]]
+if [ -f "$PREFIX/etc/tconfig/termux-config.sh" ]
 then
 	echo "初始化完成…"
 else
@@ -22,4 +29,4 @@ else
 	exit 1
 fi
 
-bash $PREFIX/etc/tconfig/termux-tools.sh
+bash $PREFIX/etc/tconfig/termux-config.sh
