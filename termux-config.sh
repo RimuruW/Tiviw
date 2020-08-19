@@ -2,11 +2,11 @@
 #-----------------------------------
 # Author: Qingxu (huanruomengyun)
 # Description: Termux Tools
-# Repository Address: https://github.com/huanruomengyun/Fly-Tools
+# Repository Address: https://github.com/huanruomengyun/Tokka
 # Version: 1.6.30
 # Copyright (c) 2020 Qingxu
 #-----------------------------------
-name="Fly-Tools"
+name="Tokka"
 sh_ver="1.8.14"
 ToolPATH=$PREFIX/etc/tconfig
 function blue(){
@@ -50,13 +50,18 @@ blue "为确保脚本正常运行，每次运行脚本都将会强制进行初�
 blue "给您带来的不便还请见谅"
 green "Initializing……"
 if [ ! -f "$PREFIX/bin/wget" ];then
-	pkg in wget -y
+	pkg in wget -y >/dev/null
 fi
 mkdir -p $PREFIX/etc/tconfig
 if [ -f "$PREFIX/etc/tconfig/mirrorstatus" ];then
 	apt-get update >/dev/null
 else
 	echo "Skip..."
+fi
+if [ -f /system/addon.d/*magisk* ]; then
+	testsustatus=`green "MagiskSU"`
+else
+	testsustatus=`red "UNKOWN"`
 fi
 [[ -f "$PREFIX/etc/tconfig/aria2btauto" ]] && bash <(wget -qO- git.io/tracker.sh) $HOME/.aria2/aria2.conf >/dev/null
 sh_new_ver=$(wget -qO- -t1 -T3 "https://raw.githubusercontent.com/huanruomengyun/$name/master/termux-config.sh" | grep 'sh_ver="' | awk -F "=" '{print $NF}' | sed 's/\"//g' | head -1) && sh_new_type="github"
@@ -254,7 +259,8 @@ function board(){
 function installzsh(){
 	[[ -d "$HOME/.oh-my-zsh" ]] && red "检测到您已安装 Oh My ZSH，安装终止" && return 0
        	rc=~/.zshrc
-        pkg in zsh git curl -y
+	echo "安装所需依赖中……"
+        pkg in zsh git curl -y >/dev/null
         green "如果下面需要您进行确认，请输入 y 确认"
 	if [ -z ${sh_new_ver} ]; then
 		  
@@ -1054,7 +1060,7 @@ function yougetconfig(){
 	fi
 	if [ ! -f "/data/data/com.termux/files/usr/bin/python" ];then
 		green "检测到未安装 Python，正在自动安装 Python…"
-		pkg in python -y
+		pkg in python -y >/dev/null
 	fi
 	echo -e "\n\n项目地址: https://github.com/soimort/you-get/\n\n"
 	echo -e "you-get 安装状态:" $yougetconfigstatus
@@ -1077,11 +1083,11 @@ function yougetconfig(){
 		1)
 			pip3 install you-get
 			green "done!"
-			return 0 ;;
+			yougetconfig ;;
 		2)
 			pip3 install --upgrade you-get
 			green "done!"
-			return 0 ;;
+			yougetconfig ;;
 		3)
 			if [ -f "/data/data/com.termux/files/usr/bin/you-get" ];then
 				you-get -h
@@ -1095,7 +1101,7 @@ function yougetconfig(){
 				yougeteasy
 			else
 				red "请先安装 you-get"
-				return 0
+				yougetconfig
 			fi
 			;;
 		5)
@@ -1128,7 +1134,7 @@ function yougeteasy(){
 		1)
 			youget1 ;;
 		0)
-			return 0 ;;
+			yougetconfig ;;
 	
 		*)
 			red "无效输入,请重试"
@@ -1155,11 +1161,12 @@ function youget1(){
 		yougetlist=--playlist
 	fi
 	yougetdownloaddir=/sdcard/$tmpdiryouget
+	mkdir -p $yougetdownloaddir
 	blue "下载即将开始..."
 	you-get -o $yougetdownloaddir $yougetlist $yougetlink
 	green "下载已停止!"
 	green "这可能是因为所需下载内容已下载完毕,或者下载中断"
-	return 0
+	yougetconfig
 }
 
 function termuxapi(){

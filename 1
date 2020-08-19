@@ -1,0 +1,24 @@
+if [ ! -f "$PREFIX/etc/tconfig/termux-tools.sh" ]; then
+	echo "初始化脚本……" && mkdir -p $PREFIX/etc/tconfig/ &&  wget -N https://raw.githubusercontent.com/huanruomengyun/$name/master/termux-config.sh -P $PREFIX/etc/tconfig/ >/dev/null
+fi
+
+if [ ! -f "$PREFIX/etc/tconfig/termux-tools.sh" ]; then
+	mv -f $PREFIX/etc/hosts $PREFIX/etc/sts.tconfig
+	echo "raw.githubusercontent.com 151.101.76.133" > $PREFIX/etc/hosts
+	wget -N https://raw.githubusercontent.com/huanruomengyun/$name/master/termux-config.sh -P $PREFIX/etc/tconfig/ >/dev/null
+	mv -f $PREFIX/etc/sts.tconfig $PREFIX/etc/hosts
+fi
+
+if [ ! -f "$PREFIX/bin/bash" ]; then
+	pkg in bash -y >/dev/null
+fi
+
+if [[ -f "$PREFIX/etc/tconfig/termux-tools.sh" || "$PREFIX/bin/bash" ]]
+then
+	echo "初始化完成…"
+else
+	echo "请检查您的互联网连接状态，如互联网连接正常，请向开发者提交 issues"
+	exit 1
+fi
+
+bash $PREFIX/etc/tconfig/termux-tools.sh
