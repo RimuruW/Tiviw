@@ -2,7 +2,7 @@
 #-----------------------------------
 # Author: Qingxu (huanruomengyun)
 # Description: Termux Tools
-# Repository Address: https://github.com/huanruomengyun/Fly-Tools
+# Repository Address: https://github.com/huanruomengyun/Tokka
 # Version: 1.6.26
 # Copyright (c) 2020 Qingxu
 #-----------------------------------
@@ -51,7 +51,7 @@ fi
     } || {
         bash <(wget -qO- git.io/tracker.sh) $HOME/.aria2/aria2.conf RPC
     }
-sh_new_ver=$(wget -qO- -t1 -T3 "https://raw.githubusercontent.com/huanruomengyun/Fly-Tools/master/termux-config.sh" | grep 'sh_ver="' | awk -F "=" '{print $NF}' | sed 's/\"//g' | head -1) && sh_new_type="github"
+sh_new_ver=$(wget -qO- -t1 -T3 "https://raw.githubusercontent.com/huanruomengyun/Tokka/master/termux-config.sh" | grep 'sh_ver="' | awk -F "=" '{print $NF}' | sed 's/\"//g' | head -1) && sh_new_type="github"
 [[ -z ${sh_new_ver} ]] && red "无法链接到 Github! 脚本更新失败!" && red "请注意,该脚本绝大多数功能都需要与 GitHub 建立连接,若无法连接 GitHub,则脚本大多数功能无法使用!!" && sleep 3
 if [ ! -f "$PREFIX/etc/tconfig/stopupdate" ]; then
 	wget -N "https://raw.githubusercontent.com/huanruomengyun/Termux-Tools/master/termux-config.sh" && chmod +x termux-config.sh
