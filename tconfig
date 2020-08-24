@@ -1,6 +1,6 @@
 #!/data/data/com.termux/files/usr/bin/sh
 name="Tokka"
-
+tconfig_ver=0.1
 if [ ! -f "$PREFIX/etc/tconfig/branch" ]; then
 	branch="master"
 else
@@ -27,6 +27,37 @@ then
 else
 	echo "请检查您的互联网连接状态，如互联网连接正常，请向开发者提交 issues"
 	exit 1
+fi
+
+tconfig_new_ver=$(wget -qO- -t1 -T3 "https://raw.githubusercontent.com/huanruomengyun/$name/$branch/tconfig" | grep 'sh_ver="' | awk -F "=" '{print $NF}' | sed 's/\"//g' | head -1) && sh_new_type="github"
+
+if [ -z ${tconfig_new_ver} ]; then
+	echo "****************"
+	echo "无法链接到 Github!"
+	echo "请注意,该脚本绝大多数功能都需要与 GitHub 建立连接,若无法连接 GitHub,则脚本大多数功能无法使用!!"
+	echo "****************"
+	echo -en "\n\n\t\t\t点击任意键以继续"
+	read -n 1 line
+	tconfig_new_ver=$(wget -qO- -t1 -T3 "gh.qingxu.ga/https://raw.githubusercontent.com/huanruomengyun/$name/$branch/tconfig"
+| grep 'sh_ver="' | awk -F "=" '{print $NF}' | sed 's/\"//g' | head -1) && sh_new_type="github"
+fi
+
+if [ ! -z ${tconfig_new_ver} ]; then
+	wget -N "https://raw.githubusercontent.com/huanruomengyun/$name/$branch/tconfig" -P $PREFIX/bin
+	chmod +x $PREFIX/bin/tconfig
+	echo -e "启动器已更新为最新版本[ $tconfig_ver --> $tconfig_new_ver ]"
+fi
+
+if [ -z ${tconfig_new_ver} ]; then
+	wget -N "gh.qingxu.ga/https://raw.githubusercontent.com/huanruomengyun/$name/$branch/tconfig" -P $PREFIX/bin
+	chmod +x $PREFIX//bin/tconfig
+	echo -e "启动器已更新为最新版本[ $tconfig_ver --> $tconfig_new_ver ]"
+fi
+
+if [ $sh_ver=$sh_new_ver ]; then
+	echo "启动器已为最新版本"
+else
+	echo "$tconfig_ver ->> $tconfig_new_ver" >> $PREFIX/etc/tconfig/logs/update_log.log
 fi
 
 bash $PREFIX/etc/tconfig/termux-config.sh
