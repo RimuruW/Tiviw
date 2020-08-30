@@ -164,6 +164,20 @@ echo "Disk Usages :" >> $PREFIX/etc/tconfig/logs/tmp_$log
 df -h >> $PREFIX/etc/tconfig/logs/tmp_$log
 mv -f $PREFIX/etc/tconfig/logs/tmp_$log $PREFIX/etc/tconfig/logs/$log
 green "系统信息确认完毕!!"
+
+blue "- 节点选择 -"
+blue "因为某些众所周知的原因，GitHub 在国内连接速度极为感人，对于无法正常连接 GitHub 的用户，你可以使用 GitHub 加速节点"
+blue "是否使用 GitHub 加速节点?"
+read ghproxychoose
+case $ghproxychoose in
+	y)
+		$ghproxy=gh.qingxu.ga/
+		;;
+	*)
+		green "Skip..."
+		;;
+esac
+
 green "您马上就可以进入脚本!"
 clear
 bash $PREFIX/etc/tconfig/main/menu.sh

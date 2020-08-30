@@ -7,14 +7,14 @@ else
 	branch=$(cat $PREFIX/etc/tconfig/branch)
 fi
 
-if [ ! -f "$PREFIX/etc/tconfig/termux-config.sh" ]; then
+if [ ! -d "$PREFIX/etc/tconfig/main" ]; then
 	echo "初始化脚本……"
 	mkdir -p $PREFIX/etc/tconfig/
-	wget -N https://raw.githubusercontent.com/huanruomengyun/$name/$branch/termux-config.sh -P $PREFIX/etc/tconfig/ >/dev/null
+	git clone -b $branch https://github.com/huanruomengyun/Tokka $PREFIX/etc/tconfig >/dev/null
 fi
 
-if [ ! -f "$PREFIX/etc/tconfig/termux-config.sh" ]; then
-	wget -N gh.qingxu.ga/https://raw.githubusercontent.com/huanruomengyun/$name/$branch/termux-config.sh -P $PREFIX/etc/tconfig/ >/dev/null
+if [ ! -d "$PREFIX/etc/tconfig/main" ]; then
+	git clone -b $branch gh.qingxu.ga/https://github.com/huanruomengyun/Tokka >/dev/null
 fi
 
 if [ ! -f "$PREFIX/bin/bash" ]; then
@@ -38,8 +38,7 @@ if [ -z ${tconfig_new_ver} ]; then
 	echo "****************"
 	echo -en "\n\n\t\t\t点击任意键以继续"
 	read -n 1 line
-	tconfig_new_ver=$(wget -qO- -t1 -T3 "gh.qingxu.ga/https://raw.githubusercontent.com/huanruomengyun/$name/$branch/tconfig"
-| grep 'sh_ver="' | awk -F "=" '{print $NF}' | sed 's/\"//g' | head -1) && sh_new_type="github"
+	tconfig_new_ver=$(wget -qO- -t1 -T3 "gh.qingxu.ga/https://raw.githubusercontent.com/huanruomengyun/$name/$branch/tconfig" | grep 'sh_ver="' | awk -F "=" '{print $NF}' | sed 's/\"//g' | head -1) && sh_new_type="github"
 fi
 
 if [ ! -z ${tconfig_new_ver} ]; then
