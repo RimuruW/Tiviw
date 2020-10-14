@@ -3,5 +3,5 @@
 
 ## 使用方法
 ```
-pkg in wget && wget -N https://raw.githubusercontent.com/huanruomengyun/Termux-Tools/master/termux-config.sh && bash termux-config.sh
+pkg in wget && wget -N https://raw.githubusercontent.com/QingxuMo/Tovow/master/termux-config.sh && bash termux-config.sh
 ```
