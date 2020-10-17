@@ -1,12 +1,14 @@
-#!/bin/bash
+#!/data/data/com.termux/files/usr/bin/bash
 #-----------------------------------
-# Author: Qingxu (huanruomengyun)
+# Author: Qingxu (QingxuMo)
 # Description: Termux Tools
-# Repository Address: https://github.com/huanruomengyun/Termux-Tools
-# Version: 1.6.30
+# Repository Address: https://github.com/QingxuMo/Tovow
+# Version: 1.0.1
 # Copyright (c) 2020 Qingxu
 #-----------------------------------
-sh_ver="1.6.30"
+name="Tovow"
+sh_ver="1.0.1"
+ToolPATH=$PREFIX/etc/tconfig
 function blue(){
 	echo -e "\033[34m\033[01m$1\033[0m"
 }
@@ -38,168 +40,34 @@ if [[ $EUID -eq 0 ]]; then
 	red "为了您的设备安全，请避免在任何情况下以 ROOT 用户运行该脚本"
 	exit 0
 fi
-blue "为确保脚本正常运行，每次运行脚本都将会强制进行初始化"
-blue "给您带来的不便还请见谅"
-green "Initializing……"
-if [ ! -f "$PREFIX/bin/wget" ];then
-	pkg in wget -y
-fi
-mkdir -p $PREFIX/etc/tconfig
-if [ -f "$PREFIX/etc/tconfig/mirrorstatus" ];then
-	apt update && apt upgrade -y
+if [[ -d /system/app && -d /system/priv-app ]]; then
+	systeminfo="Android $(getprop ro.build.version.release)"
 else
-	echo "Skip..."
+	red "This operating system is not supported."
+	exit 1
 fi
-[[ -f "$PREFIX/etc/tconfig/aria2btauto" ]] && bash <(wget -qO- git.io/tracker.sh) $HOME/.aria2/aria2.conf
-sh_new_ver=$(wget -qO- -t1 -T3 "https://raw.githubusercontent.com/huanruomengyun/Termux-Tools/master/termux-config.sh" | grep 'sh_ver="' | awk -F "=" '{print $NF}' | sed 's/\"//g' | head -1) && sh_new_type="github"
-[[ -z ${sh_new_ver} ]] && red "无法链接到 Github! 脚本最新版本信息获取失败!" && red "请注意,该脚本绝大多数功能都需要与 GitHub 建立连接,若无法连接 GitHub,则脚本大多数功能无法使用!!" && echo -en "\n\n\t\t\t点击任意键以继续" && read -n 1 line
-if [ ! -f "$PREFIX/etc/tconfig/stopupdate" ]; then
-	wget -N "https://raw.githubusercontent.com/huanruomengyun/Termux-Tools/master/termux-config.sh" && chmod +x termux-config.sh
-	echo -e "脚本已更新为最新版本[ $sh_ver --> $sh_new_ver ]"
-fi
-if [ $sh_ver=$sh_new_ver ]; then
-	echo "脚本已为最新版本"
-else
-	echo "$sh_ver ->> $sh_new_ver" >> $HOME/logs/update_log.log
-fi
-clear
-green "初始化完成!"
-green "确认您的系统信息中……"
-if [ -d /system/xbin ]; then
-	busyboxstatus=`green "true"`
-else
-	busyboxstatus=`red "false"`
-fi
-date=$(date)
-log=log_init.log
-mkdir -p $HOME/logs
-rm -f $HOME/logs/*log_*.log
-touch $HOME/logs/tmp_$log
-echo -e "====Device info====\n" >> $HOME/logs/tmp_$log
-echo "Date:" >> $HOME/logs/tmp_$log
-echo "$date\n\n" >> $HOME/logs/tmp_$log
-echo "<----Props---->" >> $HOME/logs/tmp_$log
-getprop >> $HOME/logs/tmp_$log
-echo -e "\n\n" >> $HOME/logs/tmp_$log
-echo "<----System info---->" >> $HOME/logs/tmp_$log
-echo "Logged In users:" >> $HOME/logs/tmp_$log
-whoami >> $HOME/logs/tmp_$log
-echo $systeminfo >> $HOME/logs/tmp_$log
-echo "Package Installed" >> $HOME/logs/tmp_$log
-pkg list-installed >> $HOME/logs/tmp_$log
-echo -e "\n\n" >> $HOME/logs/tmp_$log
-echo "<----Hardware info---->" >> $HOME/logs/tmp_$log
-echo "CPU info:"
-lscpu >> $HOME/logs/tmp_$log
-echo "Memory and Swap info:" >> $HOME/logs/tmp_$log
-free -h >> $HOME/logs/tmp_$log
-echo "Internet info:" >> $HOME/logs/tmp_$log
-ifconfig >> $HOME/logs/tmp_$log
-echo "Disk Usages :" >> $HOME/logs/tmp_$log
-df -h >> $HOME/logs/tmp_$log
-mv -f $HOME/logs/tmp_$log $HOME/logs/$log
-green "系统信息确认完毕!!"
-green "您马上就可以进入脚本!"
-clear
-function menu(){
-	printf "$BLUE"
-	cat <<-'EOF'
-  ________  ___    ______            __    
- /_  __/  |/  /   /_  __/___  ____  / /____
-  / / / /|_/ /_____/ / / __ \/ __ \/ / ___/
- / / / /  / /_____/ / / /_/ / /_/ / (__  ) 
-/_/ /_/  /_/     /_/  \____/\____/_/____/  
-                                           
-	EOF
-	printf "$RESET"
-        echo -e "\t\t\tv" $sh_ver
-	echo -e "\t\tBy Qingxu (huanruomengyun)"
-#if  [ $(which fortune) = /data/data/com.termux/files/usr/bin/fortune ]; then
-#    fortune
-#else
-#    pkg in fortune -y
-#    fortune
-#fi
-    echo -e "\n\n\n"
-	echo -e " 1   镜像源管理\n"
-	sleep 0.016
-	echo -e " 2   底部小键盘扩展\n"
-	sleep 0.016
-	echo -e " 3   获取存储权限\n"
-	sleep 0.016
-	echo -e " 4   安装 ZSH\n"
-	sleep 0.016
-	echo -e " 5   Termux 扩展\n"
-	sleep 0.016
-	echo -e " 6   实用工具安装\n"
-	sleep 0.016
-	echo -e " 7   获取手机信息\n"
-	sleep 0.016
-	echo -e " 8   Linux 发行版安装\n"
-	sleep 0.016
-	echo -e " 9   终端小游戏          	 99 关于脚本  \n"
-	sleep 0.016
-	echo -e "                                0   退出\n\n\n"
-	echo -en "\t\tEnter an option: "
-    read option
-}
 
-function mirrors(){
-	if [ -f "$PREFIX/etc/tconfig/mirrorstatus" ]; then
-		tsinghua=`green "true"`
-	else
-		tsinghua=`red "false"`
-	fi
-	if [ -f "$PREFIX/etc/tconfig/npmmirrorsstatus" ]; then
-		npmmirrorsstatus=`green "true"`
-	else
-		npmmirrorsstatus=`red "false"`
-	fi
-	if [ -d $HOME/.pip ]; then
-		pipmirrorsstatus=`green "true"`
-	else
-		pipmirrorsstatus=`red "false"`
-	fi
-	echo "\n\n"
-	echo "Termux 清华源状态：" $tsinghua
-	echo "NPM 淘宝源状态:" $npmmirrorsstatus
-	echo "pip 清华源状态:" $pipmirrorsstatus
-	echo "\n\n"
-	echo "1 Termux 清华源"
-	sleep 0.016
-	echo "2 NPM 淘宝源"
-	sleep 0.016
-	echo "3 pip 清华源"
-	sleep 0.016
-	echo "0 退出"
-	echo -en "\t\tEnter an option: "
-	read mirrorschoose
-	case $mirrorschoose in
-		1)
-			[[ -f "$PREFIX/etc/tconfig/mirrorstatus" ]] && red "您已更换清华源，无需重复更换" && return 0
-			sed -i 's@^\(deb.*stable main\)$@#\1\ndeb https://mirrors.tuna.tsinghua.edu.cn/termux/termux-packages-24 stable main@' $PREFIX/etc/apt/sources.list
-			sed -i 's@^\(deb.*games stable\)$@#\1\ndeb https://mirrors.tuna.tsinghua.edu.cn/termux/game-packages-24 games stable@' $PREFIX/etc/apt/sources.list.d/game.list
-			sed -i 's@^\(deb.*science stable\)$@#\1\ndeb https://mirrors.tuna.tsinghua.edu.cn/termux/science-packages-24 science stable@' $PREFIX/etc/apt/sources.list.d/science.list
-			touch $PREFIX/etc/tconfig/mirrorstatus
-			apt update && apt upgrade -y
-			;;
-		2)
-			[[ ! -f "$PREFIX/bin/npm" ]] && red "请先安装 Node.js" && return 0
-			npm config set registry https://registry.npm.taobao.org
-			touch $PREFIX/etc/tconfig/npmmirrorsstatus
-			;;
-		3)
-			[[ ! -f "$PREFIX/bin/python" ]] && red "请先安装 Python " && return 0
-			[[ -d $HOME/.pip ]] && red "您已更换清华源，无需重复更换" && return 0
-			mkdir -p ~/.pip/
-			echo -e "[global]\nindex-url = https://pypi.tuna.tsinghua.edu.cn/simple\n[install]\ntrusted-host=mirrors.aliyun.com" > ~/.pip/pip.conf
-			;;
-		0)
-			return 0 ;;
-		*)
-			red "无效输入,请重试"
-			mirrors ;;
-	esac
+green "检查基础配置中…"
+
+if [ ! -f "$PREFIX/etc/tconfig/branch" ]; then
+	branch="master"
+else
+	branch=$(cat $PREFIX/etc/tconfig/branch)
+fi
+
+if [ ! -f "$PREFIX/bin/wget" ];then
+	pkg in wget -y >/dev/null
+fi
+
+mkdir -p $ToolPATH
+
+[[ ! -f "$PREFIX/etc/tconfig/ok" ]] && bash $PREFIX/etc/tconfig/main/script/init.sh
+[[ -f "$PREFIX/etc/tconfig/gh-proxy" ]] && ghproxy=$(cat $PREFIX/etc/tconfig/gh-proxy)
+
+abort() {
+	abort_echo=$1
+	red "$abort_echo"
+	exit 0
 }
 
 function storage(){
@@ -208,6 +76,20 @@ function storage(){
 }
 
 function board(){
+	if [ -f "$HOME/.termux/termux.properties" ]; then
+		red "检测到您已经修改了小键盘，继续操作将会覆盖您的自定义设置，是否继续？[y/n]"
+		echo -en "\t\tEnter an option: "
+		read boardresetchoose
+		case $boardresetchoose in
+			y)
+				rm -f $HOME/.termux/termux.properties
+				;;
+			*)
+				echo "操作终止"
+				return 0
+				;;
+		esac
+	fi
 	mkdir -p ~/.termux
 	echo -e "extra-keys = [['TAB','>','-','~','/','*','$'],['ESC','(','HOME','UP','END',')','PGUP'],['CTRL','[','LEFT','DOWN','RIGHT',']','PGDN']]" > ~/.termux/termux.properties
 	termux-reload-settings
@@ -216,10 +98,15 @@ function board(){
 }
 
 function installzsh(){
+	[[ -d "$HOME/.oh-my-zsh" ]] && red "检测到您已安装 Oh My ZSH，安装终止" && return 0
        	rc=~/.zshrc
-        pkg in zsh git curl -y
+	echo "安装所需依赖中……"
+        pkg in zsh git curl -y >/dev/null
         green "如果下面需要您进行确认，请输入 y 确认"
+	if [ -z ${sh_new_ver} ]; then
+		  
         sh -c "$(sed -e "/exec zsh -l/d" <<< $(curl -fsSL https://raw.github.com/ohmyzsh/ohmyzsh/master/tools/install.sh))"
+	fi
         git clone https://github.com/zsh-users/zsh-autosuggestions ~/.oh-my-zsh/custom/plugins/zsh-autosuggestions
         git clone https://github.com/zsh-users/zsh-completions ~/.oh-my-zsh/custom/plugins/zsh-completions
         git clone https://github.com/zsh-users/zsh-syntax-highlighting.git ~/.oh-my-zsh/custom/plugins/zsh-syntax-highlighting
@@ -237,7 +124,7 @@ function sudoconfig(){
 	fi
 	echo -e "\n\n"
 	echo -e "sudo 安装状态:" $sudostatus
-	echo -e "Busybox 状态:" $busyboxstatus
+	echo -e "SU 状态:" $testsustatus
 	echo -e "\n\n"
 	echo -e "1 安装 sudo\n"
 	echo -e "2 修复 sudo\n"
@@ -292,7 +179,7 @@ function termuxplugin(){
 	sleep 0.016
 	echo -e "3 图形化界面安装\n"
 	sleep 0.016
-	echo -e "4 生成无效文件占据存储空间\n"
+	echo -e "4 生成无效文件填充存储空间\n"
 	sleep 0.016
 	echo -e "0 退出\n"
 	sleep 0.016
@@ -555,8 +442,6 @@ function tools(){
 	sleep 0.016
 	echo -e "6 Aria2 安装配置\n"
 	sleep 0.016
-	echo -e "7 Annie 安装配置\n"
-	sleep 0.016
 	echo -e "0 退出\n"
 	sleep 0.016
 	echo -en "\t\tEnter an option: "
@@ -574,8 +459,6 @@ function tools(){
 			bilibilitools ;;
 		6)
 			aria2config ;;
-		7)
-			annieconfig ;;
 		0)
 			return 0 ;;
 		*)
@@ -584,72 +467,20 @@ function tools(){
 	esac
 }
 
-function annieconfig(){
-	echo -e "\n\n"
-	echo -e "项目地址:  https://github.com/iawia002/annie"
-	echo -e "\n\n"
-	echo -e "1 安装 Annie\n"
-	sleep 0.016
-	echo -e "2 Annie 使用帮助\n"
-	sleep 0.016
-	echo -e "3 删除 Annie\n"
-	sleep 0.016
-	echo -e "0 退出\n"
-	read anniechoose
-	case $anniechoose in
-		1)
-			annidinstall
-			rush45
-function annieinstall(){5
-	pkg in -y golang git f:q
-	fmpeg
-	echo -e "cd\ngit clone https://github.com/iawia002/annie.git\ncd annie/\nGOOS=android GOARCH=arm64 go build -o $PREFIX/bin/annie main.go\ncd\nchmod -Rf 777 go\nrm -rf annie go" > annieinstall.sh
-	chmod +x annieinstall.sh && ./annieinstall.sh
-	rm -f annieinstall.sh
-}
 function aria2config(){
 	if [ -f "$PREFIX/bin/aria2c" ];then
 		aria2status=`green "true"`
 	else
 		aria2status=`red "false"`
 	fi
-	echo "\n\n"
+	echo -e "\n\n"
 	echo "项目地址: https://github.com/huanruomengyun/Aria2-Termux"
-	echo "\n\n"
+	echo -e "\n\n"
 	echo "Aria2 安装状态: " $aria2status
-	echo "\n\n"
-	echo "1 Aria2 安装与管理\n"
+	echo -e "\n\n"
+	echo -e "1 Aria2 安装与管理\n"
 	sleep 0.016
-	echo "2 AriaNG 启动\n"
-	sleep 0.016
-	echo "0 退出"
-	sleep 0.016
-	echo -en "\t\tEnter an option: "
-	read aria2choose
-	case $aria2choose in
-		1)
-			pkg in -y golang git fmpeg
-			echo -e "cd\ngit clone https://github.com/iawia002/annie.git\ncd annie/\nGOOS=android GOARCH=arm64 go build -o $PREFIX/bin/annie main.go\ncd\nchmod -Rf 777 go\nrm -rf annie go" > annieinstall.sh
-			chmod +x annieinstall.sh && ./annieinstall.sh
-			rm -f annieinstall.sh
-			;;
-		2)
-
-}
-function aria2config(){
-	if [ -f "$PREFIX/bin/aria2c" ];then
-		aria2status=`green "true"`
-	else
-		aria2status=`red "false"`
-	fi
-	echo "\n\n"
-	echo "项目地址: https://github.com/huanruomengyun/Aria2-Termux"
-	echo "\n\n"
-	echo "Aria2 安装状态: " $aria2status
-	echo "\n\n"
-	echo "1 Aria2 安装与管理\n"
-	sleep 0.016
-	echo "2 AriaNG 启动\n"
+	echo -e "2 AriaNG 启动\n"
 	sleep 0.016
 	echo "0 退出"
 	sleep 0.016
@@ -658,7 +489,8 @@ function aria2config(){
 	case $aria2choose in
 		1)
 			[[ ! -f "$PREFIX/etc/tconfig/aria2.sh" ]] && wget -P $PREFIX/etc/tconfig https://raw.githubusercontent.com/huanruomengyun/Aria2-Termux/master/aria2.sh && chmod +x $PREFIX/etc/tconfig/aria2.sh
-			[[ ! -f "$PREFIX/etc/tconfig/aria2.sh" ]] && red "Aria2 一键安装管理脚本下载失败！请检查您是否能正常连接 GitHub！" && echo "请回车确认" && read tmp && aria2config
+			[[ ! -f "$PREFIX/etc/tconfig/aria2.sh" ]] && wget -P $PREFIX/etc/tconfig gh.qingxu.ga/https://raw.githubusercontent.com/huanruomengyun/Aria2-Termux/master/aria2.sh && chmod +x $PREFIX/etc/tconfig/aria2.sh
+			[[ ! -f "$PREFIX/etc/tconfig/aria2.sh" ]] && red "Aria2 安装脚本下载失败，请检查网络连接状态" &&  echo "请回车确认" && read -n 1 line  && aria2config
 			bash $PREFIX/etc/tconfig/aria2.sh
 			;;
 		2)
@@ -722,9 +554,11 @@ function bilibilitools(){
 				bilibilitools
 			fi
 			if [ ! -f "/data/data/com.termux/files/usr/bin/python" ];then
+				green "检测到未安装 Python，正在自动安装 Python…"
 				pkg in python -y
 			fi
 			if [ ! -f "/data/data/com.termux/files/usr/bin/git" ];then
+				green "检测到未安装 git，正在自动安装 git..."
 				pkg in git -y
 			fi
 			touch $HOME/bilibilitoolsinstall.sh
@@ -797,7 +631,6 @@ function httpconfig(){
 				return 0
 			fi
 			http-server
-
 			return 0
 			;;
 		3)
@@ -818,7 +651,7 @@ function httpconfig(){
 }
 
 function hexo(){
-	wget https://raw.githubusercontent.com/huanruomengyun/Termux-Hexo-installer/master/hexo-installer.sh && sh hexo-installer.sh
+	wget https://raw.githubusercontent.comhttpserverchoose/huanruomengyun/Termux-Hexo-installer/master/hexo-installer.sh && sh hexo-installer.sh
 	rm -f hexo-installer.sh
 	return 0
 }
@@ -867,8 +700,6 @@ function ubuntu(){
 			ubuntudechoose ;;
 		n)
 			pkg update -y && pkg install wget curl proot tar -y && wget https://raw.githubusercontent.com/AndronixApp/AndronixOrigin/master/Installer/Ubuntu/ubuntu.sh && chmod +x ubuntu.sh && bash ubuntu.sh ;;
-		t)
-			echo "Working" ;;
 		*)
 			echo "无效输入，请重试" ;;
 	esac
@@ -1070,7 +901,8 @@ function yougetconfig(){
 		yougetconfigstatus=`red "false"`
 	fi
 	if [ ! -f "/data/data/com.termux/files/usr/bin/python" ];then
-		pkg in python
+		green "检测到未安装 Python，正在自动安装 Python…"
+		pkg in python -y >/dev/null
 	fi
 	echo -e "\n\n项目地址: https://github.com/soimort/you-get/\n\n"
 	echo -e "you-get 安装状态:" $yougetconfigstatus
@@ -1093,11 +925,11 @@ function yougetconfig(){
 		1)
 			pip3 install you-get
 			green "done!"
-			return 0 ;;
+			yougetconfig ;;
 		2)
 			pip3 install --upgrade you-get
 			green "done!"
-			return 0 ;;
+			yougetconfig ;;
 		3)
 			if [ -f "/data/data/com.termux/files/usr/bin/you-get" ];then
 				you-get -h
@@ -1111,7 +943,7 @@ function yougetconfig(){
 				yougeteasy
 			else
 				red "请先安装 you-get"
-				return 0
+				yougetconfig
 			fi
 			;;
 		5)
@@ -1144,7 +976,7 @@ function yougeteasy(){
 		1)
 			youget1 ;;
 		0)
-			return 0 ;;
+			yougetconfig ;;
 	
 		*)
 			red "无效输入,请重试"
@@ -1159,28 +991,32 @@ function youget1(){
 	echo -e "请输入您的下载链接[必填]"
 	echo -en "\t\tEnter: "
 	read yougetlink
-	echo -e "请输入您的下载路径[选填,路径默认指向内置存储.比如,如果您输入 Download,则文件会下载至内置存储的 Download 文件夹中]"
+	echo -e "请输入您的下载路径[选填,路径默认指向内置存储.比如，如果您输入 Download，则文件会下载至内置存储的 Download 文件夹中]"
 	green "看不懂就直接回车"
 	echo -en "\t\tEnter: "
 	read tmpdiryouget
 	echo -e "如果您输入的链接属于某一播放列表里面的一个,您是否想下载该列表里面的所有视频?[y/n]"
+	green "看不懂就直接回车"
 	echo -en "\t\tEnter: "
 	read tmpyougetlist
 	if  [ $tmpyougetlist = y ]; then
 		yougetlist=--playlist
 	fi
 	yougetdownloaddir=/sdcard/$tmpdiryouget
+	mkdir -p $yougetdownloaddir
 	blue "下载即将开始..."
 	you-get -o $yougetdownloaddir $yougetlist $yougetlink
 	green "下载已停止!"
 	green "这可能是因为所需下载内容已下载完毕,或者下载中断"
-	return 0
+	yougetconfig
 }
 
 function termuxapi(){
 	if [ ! -f "/data/data/com.termux/files/usr/libexec/termux-api" ];then
-		pkg in termux-api
+		pkg in termux-api -y
 	fi
+	unset termuxapichoose
+	[[ ! -z $termuxapichoose ]] && red "程序出现了内部错误，强制返回标题界面" && echo -en "\n\n\t\t\t请回车以继续" && read -n 1 line &&  menu
 	need=`blue "Need"`
 	echo -e "\n\n"
 	blue "注意,该界面部分功能需要安装并授权 Termux:API 才能使用"
@@ -1210,8 +1046,6 @@ function termuxapi(){
 	sleep 0.016
 	echo -e "\n12 存储使用状态"
 	sleep 0.016
-	echo -e "\n13 获取 IP 地址"
-	sleep 0.016
 	echo -e "\n99 将所有信息输出到日志" $need
 	sleep 0.016
 	echo -e "\n0 退出"
@@ -1221,54 +1055,63 @@ function termuxapi(){
 	case $termuxapichoose in
 		1)
 			termux-battery-status
-			sleep 3
+			echo -en "\n\n\t\t\t点击任意键以继续"
+			read -n 1 line
 			termuxapi ;;
 		2)
 			termux-camera-info
-			sleep 3
+			echo -en "\n\n\t\t\t点击任意键以继续"
+			read -n 1 line
 			termuxapi ;;
 		3)
 			termux-infrared-frequencies
-			sleep 3
+			echo -en "\n\n\t\t\t点击任意键以继续"
+			read -n 1 line
 			termuxapi ;;
 		4)
 			termux-telephony-cellinfo
-			sleep 3
+			echo -en "\n\n\t\t\t点击任意键以继续"
+			read -n 1 line
 			termuxapi ;;
 		5)
 			termux-tts-engines
-			sleep 3
+			echo -en "\n\n\t\t\t点击任意键以继续"
+			read -n 1 line
 			termuxapi ;;
 		6)
 			termux-wifi-connectioninfo
-			sleep 3
+			echo -en "\n\n\t\t\t点击任意键以继续"
+			read -n 1 line
 			termuxapi ;;
 		7)
 			termux-wifi-scaninfo
-			sleep 3
+			echo -en "\n\n\t\t\t点击任意键以继续"
+			read -n 1 line
 			termuxapi ;;
 		8)
 			termux-clipboard-get
-			sleep 3
+			echo -en "\n\n\t\t\t点击任意键以继续"
+			read -n 1 line
 			termuxapi ;;
 		9)
 			getprop |grep imei
-			sleep 3
+			echo -en "\n\n\t\t\t点击任意键以继续"
+			read -n 1 line
 			termuxapi ;;
 		10)
 			lscpu
-			sleep 3
+			echo -en "\n\n\t\t\t点击任意键以继续"
+			read -n 1 line
 			termuxapi ;;
 		11)
 			free -h
-			sleep 3
+			echo -en "\n\n\t\t\t点击任意键以继续"
+			read -n 1 line
 			termuxapi ;;
 		12)
 			df -h
-			sleep 3
-			termuxapi ;;
-		13)
-			ip -br -c addr
+			echo -en "\n\n\t\t\t点击任意键以继续"
+			read -n 1 line
 			termuxapi ;;
 		0)
 			return 0 ;;
@@ -1276,6 +1119,7 @@ function termuxapi(){
 			echo -e "\n请输入您想要保存的 log 的名字[必填]"
 			echo -en "\t\tEnter: "
 			read tmplogsname
+			[[ -z $tmplogsname ]] && red "请输入 log 的名字" && echo -en "\n\n\t\t\t请回车以继续" && read -n 1 line && termuxapi
 			userlogname=$userlogsname.txt
 			logspwdname=$HOME/logs/$userlogname
 			mkdir -p $HOME/logs
@@ -1286,6 +1130,32 @@ function termuxapi(){
 			termux-infrared-frequencies >> $logspwdname
 			termux-telephony-cellinfo >> $logspwdname
 			termux-tts-engines >> $logspwdname
+			termux-wifi-connectioninfo >> $logspwdname
+			termux-wifi-scaninfo >> $logspwdname
+			termux-clipboard-get >> $logspwdname
+			getprop |grep imei >> $logspwdname
+			lscpu >> $logspwdname
+			free -h >> $logspwdname
+			df -h >> $logspwdname
+			green "日志写入完成!"
+			termuxapi ;;
+	esac
+}
+
+function logsgen(){
+	date=$(date)
+	log=log_gen.log
+	mkdir -p $HOME/logs
+	touch $HOME/logs/tmp_$log
+	echo -e "====Device info====\n\n" >> $HOME/lo8gs/tmp_$log
+	echo -e "$log" >> $HOME/logs/tmp_$log
+	echo "<----Props---->" >> $HOME/logs/tmp_$log
+	getprop >> $HOME/logs/tmp_$log
+	echo -e "\n\n" >> $HOME/logs/tmp_$log
+	echo "<----System info---->" >> $HOME/logs/tmp_$log
+	echo "Logged In users:" >> $HOME/logs/tmp_$log
+	whoami >> $HOME/logs/tmp_$log
+	echo -e "\n\n" >> $HOME/logs/tmp_$log
 	echo "<----Hardware info---->" >> $HOME/logs/tmp_$log
 	echo "CPU info:"
 	lscpu >> $HOME/logs/tmp_$log
@@ -1323,18 +1193,22 @@ function logs(){
 	case $logschoose in
 		1)
 			echo -e "\n日志列表如下:\n"
-			ls $HOME/logs/
+			ls $HOME/logs/ $PREFIX/etc/tconfig/logs/
 			echo "请输入您想要查看的日志的名字"
 			echo -en "\t\tEnter: "
 			read logsname
-			cat $HOME/logs/$logsname
+			if [ -f "$HOME/logs/$logsname" ]; then
+				cat $HOME/logs/$logsname
+			else
+				cat $PREFIX/etc/tconfig/logs/$logsname
+			fi
 			return 0 ;;
 		2)
 			logsgen
 		        return 0 ;;
 		3)
-			rm -rf $HOME/log
-			mkdir $HOME/logs
+			rm -rf $HOME/logs $PREFIX/etc/tconfig/logs/*
+			mkdir $HOME/logs 
 			return 0 ;;
 		0)
 			return 0 ;;
@@ -1344,6 +1218,49 @@ function logs(){
 	esac
 }
 
+function menu(){
+	printf "$BLUE"
+	cat <<-'EOF'
+ _______  __   _____           _     
+|_   _\ \/ /  |_   _|__   ___ | |___ 
+  | |  \  /_____| |/ _ \ / _ \| / __|
+  | |  /  \_____| | (_) | (_) | \__ \
+  |_| /_/\_\    |_|\___/ \___/|_|___/
+                                     
+	EOF
+	printf "$RESET"
+        echo -e "\t\t\t\t\tv" $sh_ver
+	echo -e "\t\t\tBy Qingxu (huanruomengyun)"
+#if  [ $(which fortune) = /data/data/com.termux/files/usr/bin/fortune ]; then
+#    fortune
+#else
+#    pkg in fortune -y
+#    fortune
+#fi
+    echo -e "\n\n\n"
+	echo -e " 1   镜像源管理\n"
+	sleep 0.016
+	echo -e " 2   底部小键盘扩展\n"
+	sleep 0.016
+	echo -e " 3   获取存储权限\n"
+	sleep 0.016
+	echo -e " 4   安装 ZSH\n"
+	sleep 0.016
+	echo -e " 5   Termux 扩展\n"
+	sleep 0.016
+	echo -e " 6   实用工具安装\n"
+	sleep 0.016
+	echo -e " 7   获取手机信息\n"
+	sleep 0.016
+	echo -e " 8   Linux 发行版安装\n"
+	sleep 0.016
+	echo -e " 9   终端小游戏          	 99 关于脚本  \n"
+	sleep 0.016
+	echo -e "                                0   退出\n\n\n"
+	echo -en "\t\tEnter an option: "
+	read option
+}
+
 while [ 1 ]
 do
     menu
@@ -1351,7 +1268,7 @@ do
 	    0)
 	    	    exit 0 ;;
 	    1)
-	    	    mirrors ;;
+	    	    bash $PREFIX/etc/tconfig/main/script/mirror.sh ;;
 	    2)
 	    	    board ;;
 	    3)
@@ -1366,7 +1283,7 @@ do
 	    	    termuxapi ;;
 	    8)
 	    	    Linux ;;
-	    99) 
+	    99)
 	    	    about ;;
 	    *)
 		    red "无效输入，请重试" ;;
@@ -1374,4 +1291,4 @@ do
     echo -en "\n\n\t\t\t点击任意键以继续"
     read -n 1 line
 done
-clear
+

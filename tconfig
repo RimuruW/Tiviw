@@ -1,5 +1,5 @@
 #!/data/data/com.termux/files/usr/bin/sh
-name="Tokka"
+name="Tovow"
 tconfig_ver=0.1
 if [ ! -f "$PREFIX/etc/tconfig/branch" ]; then
 	branch="master"
@@ -10,11 +10,11 @@ fi
 if [ ! -d "$PREFIX/etc/tconfig/main" ]; then
 	echo "初始化脚本……"
 	mkdir -p $PREFIX/etc/tconfig/
-	git clone -b $branch https://github.com/huanruomengyun/Tokka $PREFIX/etc/tconfig >/dev/null
+	git clone -b $branch https://github.com/QingxuMo/$name $PREFIX/etc/tconfig >/dev/null
 fi
 
 if [ ! -d "$PREFIX/etc/tconfig/main" ]; then
-	git clone -b $branch gh.qingxu.ga/https://github.com/huanruomengyun/Tokka >/dev/null
+	git clone -b $branch gh.qingxu.ga/https://github.com/QingxuMo/$name >/dev/null
 fi
 
 if [ ! -f "$PREFIX/bin/bash" ]; then
@@ -29,7 +29,7 @@ else
 	exit 1
 fi
 
-tconfig_new_ver=$(wget -qO- -t1 -T3 "https://raw.githubusercontent.com/huanruomengyun/$name/$branch/tconfig" | grep 'sh_ver="' | awk -F "=" '{print $NF}' | sed 's/\"//g' | head -1) && sh_new_type="github"
+tconfig_new_ver=$(wget -qO- -t1 -T3 "https://raw.githubusercontent.com/QingxuMo/$name/$branch/tconfig" | grep 'sh_ver="' | awk -F "=" '{print $NF}' | sed 's/\"//g' | head -1) && sh_new_type="github"
 
 if [ -z ${tconfig_new_ver} ]; then
 	echo "****************"
@@ -38,18 +38,18 @@ if [ -z ${tconfig_new_ver} ]; then
 	echo "****************"
 	echo -en "\n\n\t\t\t点击任意键以继续"
 	read -n 1 line
-	tconfig_new_ver=$(wget -qO- -t1 -T3 "gh.qingxu.ga/https://raw.githubusercontent.com/huanruomengyun/$name/$branch/tconfig" | grep 'sh_ver="' | awk -F "=" '{print $NF}' | sed 's/\"//g' | head -1) && sh_new_type="github"
+	tconfig_new_ver=$(wget -qO- -t1 -T3 "gh.qingxu.ga/https://raw.githubusercontent.com/QingxuMo/$name/$branch/tconfig" | grep 'sh_ver="' | awk -F "=" '{print $NF}' | sed 's/\"//g' | head -1) && sh_new_type="github"
 fi
 
 if [ ! -z ${tconfig_new_ver} ]; then
-	wget -N "https://raw.githubusercontent.com/huanruomengyun/$name/$branch/tconfig" -P $PREFIX/bin
+	wget -N "https://raw.githubusercontent.com/QingxuMo/$name/$branch/tconfig" -P $PREFIX/bin
 	chmod +x $PREFIX/bin/tconfig
 	echo -e "启动器已更新为最新版本[ $tconfig_ver --> $tconfig_new_ver ]"
 fi
 
 if [ -z ${tconfig_new_ver} ]; then
-	wget -N "gh.qingxu.ga/https://raw.githubusercontent.com/huanruomengyun/$name/$branch/tconfig" -P $PREFIX/bin
-	chmod +x $PREFIX//bin/tconfig
+	wget -N "gh.qingxu.ga/https://raw.githubusercontent.com/QingxuMo/$name/$branch/tconfig" -P $PREFIX/bin
+	chmod +x $PREFIX/bin/tconfig
 	echo -e "启动器已更新为最新版本[ $tconfig_ver --> $tconfig_new_ver ]"
 fi
 
@@ -59,4 +59,4 @@ else
 	echo "$tconfig_ver ->> $tconfig_new_ver" >> $PREFIX/etc/tconfig/logs/update_log.log
 fi
 
-bash $PREFIX/etc/tconfig/termux-config.sh
+bash $PREFIX/etc/tconfig/main/script/menu.sh
