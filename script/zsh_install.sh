@@ -1,3 +1,11 @@
+#!/data/data/com.termux/files/usr/bin/bash
+#-----------------------------------
+# Author: Qingxu (QingxuMo)
+# Description: Termux Tools
+# Repository Address: https://github.com/QingxuMo/Tovow
+# Copyright (c) 2020 Qingxu
+#-----------------------------------
+
 [[ -d "$HOME/.oh-my-zsh" ]] && red "检测到您已安装 Oh My ZSH，安装终止" && return 0
 echo "安装所需依赖中……"
 pkg in zsh git curl -y >/dev/null

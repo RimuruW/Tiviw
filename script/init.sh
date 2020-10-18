@@ -1,4 +1,11 @@
-#!$PREFIX/bin/bash
+#!/data/data/com.termux/files/usr/bin/bash
+#-----------------------------------
+# Author: Qingxu (QingxuMo)
+# Description: Termux Tools
+# Repository Address: https://github.com/QingxuMo/Tovow
+# Copyright (c) 2020 Qingxu
+#-----------------------------------
+
 green "正在进行初始化…"
 green "这一过程只会在您第一次运行脚本时进行"
 green "确认您的设备信息中……"
@@ -72,5 +79,6 @@ esac
 
 
 green "您马上就可以进入脚本!"
-clear
+touch $PREFIX/etc/tconfig/ok
+clear 
 bash $PREFIX/etc/tconfig/main/script/menu.sh

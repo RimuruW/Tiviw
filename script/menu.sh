@@ -3,136 +3,10 @@
 # Author: Qingxu (QingxuMo)
 # Description: Termux Tools
 # Repository Address: https://github.com/QingxuMo/Tovow
-# Version: 1.0.1
 # Copyright (c) 2020 Qingxu
 #-----------------------------------
-name="Tovow"
-sh_ver="1.0.1"
-ToolPATH=$PREFIX/etc/tconfig
-function blue(){
-	echo -e "\033[34m\033[01m$1\033[0m"
-}
-function green(){
-	echo -e "\033[32m\033[01m$1\033[0m"
-}
-function red(){
-	echo -e "\033[31m\033[01m$1\033[0m"
-}
-if [ -t 1 ]; then
-	RED=$(printf '\033[31m')
-	GREEN=$(printf '\033[32m')
-	YELLOW=$(printf '\033[33m')
-	BLUE=$(printf '\033[34m')
-	BOLD=$(printf '\033[1m')
-	RESET=$(printf '\033[m')
-else
-	RED=""
-	GREEN=""
-	YELLOW=""
-	BLUE=""
-	BOLD=""
-	RESET=""
-fi
-if [[ $EUID -eq 0 ]]; then
-	red "检测到您正在尝试使用 ROOT 权限运行该脚本"
-	red "这是不建议且不被允许的"
-	red "该脚本不需要 ROOT 权限,且以 ROOT 权限运行可能会带来一些无法预料的问题"
-	red "为了您的设备安全，请避免在任何情况下以 ROOT 用户运行该脚本"
-	exit 0
-fi
-if [[ -d /system/app && -d /system/priv-app ]]; then
-	systeminfo="Android $(getprop ro.build.version.release)"
-else
-	red "This operating system is not supported."
-	exit 1
-fi
 
-green "检查基础配置中…"
-
-if [ ! -f "$PREFIX/etc/tconfig/branch" ]; then
-	branch="master"
-else
-	branch=$(cat $PREFIX/etc/tconfig/branch)
-fi
-
-if [ ! -f "$PREFIX/bin/wget" ];then
-	pkg in wget -y >/dev/null
-fi
-
-mkdir -p $ToolPATH
-
-[[ ! -f "$PREFIX/etc/tconfig/ok" ]] && bash $PREFIX/etc/tconfig/main/script/init.sh
-[[ -f "$PREFIX/etc/tconfig/gh-proxy" ]] && ghproxy=$(cat $PREFIX/etc/tconfig/gh-proxy)
-
-abort() {
-	abort_echo=$1
-	red "$abort_echo"
-	exit 0
-}
-
-function storage(){
-	termux-setup-storage
-	return 0
-}
-
-function board(){
-	if [ -f "$HOME/.termux/termux.properties" ]; then
-		red "检测到您已经修改了小键盘，继续操作将会覆盖您的自定义设置，是否继续？[y/n]"
-		echo -en "\t\tEnter an option: "
-		read boardresetchoose
-		case $boardresetchoose in
-			y)
-				rm -f $HOME/.termux/termux.properties
-				;;
-			*)
-				echo "操作终止"
-				return 0
-				;;
-		esac
-	fi
-	mkdir -p ~/.termux
-	echo -e "extra-keys = [['TAB','>','-','~','/','*','$'],['ESC','(','HOME','UP','END',')','PGUP'],['CTRL','[','LEFT','DOWN','RIGHT',']','PGDN']]" > ~/.termux/termux.properties
-	termux-reload-settings
-	green  "请重启终端使小键盘显示正常"
-	return 0
-}
-
-function aria2config(){
-	if [ -f "$PREFIX/bin/aria2c" ];then
-		aria2status=`green "true"`
-	else
-		aria2status=`red "false"`
-	fi
-	echo -e "\n\n"
-	echo "项目地址: https://github.com/huanruomengyun/Aria2-Termux"
-	echo -e "\n\n"
-	echo "Aria2 安装状态: " $aria2status
-	echo -e "\n\n"
-	echo -e "1 Aria2 安装与管理\n"
-	sleep 0.016
-	echo -e "2 AriaNG 启动\n"
-	sleep 0.016
-	echo "0 退出"
-	sleep 0.016
-	echo -en "\t\tEnter an option: "
-	read aria2choose
-	case $aria2choose in
-		1)
-			[[ ! -f "$PREFIX/etc/tconfig/aria2.sh" ]] && wget -P $PREFIX/etc/tconfig https://raw.githubusercontent.com/huanruomengyun/Aria2-Termux/master/aria2.sh && chmod +x $PREFIX/etc/tconfig/aria2.sh
-			[[ ! -f "$PREFIX/etc/tconfig/aria2.sh" ]] && wget -P $PREFIX/etc/tconfig gh.qingxu.ga/https://raw.githubusercontent.com/huanruomengyun/Aria2-Termux/master/aria2.sh && chmod +x $PREFIX/etc/tconfig/aria2.sh
-			[[ ! -f "$PREFIX/etc/tconfig/aria2.sh" ]] && red "Aria2 安装脚本下载失败，请检查网络连接状态" &&  echo "请回车确认" && read -n 1 line  && aria2config
-			bash $PREFIX/etc/tconfig/aria2.sh
-			;;
-		2)
-			ariang ;;
-		0)
-			return 0 ;;
-		*)
-			red "无效输入，请重试"
-			aria2config
-			;;
-	esac
-}
+source $PREFIX/etc/tconfig/main/script/function.sh
 
 function ariang(){
 	[[ ! -f "$PREFIX/bin/aria2c" ]] && red "请先安装 Aria2" && echo "请回车确认" && read tmp && aria2config
@@ -900,7 +774,7 @@ do
 	    1)
 	    	    source $PREFIX/etc/tconfig/main/script/mirror.sh ;;
 	    2)
-	    	    board ;;
+	    	    source $PREFIX/etc/tconfig/main/script/board.sh ;;
 	    3)
 	    	    storage ;;
 	    4)

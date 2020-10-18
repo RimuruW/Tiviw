@@ -1,3 +1,11 @@
+#!/data/data/com.termux/files/usr/bin/bash
+#-----------------------------------
+# Author: Qingxu (QingxuMo)
+# Description: Termux Tools
+# Repository Address: https://github.com/QingxuMo/Tovow
+# Copyright (c) 2020 Qingxu
+#-----------------------------------
+
 mirrors_status=$(cat $PREFIX/etc/apt/sources.list | grep "mirror" | grep -v '#')
 if [ ! -z "$mirrors_status" ]; then
 	mirrorsstatus=`green "true"`
