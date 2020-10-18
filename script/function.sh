@@ -119,6 +119,14 @@ else
 fi
 }
 
+httpconfig_check() {
+	if [ -f "/data/data/com.termux/files/usr/lib/node_modules/http-server/bin/http-server" ];then
+		httpconfigstatus=`green "true"`
+	else
+		httpconfigstatus=`red "false"`
+	fi
+}
+
 Enter=$(echo -en "\t\tEnter an option: ")
 Step=$(echo -en "\n\n\t\t\t请回车以继续" && read -n 1 line)
 Abort() {

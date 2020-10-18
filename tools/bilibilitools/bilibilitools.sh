@@ -28,24 +28,24 @@ case $biliconfig in
 			green "检测到未安装 git，正在自动安装 git..."
 			pkg in git -y
 		fi
-		source $PREFIX/etc/tconfig/main/tools/bilibilitools/bilibilitools_installer.sh
+		source $ToolPATH/main/tools/bilibilitools/bilibilitools_installer.sh
 		if [ -f "$bilibilitools_core_path/main.py" ];then
 			green "BiliBili 挂机助手已安装成功!"
 		else
 			red "BiliBili 挂机助手安装失败"
-				source $PREFIX/etc/tconfig/main/tools/bilibilitools/bilibilitools.sh
+				source $ToolPATH/main/tools/bilibilitools/bilibilitools.sh
 			fi
 			return 0
 			;;
 		2)
 			if [ ! -f "$bilibilitools_core_path/main.py" ];then
 				red "请先安装 BiliBili 挂机助手!"
-				source $PREFIX/etc/tconfig/main/tools/bilibilitools/bilibilitools.sh
+				source $ToolPATH/main/tools/bilibilitools/bilibilitools.sh
 			fi
 			if [ ! -f "/data/data/com.termux/files/usr/bin/python" ];then
 				pkg in python -y
 			fi
-			source $PREFIX/etc/tconfig/main/tools/bilibilitools/start_bilibilitools.sh
+			source $ToolPATH/main/tools/bilibilitools/start_bilibilitools.sh
 			return 0 ;;
 		3)
 			echo "开始删除…"
@@ -53,8 +53,8 @@ case $biliconfig in
 			green "如果一切正常,BiliBili 挂机助手已删除完成!"
 			return 0 ;;
 		0)
-			return 0 ;;
+			source $ToolPATH/main/tools/menu.sh ;;
 		*)
 			red "无效输入,请重试" 
-			source $PREFIX/etc/tconfig/main/tools/bilibilitools/bilibilitools.sh ;;
+			source $ToolPATH/main/tools/bilibilitools/bilibilitools.sh ;;
 esac
