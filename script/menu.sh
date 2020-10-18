@@ -8,14 +8,6 @@
 
 source $PREFIX/etc/tconfig/main/script/function.sh
 
-
-
-function hexo(){
-	wget https://raw.githubusercontent.comhttpserverchoose/huanruomengyun/Termux-Hexo-installer/master/hexo-installer.sh && sh hexo-installer.sh
-	rm -f hexo-installer.sh
-	return 0
-}
-
 function Linux(){
 	echo -e "1 Ubuntu\n"
 	sleep 0.016

@@ -21,7 +21,7 @@ if [ ! -f "$PREFIX/bin/bash" ]; then
 	pkg in bash -y >/dev/null
 fi
 
-if [ -f "$PREFIX/etc/tconfig/main/script/menu.sh" ]
+if [ -f "$PREFIX/etc/tconfig/main/script/menu.sh" ]; then
 	echo "请检查您的互联网连接状态，如互联网连接正常，请向开发者提交 issues"
 	exit 1
 fi
