@@ -45,7 +45,7 @@ case $etermuxopen in
 		else
 			touch $PREFIX/etc/termuxopen
 		fi
-		source $PREFIX/etc/tconfig/main/termuxplugin/termux-open.sh ;;
+		source $ToolPATH/main/termuxplugin/termux-open.sh ;;
 	2)
 		if [ ! -f "$PREFIX/etc/motd.bak" ];then
 			mv $PREFIX/etc/motd $PREFIX/etc/motd.bak
@@ -68,11 +68,11 @@ case $etermuxopen in
 					fi
 					touch $PREFIX/etc/termuxopen
 					green "修改完成!"
-					source $PREFIX/etc/tconfig/main/termuxplugin/termux-open.sh ;;
+					source $ToolPATH/main/termuxplugin/termux-open.sh ;;
 				q)
 					rm -f $PREFIX/etc/motd.tmp
 					echo "已退出"
-					source $PREFIX/etc/tconfig/main/termuxplugin/termux-open.sh
+					source $ToolPATH/main/termuxplugin/termux-open.sh
 					;;
 				*)
 					echo -e "$texttermuxopen" >> $PREFIX/etc/motd.tmp
@@ -86,7 +86,7 @@ case $etermuxopen in
 	4)
 		if [ ! -f "$PREFIX/etc/termuxopen" ];then
 			red "问候语已为默认状态"
-			source $PREFIX/etc/tconfig/main/termuxplugin/termux-open.sh
+			source $ToolPATH/main/termuxplugin/termux-open.sh
 		fi
 		if [ -f "$PREFIX/etc/motd.init" ];then
 			rm -f $PREFIX/etc/motd
@@ -100,27 +100,27 @@ case $etermuxopen in
 	5)
 		if [ -f "$HOME/.hushlogin" ];then
 			red "您已关闭问候语,无需重复关闭"
-			source $PREFIX/etc/tconfig/main/termuxplugin/termux-open.sh
+			source $ToolPATH/main/termuxplugin/termux-open.sh
 		fi
 		touch ~/.hushlogin
 		if [ ! -f "$HOME/.hushlogin" ];then
 			red "问候语关闭失败!"
-			source $PREFIX/etc/tconfig/main/termuxplugin/termux-open.sh
+			source $ToolPATH/main/termuxplugin/termux-open.sh
 		fi
 		green "问候语关闭成功!"
 		;;
 	6)
 		if [ ! -f "$HOME/.hushlogin" ];then
 			red "您已开启问候语,无需重复关闭"
-			source $PREFIX/etc/tconfig/main/termuxplugin/termux-open.sh
+			source $ToolPATH/main/termuxplugin/termux-open.sh
 		fi
 		rm -f  $HOME/.hushlogin
 		if [ -f "$HOME/.hushlogin" ];then
 			red "问候语开启失败!"
-			source $PREFIX/etc/tconfig/main/termuxplugin/termux-open.sh
+			source $ToolPATH/main/termuxplugin/termux-open.sh
 		fi
 		green "问候语开启成功!"
 		;;
 	0)
-		source $PREFIX/etc/tconfig/main/termuxplugin/menu.sh ;;
+		source $ToolPATH/main/termuxplugin/menu.sh ;;
 esac

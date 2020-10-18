@@ -8,101 +8,6 @@
 
 source $PREFIX/etc/tconfig/main/script/function.sh
 
-function ariang(){
-	[[ ! -f "$PREFIX/bin/aria2c" ]] && red "请先安装 Aria2" && echo "请回车确认" && read tmp && aria2config
-	blue "AriaNG 只是一个静态网页,直接打开在线网页和使用本地客户端在功能上并没有什么不同."
-	blue "但是对于 Android 用户，我推荐安装 AriaNG GUI 客户端以便于连接和管理 Aria2"
-	blue "故此，该界面给出了两个选择，您可以根据您的需求和使用偏好选择对于您来说的最佳选项."
-	echo "1 安装 AriaNG 客户端［该选项会自动跳转客户端下载网页]"
-	echo "2 直接打开在线网页"
-	echo "0 退出"
-	echo -en "您的选择是："
-	read ariangconfig
-	case $ariangconfig in
-		1)
-			termux-open-url https://github.com/Xmader/aria-ng-gui-android/releases ;;
-		2)
-			termux-open-url http://ariang.mayswind.net/latest ;;
-		0)
-			aria2config ;;
-		*)
-			red "无效输入，请重试" 
-			ariang
-			;;
-	esac
-}
-function bilibilitools(){
-	if [ -f "$HOME/bilibilitools/main.py" ];then
-		bilibilitoolstatus=`green "true"`
-	else
-		bilibilitoolstatus=`red "false"`
-	fi
-	echo -e "\n项目地址: https://github.com/Dawnnnnnn/bilibili-live-tools\nWiki: https://github.com/Dawnnnnnn/bilibili-live-tools/wiki"
-	echo -e "\nBiliBli 挂机助手安装状态:" $bilibilitoolstatus
-	echo -e "\n\n"
-	echo -e "1 安装 BiliBili 挂机助手\n"
-	sleep 0.016
-	echo -e "2 启动 BiliBili 挂机助手\n"
-	sleep 0.016
-	echo -e "3 删除 BiliBili 挂机助手\n"
-	sleep 0.016
-	echo -e "0 退出\n"
-	sleep 0.016
-	echo -en "\t\tEnter an option: "
-	read biliconfig
-	case $biliconfig in
-		1)
-			if [ -f "$HOME/bilibilitools/main.py" ];then
-				red "您已安装 BiliBili 挂机助手,无需重复安装\n"
-				red "如果您想重新安装,请先删除 BiliBili 挂机助手\n"
-				bilibilitools
-			fi
-			if [ ! -f "/data/data/com.termux/files/usr/bin/python" ];then
-				green "检测到未安装 Python，正在自动安装 Python…"
-				pkg in python -y
-			fi
-			if [ ! -f "/data/data/com.termux/files/usr/bin/git" ];then
-				green "检测到未安装 git，正在自动安装 git..."
-				pkg in git -y
-			fi
-			touch $HOME/bilibilitoolsinstall.sh
-			echo -e "git clone https://github.com/Dawnnnnnn/bilibili-live-tools $HOME/bilibilitools && cd $HOME/bilibilitools && pip install -r requirements.txt" > $HOME/bilibilitoolsinstall.sh
-			bash $HOME/bilibilitoolsinstall.sh
-			rm -f $HOME/bilibilitoolsinstall.sh
-			if [ -f "$HOME/bilibilitools/main.py" ];then
-				green "BiliBili 挂机助手已安装成功!"
-			else
-				red "BiliBili 挂机助手安装失败"
-				bilibilitools
-			fi
-			return 0
-			;;
-		2)
-			if [ ! -f "$HOME/bilibilitools/main.py" ];then
-				red "请先安装 BiliBili 挂机助手!"
-				return 0
-			fi
-			if [ ! -f "/data/data/com.termux/files/usr/bin/python" ];then
-				pkg in python -y
-			fi
-			touch $HOME/start-bilibilitools.sh
-			echo "cd $HOME/bilibilitools && python main.py" > $HOME/start-bilibilitools.sh
-			bash $HOME/start-bilibilitools.sh
-			rm -f $HOME/start-bilibilitools.sh
-			return 0 ;;
-		3)
-			echo "开始删除…"
-			rm -rf $HOME/bilibilitools
-			green "如果一切正常,BiliBili 挂机助手已删除完成!"
-			return 0 ;;
-		0)
-			return 0 ;;
-		*)
-			red "无效输入,请重试" 
-			bilibilitools ;;
-	esac
-	return 0
-}
 
 function httpconfig(){
 	if [ -f "/data/data/com.termux/files/usr/lib/node_modules/http-server/bin/http-server" ];then
@@ -697,21 +602,21 @@ function logs(){
 	case $logschoose in
 		1)
 			echo -e "\n日志列表如下:\n"
-			ls $HOME/logs/ $PREFIX/etc/tconfig/logs/
+			ls $HOME/logs/ $ToolPATH/logs/
 			echo "请输入您想要查看的日志的名字"
 			echo -en "\t\tEnter: "
 			read logsname
 			if [ -f "$HOME/logs/$logsname" ]; then
 				cat $HOME/logs/$logsname
 			else
-				cat $PREFIX/etc/tconfig/logs/$logsname
+				cat $ToolPATH/logs/$logsname
 			fi
 			return 0 ;;
 		2)
 			logsgen
 		        return 0 ;;
 		3)
-			rm -rf $HOME/logs $PREFIX/etc/tconfig/logs/*
+			rm -rf $HOME/logs $ToolPATH/logs/*
 			mkdir $HOME/logs 
 			return 0 ;;
 		0)
@@ -772,15 +677,15 @@ do
 	    0)
 	    	    exit 0 ;;
 	    1)
-	    	    source $PREFIX/etc/tconfig/main/script/mirror.sh ;;
+	    	    source $ToolPATH/main/script/mirror.sh ;;
 	    2)
-	    	    source $PREFIX/etc/tconfig/main/script/board.sh ;;
+	    	    source $ToolPATH/main/script/board.sh ;;
 	    3)
 	    	    storage ;;
 	    4)
-	    	    source $PREFIX/etc/tconfig/main/script/zsh_install.sh ;;
+	    	    source $ToolPATH/main/script/zsh_install.sh ;;
 	    5)
-	    	    source $PREFIX/etc/tconfig/main/termuxplugin/menu.sh ;;
+	    	    source $ToolPATH/main/termuxplugin/menu.sh ;;
 	    6)
 	    	    tools ;;
 	    7)

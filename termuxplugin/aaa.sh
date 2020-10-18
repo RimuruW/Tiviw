@@ -17,19 +17,19 @@ case $aaachoose in
 		red "在设备剩余存储空间不足时建议立即按 Ctrl + C 中止！"
 		echo -en "\n\n\t\t请回车以示您已阅读完毕"
 		read -n 1 line
-		yes >> $PREFIX/etc/tconfig/aaa.txt
+		yes >> $ToolPATH/aaa.txt
 		return 0 ;;
 	2)
-		rm -f $PREFIX/etc/tconfig/aaa.txt
-		if [ ! -f $PREFIX/etc/tconfig/aaa.txt ];then
+		rm -f $ToolPATH/aaa.txt
+		if [ ! -f $ToolPATH/aaa.txt ];then
 			green "删除完成！"
 		else
 			red "删除失败！"
 		fi
-		source $PREFIX/etc/tconfig/main/termuxplugin/menu.sh ;;
+		source $ToolPATH/main/termuxplugin/menu.sh ;;
 	0)
-		source $PREFIX/etc/tconfig/main/termuxplugin/menu.sh ;;
+		source $ToolPATH/main/termuxplugin/menu.sh ;;
 	*)
 		red "无效输入，请重试"
-		source $PREFIX/etc/tconfig/main/termuxplugin/aaa.sh;;
+		source $ToolPATH/main/termuxplugin/aaa.sh;;
 esac

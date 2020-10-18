@@ -1,4 +1,3 @@
-#!/data/data/com.termux/files/usr/bin/bash
 #-----------------------------------
 # Author: Qingxu (QingxuMo)
 # Description: Termux Tools

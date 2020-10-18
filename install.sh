@@ -38,6 +38,9 @@ remote_status=$(git remote -v | grep "https://github.com/QingxuMo/Tovow")
 [[ -z $remote_status ]] && red "远程仓库地址修改失败!\n请提交错误内容至开发者！"
 cd $HOME
 
+green "正在修改文件权限…"
+bash $PREFIX/etc/tconfig/main/permission.sh
+
 green "正在创建启动器…"
 rm -f $PREFIX/bin/tconfig
 cp $PREFIX/etc/tconfig/main/tconfig $PREFIX/bin/tconfig

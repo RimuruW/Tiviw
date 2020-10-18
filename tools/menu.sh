@@ -1,3 +1,11 @@
+#!/data/data/com.termux/files/usr/bin/bash
+#-----------------------------------
+# Author: Qingxu (QingxuMo)
+# Description: Termux Tools
+# Repository Address: https://github.com/QingxuMo/Tovow
+# Copyright (c) 2020 Qingxu
+#-----------------------------------
+
 echo -e "\n\n"
 echo -e "1 Hexo 配置安装\n"
 sleep 0.016
@@ -17,17 +25,17 @@ echo -en "\t\tEnter an option: "
 read toolsinstall
 case $toolsinstall in
 	1)
-		hexo ;;
+		source $PREFIX/etc/tconfig/main/tools/hexo-installer.sh ;;
 	2)
-		adbconfig ;;
+		source $PREFIX/etc/tconfig/main/tools/adbconfig.sh ;;
 	3)
-		yougetconfig ;;
+		source $PREFIX/etc/tconfig/main/tools/you-get/yougetconfig.sh ;;
 	4)
-		httpconfig ;;
+		source $PREFIX/etc/tconfig/main/tools/httpconfig.sh ;;
 	5)
-			bilibilitools ;;
+		source $PREFIX/etc/tconfig/main/tools/bilibilitools/bilibilitools.sh ;;
 	6)
-		aria2config ;;
+		source $PREFIX/etc/tconfig/main/tools/aria2/aria2config.sh ;;
 	0)
 		return 0 ;;
 	*)

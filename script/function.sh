@@ -7,8 +7,10 @@
 #-----------------------------------
 
 name="Tovow"
-sh_ver="1.0.1"
+sh_ver="1.0.1
+ToolPATH=$PREFIX/etc/tconfig
 
+# Color configure
 function blue(){
 	echo -e "\033[34m\033[01m$1\033[0m"
 }
@@ -35,6 +37,7 @@ else
 	RESET=""
 fi
 
+# Check
 if [[ $EUID -eq 0 ]]; then
 	red "检测到您正在尝试使用 ROOT 权限运行该脚本"
 	red "这是不建议且不被允许的"
@@ -49,35 +52,24 @@ else
 	exit 1
 fi
 
-green "检查基础配置中…"
+source $ToolPATH/main/permission.sh
 
-ToolPATH=$PREFIX/etc/tconfig
-
-if [ ! -f "$PREFIX/etc/tconfig/branch" ]; then
+if [ ! -f "$ToolPATH/branch" ]; then
 	branch="master"
 else
-	branch=$(cat $PREFIX/etc/tconfig/branch)
+	branch=$(cat $ToolPATH/branch)
 fi
 
 if [ ! -f "$PREFIX/bin/wget" ];then
 	pkg in wget -y >/dev/null
 fi
 
-
 mkdir -p $ToolPATH
-
-[[ ! -f "$PREFIX/etc/tconfig/ok" ]] && bash $PREFIX/etc/tconfig/main/script/init.sh
-[[ -f "$PREFIX/etc/tconfig/gh-proxy" ]] && ghproxy=$(cat $PREFIX/etc/tconfig/gh-proxy)
-
-abort() {
-	abort_echo=$1
-	red "$abort_echo"
-	exit 0
-}
-
-step=$(echo -en "\n\n\t\t\t请回车以继续" && read -n 1 line)
+[[ ! -f "$ToolPATH/ok" ]] && bash $ToolPATH/main/script/init.sh
+[[ -f "$ToolPATH/gh-proxy" ]] && ghproxy=$(cat $ToolPATH/gh-proxy)
 
 
+# The most important functions
 network_check() {
 	echo "正在检查网络连接…"
 	ping -c 1 baidu.com  > /dev/null 2>&1
@@ -100,4 +92,37 @@ network_check_sea() {
 		red "网络连接受限，尝试启用代理"
 		return 1
 	fi
+}
+
+
+aria2_check() {
+if [ -f "$PREFIX/bin/aria2c" ];then
+	aria2status=`green "true"`
+else
+	aria2status=`red "false"`
+fi
+}
+
+bilibilitools_check() {
+if [ -f "$HOME/bilibilitools/main.py" ];then
+	bilibilitoolstatus=`green "true"`
+else
+	bilibilitoolstatus=`red "false"`
+fi
+}
+
+sudo_check() {
+if [ -f "/data/data/com.termux/files/usr/bin/sudo" ];then
+	sudostatus=`green "true"`
+else
+	sudostatus=`red "false"`
+fi
+}
+
+Enter=$(echo -en "\t\tEnter an option: ")
+Step=$(echo -en "\n\n\t\t\t请回车以继续" && read -n 1 line)
+Abort() {
+	abort_echo=$1
+	red "$abort_echo"
+	exit 0
 }

@@ -12,7 +12,7 @@ if [ ! -z "$mirrors_status" ]; then
 else
 	mirrorsstatus=`red "false"`
 fi
-if [ -f "$PREFIX/etc/tconfig/npmmirrorsstatus" ]; then
+if [ -f "$ToolPATH/npmmirrorsstatus" ]; then
 	npmmirrorsstatus=`green "true"`
 else
 	npmmirrorsstatus=`red "false"`
@@ -42,13 +42,13 @@ case $mirrorschoose in
 		sed -i 's@^\(deb.*stable main\)$@#\1\ndeb https://mirrors.tuna.tsinghua.edu.cn/termux/termux-packages-24 stable main@' $PREFIX/etc/apt/sources.list
 		sed -i 's@^\(deb.*games stable\)$@#\1\ndeb https://mirrors.tuna.tsinghua.edu.cn/termux/game-packages-24 games stable@' $PREFIX/etc/apt/sources.list.d/game.list
 		sed -i 's@^\(deb.*science stable\)$@#\1\ndeb https://mirrors.tuna.tsinghua.edu.cn/termux/science-packages-24 science stable@' $PREFIX/etc/apt/sources.list.d/science.list
-		touch $PREFIX/etc/tconfig/mirrorstatus
+		touch $ToolPATH/mirrorstatus
 		apt update && apt upgrade -y
 	;;
 	2)
 		[[ ! -f "$PREFIX/bin/npm" ]] && red "请先安装 Node.js" && return 0
 		npm config set registry https://registry.npm.taobao.org
-		touch $PREFIX/etc/tconfig/npmmirrorsstatus
+		touch $ToolPATH/npmmirrorsstatus
 		;;
 	3)
 		[[ ! -f "$PREFIX/bin/python" ]] && red "请先安装 Python " && return 0
@@ -60,7 +60,7 @@ case $mirrorschoose in
 		return 0 ;;
 	*)
 		red "无效输入,请重试"
-		bash $PREFIX/etc/tconfig/main/script/mirror.sh
+		bash $ToolPATH/main/script/mirror.sh
 	 ;;
 esac
 

@@ -12,16 +12,16 @@ echo -en "\t\tEnter an option: "
 read termuxchoose
 case $termuxchoose in
 1)
-	source $PREFIX/etc/tconfig/main/termuxplugin/termux-open.sh ;;
+	source $ToolPATH/main/termuxplugin/termux-open.sh ;;
 2)
-	source $PREFIX/etc/tconfig/main/termuxplugin/sudo.sh ;;
+	source $ToolPATH/main/termuxplugin/sudo.sh ;;
 3)
-	source $PREFIX/etc/tconfig/main/termuxplugin/termuxgui.sh ;;
+	source $ToolPATH/main/termuxplugin/termuxgui.sh ;;
 4)
-	source $PREFIX/etc/tconfig/main/termuxplugin/aaa.sh ;;
+	source $ToolPATH/main/termuxplugin/aaa.sh ;;
 0)
 	return 0 ;;
 *)
 	red "无效输入,请重试" 
-	source $PREFIX/etc/tconfig/main/termuxplugin/menu.sh ;;
+	source $ToolPATH/main/termuxplugin/menu.sh ;;
 esac

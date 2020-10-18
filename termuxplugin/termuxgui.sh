@@ -18,7 +18,7 @@ case $termuxguiinstall in
 	1)
 		if [ -f "/data/data/com.termux/files/usr/bin/startvnc" ];then
 			blue "您已安装图形化界面,不必重复进行安装"
-			source $PREFIX/etc/tconfig/main/termuxplugin/termuxgui.sh
+			source $ToolPATH/main/termuxplugin/termuxgui.sh
 		fi
 		pkg i -y x11-repo
 		pkg up -y
@@ -43,8 +43,8 @@ case $termuxguiinstall in
 		green "下载链接: https://play.google.com/store/apps/details?id=com.realvnc.viewer.android"
 		;;
 	0)
-		source $PREFIX/etc/tconfig/main/termuxplugin/menu.sh ;;
+		source $ToolPATH/main/termuxplugin/menu.sh ;;
 	*)
 		red "无效输入,请重试" 
-	source $PREFIX/etc/tconfig/main/termuxplugin/termuxgui.sh ;;
+	source $ToolPATH/main/termuxplugin/termuxgui.sh ;;
 esac
