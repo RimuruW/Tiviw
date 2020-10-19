@@ -20,32 +20,32 @@ green "正在进行初始化…"
 green "这一过程只会在您第一次运行脚本时进行"
 green "确认您的设备信息中……"
 log=log_init.log
-mkdir -p $PREFIX/etc/tconfig/logs
-rm -f $PREFIX/etc/tconfig/logs/*log_*.log
-touch $PREFIX/etc/tconfig/logs/tmp_$log
-echo -e "====Device info====\n" >> $PREFIX/etc/tconfig/logs/tmp_$log
-echo "Date:" >> $PREFIX/etc/tconfig/logs/tmp_$log
-echo "$(date)\n\n" >> $PREFIX/etc/tconfig/logs/tmp_$log
-echo "<----Props---->" >> $PREFIX/etc/tconfig/logs/tmp_$log
-getprop >> $PREFIX/etc/tconfig/logs/tmp_$log
-echo -e "\n\n" >> $PREFIX/etc/tconfig/logs/tmp_$log
-echo "<----System info---->" >> $PREFIX/etc/tconfig/logs/tmp_$log
-echo "Logged In users:" >> $PREFIX/etc/tconfig/logs/tmp_$log
-whoami >> $PREFIX/etc/tconfig/logs/tmp_$log
-echo $systeminfo >> $PREFIX/etc/tconfig/logs/tmp_$log
-echo "Package Installed" >> $PREFIX/etc/tconfig/logs/tmp_$log
-pkg list-installed >> $PREFIX/etc/tconfig/logs/tmp_$log 2>/dev/null
-echo -e "\n\n" >> $PREFIX/etc/tconfig/logs/tmp_$log
-echo "<----Hardware info---->" >> $PREFIX/etc/tconfig/logs/tmp_$log
-echo "CPU info:" >> $PREFIX/etc/tconfig/logs/tmp_$log
-lscpu >> $PREFIX/etc/tconfig/logs/tmp_$log
-echo "Memory and Swap info:" >> $PREFIX/etc/tconfig/logs/tmp_$log
-free -h >> $PREFIX/etc/tconfig/logs/tmp_$log
-echo "Internet info:" >> $PREFIX/etc/tconfig/logs/tmp_$log
-ifconfig >> $PREFIX/etc/tconfig/logs/tmp_$log 2>/dev/null
-echo "Disk Usages :" >> $PREFIX/etc/tconfig/logs/tmp_$log
-df -h >> $PREFIX/etc/tconfig/logs/tmp_$log
-mv -f $PREFIX/etc/tconfig/logs/tmp_$log $PREFIX/etc/tconfig/logs/$log
+mkdir -p $PREFIX/etc/tiviw/logs
+rm -f $PREFIX/etc/tiviw/logs/*log_*.log
+touch $PREFIX/etc/tiviw/logs/tmp_$log
+echo -e "====Device info====\n" >> $PREFIX/etc/tiviw/logs/tmp_$log
+echo "Date:" >> $PREFIX/etc/tiviw/logs/tmp_$log
+echo "$(date)\n\n" >> $PREFIX/etc/tiviw/logs/tmp_$log
+echo "<----Props---->" >> $PREFIX/etc/tiviw/logs/tmp_$log
+getprop >> $PREFIX/etc/tiviw/logs/tmp_$log
+echo -e "\n\n" >> $PREFIX/etc/tiviw/logs/tmp_$log
+echo "<----System info---->" >> $PREFIX/etc/tiviw/logs/tmp_$log
+echo "Logged In users:" >> $PREFIX/etc/tiviw/logs/tmp_$log
+whoami >> $PREFIX/etc/tiviw/logs/tmp_$log
+echo $systeminfo >> $PREFIX/etc/tiviw/logs/tmp_$log
+echo "Package Installed" >> $PREFIX/etc/tiviw/logs/tmp_$log
+pkg list-installed >> $PREFIX/etc/tiviw/logs/tmp_$log 2>/dev/null
+echo -e "\n\n" >> $PREFIX/etc/tiviw/logs/tmp_$log
+echo "<----Hardware info---->" >> $PREFIX/etc/tiviw/logs/tmp_$log
+echo "CPU info:" >> $PREFIX/etc/tiviw/logs/tmp_$log
+lscpu >> $PREFIX/etc/tiviw/logs/tmp_$log
+echo "Memory and Swap info:" >> $PREFIX/etc/tiviw/logs/tmp_$log
+free -h >> $PREFIX/etc/tiviw/logs/tmp_$log
+echo "Internet info:" >> $PREFIX/etc/tiviw/logs/tmp_$log
+ifconfig >> $PREFIX/etc/tiviw/logs/tmp_$log 2>/dev/null
+echo "Disk Usages :" >> $PREFIX/etc/tiviw/logs/tmp_$log
+df -h >> $PREFIX/etc/tiviw/logs/tmp_$log
+mv -f $PREFIX/etc/tiviw/logs/tmp_$log $PREFIX/etc/tiviw/logs/$log
 green "系统信息确认完毕!!"
 check_mirrors() {
 	mirrors_status=$(cat $PREFIX/etc/apt/sources.list | grep "mirror" | grep -v '#')
@@ -80,7 +80,7 @@ echo -en "是否使用 GitHub 加速节点?[y/n]"
 read ghproxychoose
 case $ghproxychoose in
 	y)
-		echo "gh.qingxu.ga/" > $PREFIX/etc/tconfig/gh-proxy
+		echo "gh.qingxu.ga/" > $PREFIX/etc/tiviw/gh-proxy
 		;;
 	*)
 		green "Skip..."
@@ -91,4 +91,4 @@ esac
 green "您马上就可以进入脚本!"
 green "初始化完毕，请回车以启动脚本！"
 
-touch $PREFIX/etc/tconfig/ok
+touch $PREFIX/etc/tiviw/ok

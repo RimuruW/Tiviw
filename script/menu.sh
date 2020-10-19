@@ -6,7 +6,7 @@
 # Copyright (c) 2020 Qingxu
 #-----------------------------------
 
-source $PREFIX/etc/tconfig/main/script/function.sh
+source $PREFIX/etc/tiviw/main/script/function.sh
 
 function Linux(){
 	echo -e "1 Ubuntu\n"
@@ -195,172 +195,6 @@ function termuxarch(){
 		echo "Arch Linux 安装失败，请运行修复脚本"
 	fi
 	return 0
-}
-
-function adbconfig(){
-	if [ -f "/data/data/com.termux/files/usr/bin/adb.bin" ];then
-		adbconfigstatus=`green "true"`
-	else
-		adbconfigstatus=`red "false"`
-	fi
-	echo -e "\n\n"
-	echo -e "项目地址: https://github.com/MasterDevX/Termux-ADB"
-	echo -e "ADB 安装状态:" $adbconfigstatus
-	echo -e "\n\n1 安装 ADB\n"
-	sleep 0.016
-	echo -e "2 卸载 ADB\n"
-	sleep 0.016
-	echo -e "3 查看 ADB 版本\n"
-	sleep 0.016
-	echo -e "0 退出\n"
-	sleep 0.016
-	echo -en "\t\tEnter an option: "
-	read adbinstall
-	case $adbinstall in
-		1)
-			apt update
-			wget https://github.com/MasterDevX/Termux-ADB/raw/master/InstallTools.sh
-			bash InstallTools.sh
-			return 0 ;;
-		2)
-			if [ ! -f "/data/data/com.termux/files/usr/bin/adb" ];then
-				red "您并未安装 ADB,无需进行此过程"
-				return 0
-			fi
-			apt update
-			wget https://github.com/MasterDevX/Termux-ADB/raw/master/RemoveTools.sh
-			bash RemoveTools.sh
-			return 0 ;;
-		3)
-			if [ -f "/data/data/com.termux/files/usr/bin/adb" ];then
-				adb version
-			else
-				red "请先安装 ADB"
-			fi
-			return 0 ;;
-		0)
-			return 0 ;;
-		*)
-			red "无效输入,请重试" 
-			adbconfig ;;
-	esac
-}
-
-function yougetconfig(){
-	if [ -f "/data/data/com.termux/files/usr/bin/you-get" ];then
-		yougetconfigstatus=`green "true"`
-	else
-		yougetconfigstatus=`red "false"`
-	fi
-	if [ ! -f "/data/data/com.termux/files/usr/bin/python" ];then
-		green "检测到未安装 Python，正在自动安装 Python…"
-		pkg in python -y >/dev/null
-	fi
-	echo -e "\n\n项目地址: https://github.com/soimort/you-get/\n\n"
-	echo -e "you-get 安装状态:" $yougetconfigstatus
-	echo -e "\n\n"
-	echo -e "1 安装 you-get\n"
-	sleep 0.016
-	echo -e "2 升级 you-get\n"
-	sleep 0.016
-	echo -e "3 you-get 使用方法\n"
-	sleep 0.016
-	echo -e "4 you-get 简易版[适合超小白用户]\n"
-	sleep 0.016
-	echo -e "5 卸载 you-get\n"
-	sleep 0.016
-	echo -e "0 退出\n"
-	sleep 0.016
-	echo -en "\t\tEnter an option: "
-	read yougetoption
-	case $yougetoption in
-		1)
-			pip3 install you-get
-			green "done!"
-			yougetconfig ;;
-		2)
-			pip3 install --upgrade you-get
-			green "done!"
-			yougetconfig ;;
-		3)
-			if [ -f "/data/data/com.termux/files/usr/bin/you-get" ];then
-				you-get -h
-				return 0
-			else
-				red "请先安装 you-get"
-			fi
-			yougetconfig ;;
-		4)
-			if [ -f "/data/data/com.termux/files/usr/bin/you-get" ];then
-				yougeteasy
-			else
-				red "请先安装 you-get"
-				yougetconfig
-			fi
-			;;
-		5)
-			yes | pip uninstall you-get
-			if [ ! -f "/data/data/com.termux/files/usr/bin/you-get" ];then
-				green "卸载完成!"
-			else
-				red "卸载失败!"
-			fi
-			return 0 ;;
-		0)
-			return 0 ;;
-		*)
-			red "无效输入,请重试" 
-			yougetconfig ;;
-	esac
-}
-
-function yougeteasy(){
-	echo -e "\n\n"
-	blue "简易版脚本制作非常粗糙"
-	blue "简易版仅面向极端小白用户/终端无操作能力者"
-	blue "如果可以,我强烈建议使用原版 you-get 而非简易版"
-	echo -e "\n\n"
-	echo -e "1 开始\n"
-	echo -e "0 退出\n"
-	echo -en "\t\tEnter an option: "
-	read tmpyouget
-	case $tmpyouget in
-		1)
-			youget1 ;;
-		0)
-			yougetconfig ;;
-	
-		*)
-			red "无效输入,请重试"
-			yougeteasy ;;
-	esac 
-}
-
-function youget1(){
-	echo -e "\n\n"
-	echo "you-get 支持的链接种类: https://github.com/soimort/you-get/wiki/%E4%B8%AD%E6%96%87%E8%AF%B4%E6%98%8E#%E6%94%AF%E6%8C%81%E7%BD%91%E7%AB%99"
-	echo "you-get 也可以下载网页上的视频和图片"
-	echo -e "请输入您的下载链接[必填]"
-	echo -en "\t\tEnter: "
-	read yougetlink
-	echo -e "请输入您的下载路径[选填,路径默认指向内置存储.比如，如果您输入 Download，则文件会下载至内置存储的 Download 文件夹中]"
-	green "看不懂就直接回车"
-	echo -en "\t\tEnter: "
-	read tmpdiryouget
-	echo -e "如果您输入的链接属于某一播放列表里面的一个,您是否想下载该列表里面的所有视频?[y/n]"
-	green "看不懂就直接回车"
-	echo -en "\t\tEnter: "
-	read tmpyougetlist
-	if  [ $tmpyougetlist = y ]; then
-		yougetlist=--playlist
-	fi
-	yougetdownloaddir=/sdcard/$tmpdiryouget
-	mkdir -p $yougetdownloaddir
-	blue "下载即将开始..."
-	you-get -o $yougetdownloaddir $yougetlist $yougetlink
-	green "下载已停止!"
-	green "这可能是因为所需下载内容已下载完毕,或者下载中断"
-	yougetconfig
 }
 
 function termuxapi(){
@@ -581,7 +415,7 @@ function menu(){
                                      
 	EOF
 	printf "$RESET"
-        echo -e "\t\t\t\t\tv" $sh_ver
+        echo -e "\t\t\t\t\tv" $VERSION
 	echo -e "\t\t\tBy Qingxu (QingxuMo)"
 #if  [ $(which fortune) = /data/data/com.termux/files/usr/bin/fortune ]; then
 #    fortune

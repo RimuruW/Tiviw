@@ -9,14 +9,14 @@ function red(){
 	echo -e "\033[31m\033[01m$1\033[0m"
 }
 
-if [ -d $PREFIX/etc/tconfig ]; then
-	red "您已安装 Tovow ，无需重复安装"
-	red "如果您需要移除 Tovow，请输入 rm -rf $PREFIX/etc/tconfig"
+if [ -d $PREFIX/etc/tiviw ]; then
+	red "您已安装 Tiviw ，无需重复安装"
+	red "如果您需要移除 Tiviw，请输入 rm -rf $PREFIX/etc/tiviw"
 	exit 1
 fi
 
 if [ ! -f $PREFIX/bin/git ]; then
-	red -e "\033[31m\033[01m 警告，您并未安装 git \033[0m"
+	red -e "警告，您并未安装 git！"
 	blue -e "将自动安装 git..."
 	blue -e "对于国内用户，未配置镜像源会导致安装时间极长"
 	apt-get update && apt install git -y
@@ -24,17 +24,17 @@ if [ ! -f $PREFIX/bin/git ]; then
 fi
 
 green "正在创建工作目录…"
-mkdir -p $PREFIX/etc/tconfig
+mkdir -p $PREFIX/etc/tiviw
 
 green "正在拉取远程仓库…"
-git clone https://github.com.cnpmjs.org/QingxuMo/Tovow $PREFIX/etc/tconfig/main
+git clone https://github.com.cnpmjs.org/QingxuMo/Tiviw $PREFIX/etc/tiviw/main
 
 green "正在修改远程仓库地址…"
-cd $PREFIX/etc/tconfig/main
-git remote set-url origin https://github.com/QingxuMo/Tovow
+cd $PREFIX/etc/tiviw/main
+git remote set-url origin https://github.com/QingxuMo/Tiviw
 
 green "正在检查远程仓库地址…"
-remote_status=$(git remote -v | grep "https://github.com/QingxuMo/Tovow")"
+remote_status="$(git remote -v | grep "https://github.com/QingxuMo/Tiviw")"
 [[ -z $remote_status ]] && red "远程仓库地址修改失败!\n请提交错误内容至开发者！"
 
 green "正在校验其他选项…“
@@ -57,15 +57,15 @@ esac
 cd $HOME
 
 green "正在修改文件权限…"
-bash $PREFIX/etc/tconfig/main/permission.sh
+bash $PREFIX/etc/tiviw/main/permission.sh
 
 green "正在创建启动器…"
-rm -f $PREFIX/bin/tconfig
-cp $PREFIX/etc/tconfig/main/tconfig $PREFIX/bin/tconfig
-chmod +x $PREFIX/bin/tconfig
+rm -f $PREFIX/bin/tiviw
+cp $PREFIX/etc/tiviw/main/tiviw $PREFIX/bin/tiviw
+chmod +x $PREFIX/bin/tiviw
 
-if [ -f $PREFIX/bin/tconfig ]; then
-	green "安装成功！请输入 tconfig 启动脚本！"
+if [ -f $PREFIX/bin/tiviw ]; then
+	green "安装成功！请输入 tiviw 启动脚本！"
 	exit 0
 else
 	red "安装失败！请提交错误内容至开发者！"

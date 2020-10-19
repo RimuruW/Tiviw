@@ -6,32 +6,19 @@
 # Copyright (c) 2020 Qingxu
 #-----------------------------------
 
-mirrors_status=$(cat $PREFIX/etc/apt/sources.list | grep "mirror" | grep -v '#')
-if [ ! -z "$mirrors_status" ]; then
-	mirrorsstatus=`green "true"`
-else
-	mirrorsstatus=`red "false"`
-fi
-if [ -f "$ToolPATH/npmmirrorsstatus" ]; then
-	npmmirrorsstatus=`green "true"`
-else
-	npmmirrorsstatus=`red "false"`
-fi
-if [ -d $HOME/.pip ]; then
-	pipmirrorsstatus=`green "true"`
-else
-	pipmirrorsstatus=`red "false"`
-fi
+mirror_check
+NPM_mirror_check
+PIP_mirror_check
 echo -e "\n\n"
 echo "Termux 镜像源状态：" $mirrorsstatus
 echo "NPM 淘宝源状态:" $npmmirrorsstatus
 echo "pip 清华源状态:" $pipmirrorsstatus
 echo -e "\n\n"
-echo "1 Termux 清华源"
+echo "1 Termux 清华源配置"
 sleep 0.016
-echo "2 NPM 淘宝源"
+echo "2 NPM 淘宝源配置"
 sleep 0.016
-echo "3 pip 清华源"
+echo "3 pip 清华源配置"
 sleep 0.016
 echo "0 退出"
 echo -en "\t\tEnter an option: "

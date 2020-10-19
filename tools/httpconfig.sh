@@ -20,7 +20,7 @@ case $httpserverchoose in
 	2)
 		if [ ! -f "/data/data/com.termux/files/usr/lib/node_modules/http-server/bin/http-server" ]; then
 			red "请先安装 HTTP 服务器"
-			source $PREFIX/etc/tconfig/main/tools/httpconfig.sh
+			source $PREFIX/etc/tiviw/main/tools/httpconfig.sh
 		fi
 		http-server
 		return 0
@@ -28,7 +28,7 @@ case $httpserverchoose in
 	3)
 		if [ ! -f "/data/data/com.termux/files/usr/lib/node_modules/http-server/bin/http-server" ]; then
 			red "请先安装 HTTP 服务器"
-			source $PREFIX/etc/tconfig/main/tools/httpconfig.sh
+			source $PREFIX/etc/tiviw/main/tools/httpconfig.sh
 		fi
 	green "开始卸载..."
 		npm uninstall http-server -g
@@ -38,5 +38,5 @@ case $httpserverchoose in
 		source $ToolPATH/main/tools/menu.sh ;;
 	*)
 		red "无效输入,请重试"
-		source $PREFIX/etc/tconfig/main/tools/httpconfig.sh ;;
+		source $PREFIX/etc/tiviw/main/tools/httpconfig.sh ;;
 esac

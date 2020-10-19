@@ -6,7 +6,7 @@
 # Copyright (c) 2020 Qingxu
 #-----------------------------------
 
-[[ ! -f "$PREFIX/bin/aria2c" ]] && red "请先安装 Aria2" && Step && source $PREFIX/etc/tconfig/main/tools/aria2/aria2config.sh
+[[ ! -f "$PREFIX/bin/aria2c" ]] && red "请先安装 Aria2" && Step && source $PREFIX/etc/tiviw/main/tools/aria2/aria2config.sh
 blue "AriaNG 只是一个静态网页,直接打开在线网页和使用本地客户端在功能上并没有什么不同."
 blue "但是对于 Android 用户，我推荐安装 AriaNG GUI 客户端以便于连接和管理 Aria2"
 blue "故此，该界面给出了两个选择，您可以根据您的需求和使用偏好选择对于您来说的最佳选项."
@@ -21,9 +21,9 @@ case $ariangconfig in
 	2)
 		termux-open-url http://mirror-aria2.qingxu.live/ ;;
 	0)
-		source $PREFIX/etc/tconfig/main/tools/aria2/aria2config.sh ;;
+		source $PREFIX/etc/tiviw/main/tools/aria2/aria2config.sh ;;
 	*)
 		red "无效输入，请重试" 
-		source $PREFIX/etc/tconfig/main/tools/aria2/ariang.sh
+		source $PREFIX/etc/tiviw/main/tools/aria2/ariang.sh
 		;;
 esac
