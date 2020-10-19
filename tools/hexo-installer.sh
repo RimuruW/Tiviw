@@ -8,8 +8,8 @@
 #-----------------------------------
 clear
 pkg in nodejs-lts git vim nano openssh unzip -y
-echo "是否更换 NPM 源为淘宝源? [y/n]"
-echo -e "Enter an option: "
+green "是否更换 NPM 源为淘宝源? [y/n]"
+echo -en "Enter an option: "
 read npmtaobao
 case $npmtaobao in
 	y)
@@ -21,10 +21,10 @@ case $npmtaobao in
 esac
 npm install -g npm
 npm install -g hexo-cli
-echo "请输入您想创建的 Hexo 博客文件夹名称 [必填]"
-echo -e "\t\tEnter the name: "
+green "请输入您想创建的 Hexo 博客文件夹名称 [必填]"
+echo -en "\t\tEnter the name: "
 read blogname
-[[ -z "$blogname" ]] && blogname=BlogDirAutoGen
+[[ -z "$blogname" ]] && red "未获取到博客文件夹名称，安装失败！" && exit 1
 mkdir -p $HOME/$blogname
 blog=$HOME/$blogname
 hexo init $blog
