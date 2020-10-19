@@ -8,17 +8,21 @@
 #-----------------------------------
 clear
 pkg in nodejs-lts git vim nano openssh unzip -y
-green "是否更换 NPM 源为淘宝源? [y/n]"
-echo -en "Enter an option: "
-read npmtaobao
-case $npmtaobao in
-	y)
-		npm config set registry https://registry.npm.taobao.org ;;
-	n)
-		echo "Use default" ;;
-	*)
-		echo "输入无效,使用默认源" ;;
-esac
+if network_check_sea; then
+	green "网络连接正常，无需镜像源"
+else
+	green "是否更换 NPM 源为淘宝源? [y/n]"
+	echo -en "Enter an option: "
+	read npmtaobao
+	case $npmtaobao in
+		y)
+			npm config set registry https://registry.npm.taobao.org ;;
+		n)
+			echo "Use default" ;;
+		*)
+			echo "输入无效,使用默认源" ;;
+	esac
+fi
 npm install -g npm
 npm install -g hexo-cli
 green "请输入您想创建的 Hexo 博客文件夹名称 [必填]"
