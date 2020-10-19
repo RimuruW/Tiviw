@@ -22,8 +22,7 @@ echo -en "\t\tEnter an option: "
 read aria2choose
 case $aria2choose in
 	1)
-		[[ ! -f "$PREFIX/etc/tiviw/aria2.sh" ]] && cd $ToolPATH && wget -P $PREFIX/etc/tiviw https://raw.githubusercontent.com/QingxuMo/Aria2-Termux/master/aria2.sh && chmod +x $PREFIX/etc/tiviw/aria2.sh
-		[[ ! -f "$PREFIX/etc/tiviw/aria2.sh" ]] && cd $ToolPATH && wget -P $PREFIX/etc/tiviw gh.qingxu.ga/https://raw.githubusercontent.com/QingxuMo/Aria2-Termux/master/aria2.sh && chmod +x $PREFIX/etc/tiviw/aria2.sh
+		[[ ! -f "$PREFIX/etc/tiviw/aria2.sh" ]] && wget -P $PREFIX/etc/tiviw https://raw.githubusercontent.com/QingxuMo/Aria2-Termux/master/aria2.sh && chmod +x $PREFIX/etc/tiviw/aria2.sh
 		[[ ! -f "$PREFIX/etc/tiviw/aria2.sh" ]] && red "Aria2 安装脚本下载失败，请检查网络连接状态" &&  echo "请回车确认" && read -n 1 line  && source $PREFIX/etc/tiviw/main/tools/aria2/aria2config.sh
 		bash $PREFIX/etc/tiviw/aria2.sh
 		;;
