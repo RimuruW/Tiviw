@@ -10,10 +10,10 @@ if [ ! -d "$HOME/storage/shared/Android" ]; then
 	termux-setup-storage
 	if [ -d "$HOME/storage/shared/Android" ]; then
 		green "存储权限获取成功！"
-		step
+		Step
 	else
 		red "存储权限获取失败！"
-		step
+		Step
 	fi
 else
 	red "您已获取存储权限，是否继续操作？[y/n]"
@@ -25,11 +25,11 @@ else
 			;;
 		n)
 			blue "已取消…"
-			step
+			Step
 			;;
 		*)
 			blue "默认跳过…"
-			step
+			Step
 			;;
 	esac
 fi
