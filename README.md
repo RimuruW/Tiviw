@@ -1,7 +1,8 @@
-# Termux-Tools
-一个集合众多工具的 Termux 扩展脚本
+# Tiviw
 
 ## 使用方法
 ```
-pkg in wget && wget -N https://raw.githubusercontent.com/QingxuMo/Tovow/master/termux-config.sh && bash termux-config.sh
+bash -c "$(curl -L https://raw.githubusercontent.com/QingxuMo/Tiviw/dev/install.sh)"
 ```
+
+**因 dev 分支提交还未合并到 master 分支，安装过程中请选择 dev 分支以保证脚本可用！**
