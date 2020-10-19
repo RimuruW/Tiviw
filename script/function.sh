@@ -7,17 +7,17 @@
 #-----------------------------------
 
 name="Tovow"
-sh_ver="1.0.1
-ToolPATH=$PREFIX/etc/tconfig
+sh_ver="1.0.1"
+ToolPATH="$PREFIX/etc/tconfig"
 
 # Color configure
-function blue(){
+blue(){
 	echo -e "\033[34m\033[01m$1\033[0m"
 }
-function green(){
+green(){
 	echo -e "\033[32m\033[01m$1\033[0m"
 }
-function red(){
+red(){
 	echo -e "\033[31m\033[01m$1\033[0m"
 }
 

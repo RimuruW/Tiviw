@@ -36,6 +36,10 @@ git remote set-url origin https://github.com/QingxuMo/Tovow
 green "正在检查远程仓库地址…"
 remote_status=$(git remote -v | grep "https://github.com/QingxuMo/Tovow")
 [[ -z $remote_status ]] && red "远程仓库地址修改失败!\n请提交错误内容至开发者！"
+
+green "正在校验参数…“
+[[ $1 = dev ]] && echo "$1" > $PREFIX/etc/tconfig/branch && git checkout $1
+
 cd $HOME
 
 green "正在修改文件权限…"

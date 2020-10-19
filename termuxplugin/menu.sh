@@ -12,7 +12,7 @@ echo -en "\t\tEnter an option: "
 read termuxchoose
 case $termuxchoose in
 1)
-	source $ToolPATH/main/termuxplugin/termux-open.sh ;;
+	source $ToolPATH/main/termuxplugin/termux_open.sh ;;
 2)
 	source $ToolPATH/main/termuxplugin/sudo.sh ;;
 3)

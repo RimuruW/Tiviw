@@ -624,13 +624,13 @@ do
 	    2)
 	    	    source $ToolPATH/main/script/board.sh ;;
 	    3)
-	    	    storage ;;
+	    	    source $ToolPATH/main/script/storage.sh ;;
 	    4)
 	    	    source $ToolPATH/main/script/zsh_install.sh ;;
 	    5)
 	    	    source $ToolPATH/main/termuxplugin/menu.sh ;;
 	    6)
-	    	    tools ;;
+	    	    source $ToolPATH/main/tools/menu.sh ;;
 	    7)
 	    	    termuxapi ;;
 	    8)

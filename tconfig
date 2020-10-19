@@ -2,6 +2,7 @@
 name="Tovow"
 tconfig_ver=0.1
 
+echo "校验脚本中…"
 if [ ! -f "$PREFIX/etc/tconfig/branch" ]; then
 	branch="master"
 else
@@ -26,52 +27,5 @@ if [ ! -f "$PREFIX/etc/tconfig/main/script/menu.sh" ]; then
 	exit 1
 fi
 
-tconfig_new_ver=$(wget -qO- -t1 -T3 "https://raw.githubusercontent.com/QingxuMo/$name/$branch/tconfig" | grep 'tconfig_ver="' | awk -F "=" '{print $NF}' | sed 's/\"//g' | head -1) && sh_new_type="github"
-
-if [ -z ${tconfig_new_ver} ]; then
-	echo "****************"
-	echo "无法链接到 Github!"
-	echo "请注意,该脚本绝大多数功能都需要与 GitHub 建立连接,若无法连接 GitHub,则脚本大多数功能无法使用!!"
-	echo "****************"
-	echo -en "\n\n\t\t\t点击任意键以继续"
-	read -n 1 line
-	tconfig_new_ver=$(wget -qO- -t1 -T3 "gh.qingxu.ga/https://raw.githubusercontent.com/QingxuMo/$name/$branch/tconfig" | grep 'tconfig_ver="' | awk -F "=" '{print $NF}' | sed 's/\"//g' | head -1) && sh_new_type="github"
-fi
-
-if [ ! -z ${tconfig_new_ver} ]; then
-	if [ $tconfig_new_ver > $tconfig_ver ]; then
-		wget -N "https://raw.githubusercontent.com/QingxuMo/$name/$branch/tconfig" -P $PREFIX/bin
-		chmod +x $PREFIX/bin/tconfig
-		echo -e "启动器已更新为最新版本[ $tconfig_ver --> $tconfig_new_ver ]"
-	else
-		echo "本地启动器版本高于云端版本!"
-		echo "云端分支：$branch"
-		echo "是否强制更新？[y/n]"
-		read tconfigupdate
-		case $tconfigupdate in
-			y)
-				wget -N "https://raw.githubusercontent.com/QingxuMo/$name/$branch/tconfig" -P $PREFIX/bin
-				chmod +x $PREFIX/bin/tconfig
-				echo -e "启动器已更新为云端最新版本[ $tconfig_ver --> $tconfig_new_ver ]"
-				;;
-			n)
-				echo "跳过…"
-				;;
-			*)
-				echo "默认跳过…"
-				;;
-		esac
-	fi
-fi
-
-if [ -z ${tconfig_new_ver} ]; then
-	wget -N "gh.qingxu.ga/https://raw.githubusercontent.com/QingxuMo/$name/$branch/tconfig" -P $PREFIX/bin
-	chmod +x $PREFIX/bin/tconfig
-	echo -e "启动器已更新为最新版本[ $tconfig_ver --> $tconfig_new_ver ]"
-fi
-
-if [ $tconfig_ver=$tconfig_new_ver ]; then
-	echo "启动器已为最新版本"
-fi
-
+echo "校验完毕，请回车以启动脚本！"
 bash $PREFIX/etc/tconfig/main/script/menu.sh
