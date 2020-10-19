@@ -9,8 +9,8 @@ function red(){
 	echo -e "\033[31m\033[01m$1\033[0m"
 }
 
-if [ -f $PREFIX/etc/tconfig ]; then
-	red"您已安装 Tovow ，无需重复安装"
+if [ -d $PREFIX/etc/tconfig ]; then
+	red "您已安装 Tovow ，无需重复安装"
 	red "如果您需要移除 Tovow，请输入 rm -rf $PREFIX/etc/tconfig"
 	exit 1
 fi
@@ -34,12 +34,26 @@ cd $PREFIX/etc/tconfig/main
 git remote set-url origin https://github.com/QingxuMo/Tovow
 
 green "正在检查远程仓库地址…"
-remote_status=$(git remote -v | grep "https://github.com/QingxuMo/Tovow")
+remote_status=$(git remote -v | grep "https://github.com/QingxuMo/Tovow")"
 [[ -z $remote_status ]] && red "远程仓库地址修改失败!\n请提交错误内容至开发者！"
 
-green "正在校验参数…“
-[[ $1 = dev ]] && echo "$1" > $PREFIX/etc/tconfig/branch && git checkout $1
+green "正在校验其他选项…“
 
+blue "- 分支切换 -"
+red "注意，该选项是仅面向开发者测试的选项，普通用户请使用默认的 master 分支！"
+red "作者不保证 dev 分支代码的可用和安全性，请谨慎切换！"
+blue "是否切换 dev 分支？[y/n, default is n]"
+echo -en "Enrer an option:"
+read IFDEV
+case $IFDEV in
+	y)
+		red "正在切换 dev 分支，注意，这是一个高危操作！"
+		git checkout dev
+		;;
+	*)
+		green "跳过该选项..."
+		;;
+esac
 cd $HOME
 
 green "正在修改文件权限…"
@@ -58,4 +72,3 @@ else
 	red "错误：启动器安装失败"
 	exit 1
 fi
-

@@ -134,3 +134,6 @@ Abort() {
 	red "$abort_echo"
 	exit 0
 }
+
+echo "校验完毕，请回车以启动脚本！"
+clear
