@@ -27,6 +27,7 @@ case $yougetoption in
 				y)
 					if mirror_check; then
 						green "Termux 镜像源已配置"
+						pkg in python
 					else
 						if network_check_sea; then
 							pkg in python

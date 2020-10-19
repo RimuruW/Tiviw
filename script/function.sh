@@ -150,7 +150,6 @@ youget_check() {
 
 python_check() {
 	if [ ! -f "/data/data/com.termux/files/usr/bin/python" ];then
-		red "Python 未安装！"
 		return 1
 	else
 		return 0
