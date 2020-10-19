@@ -89,4 +89,6 @@ esac
 
 
 green "您马上就可以进入脚本!"
+green "初始化完毕，请回车以启动脚本！"
+
 touch $PREFIX/etc/tconfig/ok
