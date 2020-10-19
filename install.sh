@@ -37,7 +37,7 @@ green "正在检查远程仓库地址…"
 remote_status="$(git remote -v | grep "https://github.com/QingxuMo/Tiviw")"
 [[ -z $remote_status ]] && red "远程仓库地址修改失败!\n请提交错误内容至开发者！"
 
-green "正在校验其他选项…“
+green "正在校验其他选项…"
 
 blue "- 分支切换 -"
 red "注意，该选项是仅面向开发者测试的选项，普通用户请使用默认的 master 分支！"
