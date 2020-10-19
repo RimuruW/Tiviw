@@ -216,13 +216,20 @@ youget_download(){
 
 remote_status="$(git remote -v | grep "https://github.com/QingxuMo/Tiviw")"
 update_remote_status="$(git remote -v | grep "https://github.com.cnpmjs.org/QingxuMo/Tiviw")"
-Enter=$(echo -en "\t\tEnter an option: ")
-Step=$(echo -en "\n\n\t\t\t请回车以继续" && read -n 1 line)
+
+Enter() {
+echo -en "\t\tEnter an option: "
+}
+
+Step() {
+echo -en "\n\n\t\t\t请回车以继续"
+read -n 1 line
+}
+
 Abort() {
 	abort_echo=$1
 	red "$abort_echo"
 	exit 0
 }
 
-echo "校验完毕，请回车以启动脚本！"
 clear

@@ -67,6 +67,7 @@ case $ABOUT_CHOOSE in
 	*)
 		red "无效输入，请重试！"
 		Step
+		source $ToolPATH/main/script/about.sh
 		;;
 esac
 
