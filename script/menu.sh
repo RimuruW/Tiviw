@@ -470,7 +470,7 @@ do
 	    8)
 	    	    Linux ;;
 	    99)
-	    	    about ;;
+	    	    source $ToolPATH/main/script/about.sh ;;
 	    *)
 		    red "无效输入，请重试" ;;
     esac
