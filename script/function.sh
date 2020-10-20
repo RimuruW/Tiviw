@@ -77,7 +77,7 @@ network_check() {
 	echo "正在检查网络连接…"
 	ping -c 1 baidu.com  > /dev/null 2>&1
 	if [ $? -eq 0 ]; then
-		green "网络连接正常"
+		green "网络已连接"
 		return 0
 	else
 		red "无法连接到网络，请检查！"
@@ -87,6 +87,7 @@ network_check() {
 
 network_check_sea() {
 	network_check
+	green "尝试检查网络可用性…"
 	ping -c 1 google.com  > /dev/null 2>&1
 	if [ $? -eq 0 ]; then
 		green "网络可用，不使用代理"

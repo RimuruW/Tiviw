@@ -27,5 +27,4 @@ if [ ! -f "$PREFIX/etc/tiviw/main/script/menu.sh" ]; then
 	exit 1
 fi
 
-echo "校验完毕，请回车以启动脚本！"
 bash $PREFIX/etc/tiviw/main/script/menu.sh
