@@ -405,7 +405,7 @@ function logs(){
 }
 
 function menu(){
-	printf "$BOLD"
+	printf "$BLUE"
 	cat <<-'EOF'
                                                     
 _/_/_/_/_/  _/              _/                      

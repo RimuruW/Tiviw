@@ -22,21 +22,12 @@ red(){
 	echo -e "\033[31m\033[01m$1\033[0m"
 }
 
-if [ -t 1 ]; then
-	RED=$(printf '\033[31m')
-	GREEN=$(printf '\033[32m')
-	YELLOW=$(printf '\033[33m')
-	BLUE=$(printf '\033[34m')
-	BOLD=$(printf '\033[1m')
-	RESET=$(printf '\033[m')
-else
-	RED=""
-	GREEN=""
-	YELLOW=""
-	BLUE=""
-	BOLD=""
-	RESET=""
-fi
+RED=$(printf '\033[31m')
+GREEN=$(printf '\033[32m')
+YELLOW=$(printf '\033[33m')
+BLUE=$(printf '\033[34m')
+BOLD=$(printf '\033[1m')
+RESET=$(printf '\033[m')
 
 # Check
 if [[ $EUID -eq 0 ]]; then
