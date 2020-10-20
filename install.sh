@@ -49,6 +49,7 @@ case $IFDEV in
 	y)
 		red "正在切换 dev 分支，注意，这是一个高危操作！"
 		git checkout dev
+		echo "dev" > $PREFIX/etc/tiviw/branch
 		;;
 	*)
 		green "跳过该选项..."
