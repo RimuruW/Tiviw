@@ -8,7 +8,7 @@
 
 name="Tovow"
 sh_ver="1.0.1"
-ver_code="20201020 dev"
+ver_code="20201020"
 ToolPATH="$PREFIX/etc/tiviw"
 
 # Color configure
@@ -48,7 +48,7 @@ source $ToolPATH/main/permission.sh
 
 if [ ! -f "$ToolPATH/branch" ]; then
 	branch="master"
-	VERSION="$sh_ver"
+	VERSION="v$sh_ver"
 else
 	branch=$(cat $ToolPATH/branch)
 	VERSION="$ver_code"

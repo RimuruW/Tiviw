@@ -417,7 +417,8 @@ _/      _/      _/      _/      _/      _/
                                                     
 	EOF
 	printf "$RESET"
-        echo -e "\t\t\t\t\tv" $VERSION
+        echo -en "\t\t\t\t\t$VERSION"
+        [[ $branch = dev ]] && red "dev"
 	echo -e "\t\t\tBy Qingxu (QingxuMo)"
 #if  [ $(which fortune) = /data/data/com.termux/files/usr/bin/fortune ]; then
 #    fortune
