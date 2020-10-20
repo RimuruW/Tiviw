@@ -1,6 +1,8 @@
 echo -e "1 更新脚本"
+sp
 sleep 0.016
 echo -e "2 切换分支"
+sp
 sleep 0.016
 echo -e "0 退出脚本"
 Enter

@@ -314,6 +314,10 @@ echo -en "\n\n\t\t\t请回车以确认"
 read -n 1 line
 }
 
+sp() {
+echo -e "\n"
+}
+
 Abort() {
 	abort_echo=$1
 	red "$abort_echo"
