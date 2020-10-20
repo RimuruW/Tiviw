@@ -187,6 +187,102 @@ else
 fi
 }
 
+check_apt_ability() {
+	if mirror_check; then
+		green "Termux 镜像源已配置"
+		return 0
+	else
+		if network_check_sea; then
+			return 0
+		else
+			red "根据检测结果，脚本认定你当前网络环境无法完成安装！"
+			red "对于国内用户，请配置镜像源以完成安装！"
+			blue "是否跳转到 Termux 镜像源配置？[y/n]"
+			Enter
+			read MIRROR_CHOOSE
+			case $MIRROR_CHOOSE in
+				y)
+					source $ToolPATH/main/script/mirror.sh
+					;;
+				*)
+					red "跳过镜像源配置！"
+					red "警告，根据网络环境和镜像源配置检测结果，脚本认为你无法完成安装！"
+					red "安装强制中止！"
+					return 1
+					;;
+			esac
+		fi
+	fi
+}
+
+check_pip_ability() {
+	if python_check; then
+		green "Python 已安装"
+	else
+		red "Python 未安装！"
+		blue "是否安装 Python？[y/n]"
+		Enter
+		read PYTHON_INSTALL_CHOOSE
+		case $PYTHON_INSTALL_CHOOSE in
+			y)
+				if check_apt_ability; then
+					pkg in python
+					if python_check; then
+						green "Python 安装成功！"
+					else
+						red "Python 未安装成功，请检查网络连接！"
+						Step
+					fi
+				else
+					red "无法完成 Python 安装！"
+					Step
+					return 1
+				fi
+				;;
+			n)
+				red "拒绝安装 Python！"
+				Step
+				return 1
+				;;
+			*)
+				red "无效输入！"
+				Step
+				return 1
+				;;
+		esac				
+	fi
+	if PIP_mirror_check; then
+		return 0
+	else
+		if network_check_sea; then
+			return 0
+		else
+			red "根据检测结果，脚本认定你当前网络环境无法完成安装！"
+			red "对于国内用户，请配置镜像源以完成安装！"
+			blue "是否跳转到 PIP 镜像源配置？[y/n]"
+			Enter
+			read PIP_MIRROR_CHOOSE
+			case $PIP_MIRROR_CHOOSE in
+				y)
+					source $ToolPATH/main/script/mirror.sh
+					;;
+				n)
+					red "跳过镜像源配置！"
+					red "警告，根据网络环境和镜像源配置检测结果，脚本认为你无法完成安装！"
+					red "安装强制中止！"
+					Step
+					return 1
+					;;
+				*)
+					red "无效输入，请重试！"
+					Step
+					return 1
+					;;
+			esac
+		fi
+	fi
+}
+
 youget_download(){
 	echo -e "\n\n"
 	echo "you-get 支持的链接种类: https://github.com/soimort/you-get/wiki/%E4%B8%AD%E6%96%87%E8%AF%B4%E6%98%8E#%E6%94%AF%E6%8C%81%E7%BD%91%E7%AB%99"
@@ -221,7 +317,7 @@ echo -en "\t\tEnter an option: "
 }
 
 Step() {
-echo -en "\n\n\t\t\t请回车以继续"
+echo -en "\n\n\t\t\t请回车以确认"
 read -n 1 line
 }
 
