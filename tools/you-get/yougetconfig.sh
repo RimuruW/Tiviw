@@ -20,17 +20,21 @@ case $yougetoption in
 	1)
 		if youget_check; then
 			red "已安装 you-get，无需重复安装！"
+			Step
 		else
 			if check_pip_ability; then
 				pip3 install you-get
 				if youget_check; then
 					green "you-get 安装成功！"
+					Step
 				else
 					red "you-get 安装失败！"
 					red "请检查你的网络连接！"
+					Step
 				fi
 			else
 				red "不满足所需环境条件，无法完成安装！"
+				Step
 			fi
 		fi
 		source $ToolPATH/main/tools/you-get/yougetconfig.sh
@@ -43,9 +47,11 @@ case $yougetoption in
 				green "Done!"
 			else
 				red "未安装 Python，无法进行该操作！"
+				Step
 			fi
 		else
 			red "请先安装 you-get！"
+			Step
 		fi
 		source $ToolPATH/main/tools/you-get/yougetconfig.sh 
 		;;
@@ -55,6 +61,7 @@ case $yougetoption in
 			source $ToolPATH/main/tools/you-get/yougetconfig.sh
 		else
 			red "请先安装 you-get"
+			Step
 		fi
 		source $ToolPATH/main/tools/you-get/yougetconfig.sh ;;
 	4)
@@ -62,6 +69,7 @@ case $yougetoption in
 			source $ToolPATH/main/tools/you-get/yougeteasy.sh
 		else
 			red "请先安装 you-get"
+			Step
 			source $ToolPATH/main/tools/you-get/yougetconfig.sh
 		fi
 		;;
@@ -71,14 +79,18 @@ case $yougetoption in
 				yes | pip uninstall you-get
 				if youget_check; then
 					red "卸载失败！请提交错误至开发者！"
+					Step
 				else
 					green "卸载成功！"
+					Step
 				fi
 			else
 				red "未安装 Python，无法执行该命令！"
+				Step
 			fi
 		else
 			red "you-get 未安装！"
+			Step
 		fi
 		source $ToolPATH/main/tools/you-get/yougetconfig.sh ;;
 	0)

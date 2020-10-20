@@ -208,6 +208,7 @@ check_apt_ability() {
 					red "跳过镜像源配置！"
 					red "警告，根据网络环境和镜像源配置检测结果，脚本认为你无法完成安装！"
 					red "安装强制中止！"
+					Step
 					return 1
 					;;
 			esac
@@ -226,7 +227,7 @@ check_pip_ability() {
 		case $PYTHON_INSTALL_CHOOSE in
 			y)
 				if check_apt_ability; then
-					pkg in python
+					pkg in python -y
 					if python_check; then
 						green "Python 安装成功！"
 					else
