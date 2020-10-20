@@ -9,6 +9,21 @@ function red(){
 	echo -e "\033[31m\033[01m$1\033[0m"
 }
 
+# Check
+if [[ $EUID -eq 0 ]]; then
+	red "检测到您正在尝试使用 ROOT 权限运行安装脚本"
+	red "这是不建议且不被允许的"
+	red "安装全过程不需要 ROOT 权限,且以 ROOT 权限运行可能会带来一些无法预料的问题"
+	red "为了您的设备安全，请避免在任何情况下以 ROOT 用户运行安装脚本"
+	exit 1
+fi
+if [[ -d /system/app && -d /system/priv-app ]]; then
+	systeminfo="Android $(getprop ro.build.version.release)"
+else
+	red "This operating system is not supported."
+	exit 1
+fi
+
 if [ -d $PREFIX/etc/tiviw ]; then
 	red "您已安装 Tiviw ，无需重复安装"
 	red "如果您需要移除 Tiviw，请输入 rm -rf $PREFIX/etc/tiviw"

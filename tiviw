@@ -27,4 +27,6 @@ if [ ! -f "$PREFIX/etc/tiviw/main/script/menu.sh" ]; then
 	exit 1
 fi
 
-bash $PREFIX/etc/tiviw/main/script/menu.sh
+mkdir -p $PREFIX/etc/tiviw/logs
+bash $PREFIX/etc/tiviw/main/script/logsmanager.sh
+bash $PREFIX/etc/tiviw/main/script/menu.sh | tee -a $PREFIX/etc/tiviw/logs/1.log
