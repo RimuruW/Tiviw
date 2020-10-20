@@ -17,11 +17,11 @@ case $ABOUT_CHOOSE in
 			if [ -z update_remote_status ]; then
 				red "远程仓库地址修改失败，仍然尝试拉起最新版本…"
 				red "拉取可能会失败！"
-				git pull
+				git pull 2>/dev/null
 				green "拉取结束！"
 			else
 				green "远程仓库仓库地址修改成功，尝试拉取最新版本…"
-				git pull
+				git pull 2>/dev/null
 				green "拉取结束！"
 			fi
 			git remote set-url origin https://github.com/QingxuMo/Tiviw
