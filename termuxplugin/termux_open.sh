@@ -68,11 +68,13 @@ case $etermuxopen in
 					fi
 					touch $PREFIX/etc/termuxopen
 					green "修改完成!"
-					source $ToolPATH/main/termuxplugin/termux_open.sh ;;
+					source $ToolPATH/main/termuxplugin/termux_open.sh
+					return 0 ;;
 				q)
 					rm -f $PREFIX/etc/motd.tmp
 					echo "已退出"
 					source $ToolPATH/main/termuxplugin/termux_open.sh
+					return 0
 					;;
 				*)
 					echo -e "$texttermuxopen" >> $PREFIX/etc/motd.tmp
