@@ -5,6 +5,8 @@ echo -e "2 切换分支"
 sp
 sleep 0.016
 echo -e "0 退出脚本"
+sp
+sp
 Enter
 read ABOUT_CHOOSE
 case $ABOUT_CHOOSE in

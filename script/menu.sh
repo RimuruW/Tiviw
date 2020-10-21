@@ -417,10 +417,10 @@ _/      _/      _/      _/      _/      _/
                                                     
 	EOF
 	printf "$RESET"
-        echo -en "\t\t\t\t\t$VERSION"
+        echo -en "\t\t\t\t$VERSION"
         [[ $branch = dev ]] && red " dev"
         [[ $branch = master ]] && green " master"
-	echo -e "\t\t\tBy Qingxu (QingxuMo)"
+	echo -e "\t\t\t\tBy Qingxu (QingxuMo)"
 #if  [ $(which fortune) = /data/data/com.termux/files/usr/bin/fortune ]; then
 #    fortune
 #else
