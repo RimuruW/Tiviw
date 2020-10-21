@@ -11,8 +11,10 @@ case $ABOUT_CHOOSE in
 	1)
 		if network_check_sea; then
 			cd $ToolPATH/main
-			git pull
+			git pull 2>/dev/null
+			cp tiviw $PREFIX/bin/tiviw
 			green "已拉取最新版本！"
+			green "请重启脚本以应用更新！"
 		else
 			cd $ToolPATH/main
 			git remote set-url origin https://github.com.cnpmjs.org/QingxuMo/Tiviw
@@ -20,11 +22,16 @@ case $ABOUT_CHOOSE in
 				red "远程仓库地址修改失败，仍然尝试拉起最新版本…"
 				red "拉取可能会失败！"
 				git pull 2>/dev/null
+				cp tiviw $PREFIX/bin/tiviw
 				green "拉取结束！"
+				green "请重启脚本以应用更新！"
+				
 			else
 				green "远程仓库仓库地址修改成功，尝试拉取最新版本…"
 				git pull 2>/dev/null
+				cp tiviw $PREFIX/bin/tiviw
 				green "拉取结束！"
+				green "请重启脚本以应用更新！"
 			fi
 			git remote set-url origin https://github.com/QingxuMo/Tiviw
 			if [ -z remote_status ]; then
@@ -50,11 +57,13 @@ case $ABOUT_CHOOSE in
 			dev)
 				red "正在切换 dev 分支，注意，这是一个高危操作！"
 				git checkout dev
+				cp tiviw $PREFIX/bin/tiviw
 				echo "dev" > $ToolPATH/branch
 				;;
 			master)
 				green "正在切换 master 分支…"
 				git checkout master
+				cp tiviw $PREFIX/bin/tiviw
 				rm -f $ToolPATH/branch
 				;;
 			*)
