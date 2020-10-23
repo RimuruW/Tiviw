@@ -38,7 +38,7 @@ case $aria2choose in
 		bash $PREFIX/etc/tiviw/aria2/aria2.sh
 		;;
 	2)
-		if network_check, then
+		if network_check; then
 			    if [ -f "$PREFIX/etc/tiviw/aria2.sh.bak2" ]; then
 				    rm -f $PREFIX/etc/tiviw/aria2.sh.bak2
 			    fi
