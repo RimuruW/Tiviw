@@ -39,11 +39,11 @@ case $aria2choose in
 		;;
 	2)
 		if network_check; then
-			    if [ -f "$PREFIX/etc/tiviw/aria2.sh.bak2" ]; then
-				    rm -f $PREFIX/etc/tiviw/aria2.sh.bak2
+			    if [ -f "$PREFIX/etc/tiviw/aria2/aria2.sh.bak2" ]; then
+				    rm -f $PREFIX/etc/tiviw/aria2/aria2.sh.bak2
 			    fi
-			    if [ -f "$PREFIX/etc/tiviw/aria2.sh.bak" ]; then
-				    mv $PREFIX/etc/tiviw/aria2.sh.bak $PREFIX/etc/tiviw/aria2.sh.bak2
+			    if [ -f "$PREFIX/etc/tiviw/aria2/aria2.sh.bak" ]; then
+				    mv $PREFIX/etc/tiviw/aria2/aria2.sh.bak $PREFIX/etc/tiviw/aria2/aria2.sh.bak2
 			    fi
 			mv $PREFIX/etc/tiviw/aria2/aria2.sh $PREFIX/etc/tiviw/aria2/aria2.sh.bak
 			wget -P $PREFIX/etc/tiviw/aria2 https://raw.githubusercontent.com/QingxuMo/Aria2-Termux/master/aria2.sh && chmod +x $PREFIX/etc/tiviw/aria2/aria2.sh
@@ -68,6 +68,7 @@ case $aria2choose in
 		[[ -z $(echo $aria2termuxversion | grep "aria2.sh.bak") ]] && red "无效输入！" && source $PREFIX/etc/tiviw/main/tools/aria2/aria2config.sh && return 1
 		mv -f $PREFIX/etc/tiviw/aria2/$aria2termuxversion $PREFIX/etc/tiviw/aria2/aria2.sh
 		green "执行完成"
+		source $PREFIX/etc/tiviw/main/tools/aria2/aria2config.sh && return 0
 		;;
 
 	4)
