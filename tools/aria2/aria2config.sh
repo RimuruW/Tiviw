@@ -59,7 +59,9 @@ case $aria2choose in
 		;;
 	3)
 		echo "检测到备份文件如下:"
+		echo "================"
 		echo $(ls $PREFIX/etc/tiviw/aria2 | grep "bak")
+		echo "================"
 		blue "aria2.sh.bak 代表上一次更新前本地版本\naria2.sh.bak2（如果存在）为上上次更新前本地版本"
 		echo -en "请选择你要恢复的版本:"
 		read $aria2termuxversion
