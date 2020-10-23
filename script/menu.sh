@@ -414,7 +414,6 @@ _/_/_/_/_/  _/              _/
  _/      _/    _/  _/    _/    _/  _/  _/  _/       
 _/      _/      _/      _/      _/      _/          
                                                     
-                                                    
 	EOF
 	printf "$RESET"
         echo -en "\t\t\t\t$VERSION"
@@ -427,7 +426,7 @@ _/      _/      _/      _/      _/      _/
 #    pkg in fortune -y
 #    fortune
 #fi
-    echo -e "\n\n\n"
+    echo -e "\n\n"
 	echo -e " 1   镜像源管理\n"
 	sleep 0.016
 	echo -e " 2   底部小键盘扩展\n"
