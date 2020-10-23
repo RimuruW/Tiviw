@@ -54,8 +54,8 @@ case $aria2choose in
 			fi
 		else
 			red "网络连接异常！"
-			source $PREFIX/etc/tiviw/main/tools/aria2/aria2config.sh && return 1
 		fi
+		source $PREFIX/etc/tiviw/main/tools/aria2/aria2config.sh && return 0
 		;;
 	3)
 		echo "检测到备份文件如下:"
@@ -63,8 +63,8 @@ case $aria2choose in
 		echo "$(ls $PREFIX/etc/tiviw/aria2 | grep "bak")"
 		echo "================"
 		blue "aria2.sh.bak 代表上一次更新前本地版本\naria2.sh.bak2（如果存在）为上上次更新前本地版本"
-		echo -en "请选择你要恢复的版本:"
-		read $aria2termuxversion
+		echo -en "请选择你要恢复的文件:"
+		read aria2termuxversion
 		[[ -z $(echo $aria2termuxversion | grep "aria2.sh.bak") ]] && red "无效输入！" && source $PREFIX/etc/tiviw/main/tools/aria2/aria2config.sh && return 1
 		mv -f $PREFIX/etc/tiviw/aria2/$aria2termuxversion $PREFIX/etc/tiviw/aria2/aria2.sh
 		green "执行完成"
