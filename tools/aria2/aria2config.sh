@@ -21,7 +21,9 @@ echo "Aria2-Termux 安装状态: " $aria2termuxstatus
 echo -e "\n\n"
 echo -e "1 Aria2-Termux\n"
 sleep 0.016
-echo -e "2 Aria2-Termux 回退版本(如果更新 Aria2-Termux 后出现异常请选择此选项)\n"
+echo -e "2 Aria2-Termux 更新\n"
+sleep 0.016
+echo -e "3 Aria2-Termux 回退版本(如果更新 Aria2-Termux 后出现异常请选择此选项)\n"
 sleep 0.016
 echo -e "3 AriaNG 启动\n"
 sleep 0.016
@@ -37,7 +39,13 @@ case $aria2choose in
 		;;
 	2)
 		if network_check, then
-			rm -f $PREFIX/etc/tiviw/aria2/aria2.sh
+			    if [ -f "$PREFIX/etc/tiviw/aria2.sh.bak2" ]; then
+				    rm -f $PREFIX/etc/tiviw/aria2.sh.bak2
+			    fi
+			    if [ -f "$PREFIX/etc/tiviw/aria2.sh.bak" ]; then
+				    mv $PREFIX/etc/tiviw/aria2.sh.bak $PREFIX/etc/tiviw/aria2.sh.bak2
+			    fi
+			mv $PREFIX/etc/tiviw/aria2/aria2.sh $PREFIX/etc/tiviw/aria2/aria2.sh.bak
 			wget -P $PREFIX/etc/tiviw/aria2 https://raw.githubusercontent.com/QingxuMo/Aria2-Termux/master/aria2.sh && chmod +x $PREFIX/etc/tiviw/aria2/aria2.sh
 			if [ -f $PREFIX/etc/tiviw/aria2/aria2.sh ]; then
 				green "更新成功！"
