@@ -298,8 +298,8 @@ youget_download(){
 	mkdir -p $yougetdownloaddir
 	blue "下载即将开始..."
 	you-get -o $yougetdownloaddir $yougetlist $yougetlink
-	green "下载已停止!"
-	green "这可能是因为所需下载内容已下载完毕,或者下载中断"
+	green "下载已停止！"
+	green "这可能是因为所需下载内容已下载完毕，或者下载中断"
 }
 
 remote_status="$(git remote -v | grep "https://github.com/QingxuMo/Tiviw")"
