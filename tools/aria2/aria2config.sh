@@ -25,7 +25,7 @@ echo -e "2 Aria2-Termux 更新\n"
 sleep 0.016
 echo -e "3 Aria2-Termux 回退版本(如果更新 Aria2-Termux 后出现异常请选择此选项)\n"
 sleep 0.016
-echo -e "3 AriaNG 启动\n"
+echo -e "4 AriaNG 启动\n"
 sleep 0.016
 echo "0 退出"
 sleep 0.016
