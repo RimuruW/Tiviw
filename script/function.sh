@@ -7,8 +7,8 @@
 #-----------------------------------
 
 name="Tovow"
-sh_ver="1.0.1"
-ver_code="20201020"
+sh_ver="1.0.2"
+ver_code="20201031"
 ToolPATH="$PREFIX/etc/tiviw"
 
 # Color configure

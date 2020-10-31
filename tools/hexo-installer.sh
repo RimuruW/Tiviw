@@ -25,15 +25,27 @@ else
 fi
 npm install -g npm
 npm install -g hexo-cli
-green "请输入您想创建的 Hexo 博客文件夹名称 [必填]"
-echo -en "\t\tEnter the name: "
-read blogname
-[[ -z "$blogname" ]] && red "未获取到博客文件夹名称，安装失败！" && exit 1
-mkdir -p $HOME/$blogname
-blog=$HOME/$blogname
-hexo init $blog
-npm install --prefix $blog hexo-deployer-git hexo-generator-feed hexo-generator-sitemap --save
-echo "Hexo 已初始化并已安装基础模块，请勿重复进行 hexo init"
+blue "是否立即创建一个文件夹并初始化？"
+Enter
+read hexoinit
+case $hexoinit in
+	y*)
+		green "请输入您想创建的 Hexo 博客文件夹名称 [必填]"
+		echo -en "\t\tEnter the name: "
+		read blogname
+		[[ -z "$blogname" ]] && red "未获取到博客文件夹名称，初始化失败！" && exit 1
+		mkdir -p $HOME/$blogname
+		blog=$HOME/$blogname
+		hexo init $blog
+		npm install --prefix $blog hexo-deployer-git hexo-generator-feed hexo-generator-sitemap --save
+		echo "Hexo 已初始化并已安装基础模块，请勿重复进行 hexo init"
+		echo "博客目录默认为 $blog"
+		;;
+	n*)
+		echo "跳过初始化…"
+		;;
+	*)
+		red "无效输入，跳过初始化…"
+		;; 
 echo "Hexo 版本信息如下"
 hexo version
-echo "博客目录默认为 $blog"

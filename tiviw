@@ -1,5 +1,5 @@
 #!/data/data/com.termux/files/usr/bin/sh
-name="Tovow"
+name="Tiviw"
 tiviw_ver=0.1
 
 echo "校验脚本中…"
