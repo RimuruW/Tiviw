@@ -40,6 +40,7 @@ case $ABOUT_CHOOSE in
 			git remote set-url origin https://github.com/QingxuMo/Tiviw
 			if [ -z "$remote_status" ]; then
 				red "远程仓库地址恢复失败！"
+				red "远程仓库状态：$remote_status
 				red "请手动输入 cd $ToolPATH/main && git remote set-url origin https://github.com/QingxuMo/Tiviw 恢复远程仓库地址"
 				red "提交该界面截图至开发者以帮助开发者解决该问题！"
 				exit 1

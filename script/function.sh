@@ -6,7 +6,7 @@
 # Copyright (c) 2020 Qingxu
 #-----------------------------------
 
-name="Tovow"
+name="Tiviw"
 sh_ver="1.0.2"
 ver_code="20201031"
 ToolPATH="$PREFIX/etc/tiviw"
