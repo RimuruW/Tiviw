@@ -33,9 +33,18 @@ echo -en "\t\tEnter an option: "
 read aria2choose
 case $aria2choose in
 	1)
-		[[ ! -f "$PREFIX/etc/tiviw/aria2/aria2.sh" ]] && mkdir -p $PREFIX/etc/tiviw/aria2 && wget -P $PREFIX/etc/tiviw/aria2 https://raw.githubusercontent.com/QingxuMo/Aria2-Termux/master/aria2.sh && chmod +x $PREFIX/etc/tiviw/aria2/aria2.sh
+		if [ ! -f "$PREFIX/etc/tiviw/aria2/aria2.sh" ]; then
+			if network_check_sea; then
+				mkdir -p $PREFIX/etc/tiviw/aria2 && wget -P $PREFIX/etc/tiviw/aria2 https://raw.githubusercontent.com/QingxuMo/Aria2-Termux/master/aria2.sh && chmod +x $PREFIX/etc/tiviw/aria2/aria2.sh
+			else
+				mkdir -p $PREFIX/etc/tiviw/aria2 && wget -P $PREFIX/etc/tiviw/aria2 https://cdn.jsdelivr.net/gh/QingxuMo/Aria2-Termux@master/aria2.sh && chmod +x $PREFIX/etc/tiviw/aria2/aria2.sh
+			fi
+		else
+			red "您已安装Aria2-Termux，无需重复安装"
+		fi
 		[[ ! -f "$PREFIX/etc/tiviw/aria2/aria2.sh" ]] && red "Aria2 安装脚本下载失败，请检查网络连接状态" &&  echo "请回车确认" && read -n 1 line  && source $PREFIX/etc/tiviw/main/tools/aria2/aria2config.sh && return 1
 		bash $PREFIX/etc/tiviw/aria2/aria2.sh
+		source $PREFIX/etc/tiviw/main/tools/aria2/ariang.sh && return 0
 		;;
 	2)
 		if network_check; then

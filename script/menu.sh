@@ -2,7 +2,7 @@
 #-----------------------------------
 # Author: Qingxu (QingxuMo)
 # Description: Termux Tools
-# Repository Address: https://github.com/QingxuMo/Tovow
+# Repository Address: https://github.com/QingxuMo/Tiviw
 # Copyright (c) 2020 Qingxu
 #-----------------------------------
 

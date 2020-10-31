@@ -10,5 +10,6 @@ bash -c "$(curl -L https://raw.githubusercontent.com/QingxuMo/Tiviw/master/insta
 > 国内用户请输入以下命令
 
 ```
-bash -c "$(curl -L https://cdn.jsdelivr.net/gh/QingxuMo/Tovow@master/install.sh)"
+bash -c "$(curl -L https://cdn.jsdelivr.net/gh/QingxuMo/Tiviw@dev/install.sh)"
 ```
+>>>>>>> dev

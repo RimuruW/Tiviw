@@ -23,6 +23,7 @@ case $ABOUT_CHOOSE in
 			if [ -z update_remote_status ]; then
 				red "远程仓库地址修改失败，仍然尝试拉起最新版本…"
 				red "拉取可能会失败！"
+				git checkout . && git clean -xdf
 				git pull 2>/dev/null
 				cp tiviw $PREFIX/bin/tiviw
 				green "拉取结束！"
@@ -30,15 +31,16 @@ case $ABOUT_CHOOSE in
 				
 			else
 				green "远程仓库仓库地址修改成功，尝试拉取最新版本…"
+				git checkout . && git clean -xdf
 				git pull 2>/dev/null
 				cp tiviw $PREFIX/bin/tiviw
 				green "拉取结束！"
 				green "请重启脚本以应用更新！"
 			fi
 			git remote set-url origin https://github.com/QingxuMo/Tiviw
-			if [ -z remote_status ]; then
+			if [ -z "$remote_status" ]; then
 				red "远程仓库地址恢复失败！"
-				red "请手动输入 cd $ToolPATH/main && git remote set-url origin https://github.com/QingxuMo/Tiviw 回复远程仓库地址"
+				red "请手动输入 cd $ToolPATH/main && git remote set-url origin https://github.com/QingxuMo/Tiviw 恢复远程仓库地址"
 				red "提交该界面截图至开发者以帮助开发者解决该问题！"
 				exit 1
 			else
@@ -47,6 +49,7 @@ case $ABOUT_CHOOSE in
 		fi
 		cd $HOME
 		source $ToolPATH/main/script/about.sh
+		return 0
 		;;
 	2)
 		red "注意，该选项是仅面向开发者测试的选项，普通用户请使用默认的 master 分支！"
@@ -72,12 +75,14 @@ case $ABOUT_CHOOSE in
 				red "不存在的分支名称！"
 				red "请输入 master 或 dev！"
 				source $ToolPATH/main/script/about.sh
+				return 0
 				;;
 		esac
 		cd $HOME
 		;;
 	0)
 		source $ToolPATH/main/script/menu.sh
+		return 0
 		;;
 	*)
 		red "无效输入，请重试！"
