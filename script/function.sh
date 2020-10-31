@@ -302,8 +302,25 @@ youget_download(){
 	green "这可能是因为所需下载内容已下载完毕，或者下载中断"
 }
 
-remote_status="$(git remote -v | grep "https://github.com/QingxuMo/Tiviw")"
-update_remote_status="$(git remote -v | grep "https://github.com.cnpmjs.org/QingxuMo/Tiviw")"
+remote_status() {
+	git remote -v | grep "https://github.com/QingxuMo/Tiviw"
+	if [ $? -eq 0 ]; then
+		green "远程仓库地址为源地址!"
+		return 0
+	else
+		red "远程仓库地址异常！"
+		return 1
+	fi
+}
+
+update_remote_status() {
+	git remote -v | grep "https://github.com.cnpmjs.org/QingxuMo/Tiviw"
+	if [ $? -eq 0 ]; then
+		green "远程仓库地址修改成功!"
+	else
+		red "远程仓库地址修改失败！"
+	fi
+}
 
 Enter() {
 echo -en "\t\tEnter an option: "
