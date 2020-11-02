@@ -12,4 +12,3 @@ bash -c "$(curl -L https://raw.githubusercontent.com/QingxuMo/Tiviw/master/insta
 ```
 bash -c "$(curl -L https://cdn.jsdelivr.net/gh/QingxuMo/Tiviw@dev/install.sh)"
 ```
->>>>>>> dev
