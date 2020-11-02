@@ -291,9 +291,14 @@ youget_download(){
 	green "看不懂就直接回车"
 	echo -en "\t\tEnter: "
 	read tmpyougetlist
-	if  [ $tmpyougetlist = y ]; then
-		yougetlist=--playlist
-	fi
+	case $tmpyougetlist in
+		y*)
+			yougetlist=--playlist
+			;;
+		*)
+			:
+			;;
+	esac
 	yougetdownloaddir=/sdcard/$tmpdiryouget
 	mkdir -p $yougetdownloaddir
 	blue "下载即将开始..."
