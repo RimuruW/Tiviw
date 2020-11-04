@@ -17,6 +17,7 @@ case $aaachoose in
 		red "在设备剩余存储空间不足时建议立即按 Ctrl + C 中止！"
 		echo -en "\n\n\t\t请回车以示您已阅读完毕"
 		read -n 1 line
+		blue "开始生成无效文件…"
 		yes >> $ToolPATH/aaa.txt
 		return 0 ;;
 	2)
