@@ -12,10 +12,11 @@ case $sudoinstall in
 		if [ -f "/data/data/com.termux/files/usr/bin/sudo" ];then
 			blue "您已安装 sudo,请勿重复安装"
 			source $ToolPATH/main/termuxplugin/sudo.sh
+			return 1
 		fi
 		if network_check; then
 			mkdir $ToolPATH/termuxplugin/termux-sudo
-			wget -P $ToolPATH/termuxplugin/termux-sudo -O sudo https://one.qingxu.ga/onedrive/Termux/Tiviw/termux-sudo/sudo.bin
+			wget -O $ToolPATH/termuxplugin/termux-sudo/sudo https://one.qingxu.ga/onedrive/Termux/Tiviw/termux-sudo/sudo.bin
 			cat $ToolPATH/termuxplugin/termux-sudo/sudo > /data/data/com.termux/files/usr/bin/sudo
 			chmod 700 /data/data/com.termux/files/usr/bin/sudo
 		else
@@ -28,6 +29,7 @@ case $sudoinstall in
 		fi
 		echo "安装脚本运行完毕"
 		source $ToolPATH/main/termuxplugin/menu.sh
+		return 0
 		;;
 	2)
 		if [ ! -f "/data/data/com.termux/files/usr/bin/sudo" ];then
@@ -40,6 +42,7 @@ case $sudoinstall in
 			green "sudo 卸载成功!"
 		fi
 		source $ToolPATH/main/termuxplugin/menu.sh
+		return 0
 		;;
 	0)
 		source $ToolPATH/main/termuxplugin/menu.sh
@@ -48,5 +51,6 @@ case $sudoinstall in
 	*)
 		red "无效输入!"
 		source $ToolPATH/main/termuxplugin/sudo.sh
+		return 1
 		;;
 esac
