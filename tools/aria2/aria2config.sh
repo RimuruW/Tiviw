@@ -44,7 +44,7 @@ case $aria2choose in
 		fi
 		[[ ! -f "$PREFIX/etc/tiviw/aria2/aria2.sh" ]] && red "Aria2 安装脚本下载失败，请检查网络连接状态" &&  echo "请回车确认" && read -n 1 line  && source $PREFIX/etc/tiviw/main/tools/aria2/aria2config.sh && return 1
 		bash $PREFIX/etc/tiviw/aria2/aria2.sh
-		source $PREFIX/etc/tiviw/main/tools/aria2/ariang.sh && return 0
+		source $PREFIX/etc/tiviw/main/tools/aria2/aria2config.sh && return 0
 		;;
 	2)
 		if network_check; then
@@ -55,7 +55,11 @@ case $aria2choose in
 				    mv $PREFIX/etc/tiviw/aria2/aria2.sh.bak $PREFIX/etc/tiviw/aria2/aria2.sh.bak2
 			    fi
 			mv $PREFIX/etc/tiviw/aria2/aria2.sh $PREFIX/etc/tiviw/aria2/aria2.sh.bak
-			wget -P $PREFIX/etc/tiviw/aria2 https://raw.githubusercontent.com/QingxuMo/Aria2-Termux/master/aria2.sh && chmod +x $PREFIX/etc/tiviw/aria2/aria2.sh
+			if network_check_sea; then
+				mkdir -p $PREFIX/etc/tiviw/aria2 && wget -P $PREFIX/etc/tiviw/aria2 https://raw.githubusercontent.com/QingxuMo/Aria2-Termux/master/aria2.sh && chmod +x $PREFIX/etc/tiviw/aria2/aria2.sh
+			else
+				mkdir -p $PREFIX/etc/tiviw/aria2 && wget -P $PREFIX/etc/tiviw/aria2 https://cdn.jsdelivr.net/gh/QingxuMo/Aria2-Termux@master/aria2.sh && chmod +x $PREFIX/etc/tiviw/aria2/aria2.sh
+			fi
 			if [ -f $PREFIX/etc/tiviw/aria2/aria2.sh ]; then
 				green "更新成功！"
 			else
@@ -69,7 +73,7 @@ case $aria2choose in
 	3)
 		echo "检测到备份文件如下:"
 		echo "================"
-		echo "$(ls $PREFIX/etc/tiviw/aria2 | grep "bak")"
+		echo "$(ls $PREFIX/etc/tiviw/aria2/ | grep "bak")"
 		echo "================"
 		blue "aria2.sh.bak 代表上一次更新前本地版本\naria2.sh.bak2（如果存在）为上上次更新前本地版本"
 		echo -en "请选择你要恢复的文件:"
