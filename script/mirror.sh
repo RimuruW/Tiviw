@@ -31,23 +31,33 @@ case $mirrorschoose in
 		sed -i 's@^\(deb.*science stable\)$@#\1\ndeb https://mirrors.tuna.tsinghua.edu.cn/termux/science-packages-24 science stable@' $PREFIX/etc/apt/sources.list.d/science.list
 		touch $ToolPATH/mirrorstatus
 		apt update && apt upgrade -y
+		source $ToolPATH/main/script/mirror.sh
+		return 0
 	;;
 	2)
-		[[ ! -f "$PREFIX/bin/npm" ]] && red "请先安装 Node.js" && return 0
+		[[ ! -f "$PREFIX/bin/npm" ]] && red "请先安装 Node.js" && source $ToolPATH/main/script/mirror.sh && return 1
+		blue "尝试添加设置 NPM 镜像源…"
 		npm config set registry https://registry.npm.taobao.org
 		touch $ToolPATH/npmmirrorsstatus
+		green "NPM 镜像源已设置！"
+		source $ToolPATH/main/script/mirror.sh
+		return 0
 		;;
 	3)
-		[[ ! -f "$PREFIX/bin/python" ]] && red "请先安装 Python " && return 0
-		[[ -d $HOME/.pip ]] && red "您已添加镜像源，无需重复添加" && return 0
+		[[ ! -f "$PREFIX/bin/python" ]] && red "请先安装 Python " && source $ToolPATH/main/script/mirror.sh && return 1
+		[[ -d $HOME/.pip ]] && red "您已添加镜像源，无需重复添加" && source $ToolPATH/main/script/mirror.sh && return 1
 		mkdir -p ~/.pip/
 		echo -e "[global]\nindex-url = https://pypi.tuna.tsinghua.edu.cn/simple\n[install]\ntrusted-host=mirrors.aliyun.com" > ~/.pip/pip.conf
+		green "pip 镜像源已添加！"
+		source $ToolPATH/main/script/mirror.sh
+		return 0
 		;;
 	0)
 		return 0 ;;
 	*)
 		red "无效输入,请重试"
-		bash $ToolPATH/main/script/mirror.sh
+		source $ToolPATH/main/script/mirror.sh
+		return 1
 	 ;;
 esac
 

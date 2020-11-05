@@ -345,5 +345,3 @@ Abort() {
 	red "$abort_echo"
 	exit 0
 }
-
-clear

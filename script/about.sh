@@ -77,6 +77,7 @@ case $ABOUT_CHOOSE in
 				return 0
 				;;
 		esac
+		source $ToolPATH/main/script/function.sh
 		cd $HOME
 		;;
 	0)
@@ -86,7 +87,7 @@ case $ABOUT_CHOOSE in
 	*)
 		red "无效输入，请重试！"
 		Step
-		source $ToolPATH/main/script/about.sh
+		source $ToolPATH/main/script/about.sh && return 1
 		;;
 esac
 

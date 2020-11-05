@@ -11,6 +11,7 @@ case $sudoinstall in
 	1)
 		if [ -f "/data/data/com.termux/files/usr/bin/sudo" ];then
 			blue "您已安装 sudo,请勿重复安装"
+			Step
 			source $ToolPATH/main/termuxplugin/sudo.sh
 			return 1
 		fi
@@ -20,6 +21,7 @@ case $sudoinstall in
 			cat $ToolPATH/termuxplugin/termux-sudo/sudo > /data/data/com.termux/files/usr/bin/sudo
 			chmod 700 /data/data/com.termux/files/usr/bin/sudo
 		else
+		    Step
 			red "请连接网络后安装 sudo"
 		fi
 		if [ -f "/data/data/com.termux/files/usr/bin/sudo" ];then
@@ -28,6 +30,7 @@ case $sudoinstall in
 			green "脚本运行失败!请检查网络连接或提交日志"
 		fi
 		echo "安装脚本运行完毕"
+		Step
 		source $ToolPATH/main/termuxplugin/menu.sh
 		return 0
 		;;
@@ -41,6 +44,7 @@ case $sudoinstall in
 		else
 			green "sudo 卸载成功!"
 		fi
+		Step
 		source $ToolPATH/main/termuxplugin/menu.sh
 		return 0
 		;;
