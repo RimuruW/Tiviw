@@ -46,6 +46,7 @@ case $ABOUT_CHOOSE in
 			fi
 		fi
 		cd $HOME
+		source $ToolPATH/main/script/function.sh
 		source $ToolPATH/main/script/about.sh
 		return 0
 		;;

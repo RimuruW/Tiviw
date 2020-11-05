@@ -13,9 +13,14 @@ case $sudoinstall in
 			blue "您已安装 sudo,请勿重复安装"
 			source $ToolPATH/main/termuxplugin/sudo.sh
 		fi
-		git clone https://gitlab.com/st42/termux-sudo.git $HOME/termux-sudo
-		cat $HOME/termux-sudo/sudo > /data/data/com.termux/files/usr/bin/sudo
-		chmod 700 /data/data/com.termux/files/usr/bin/sudo
+		if network_check; then
+			mkdir $ToolPATH/termuxplugin/termux-sudo
+			wget -P $ToolPATH/termuxplugin/termux-sudo -O sudo https://one.qingxu.ga/onedrive/Termux/Tiviw/termux-sudo/sudo.bin
+			cat $ToolPATH/termuxplugin/termux-sudo/sudo > /data/data/com.termux/files/usr/bin/sudo
+			chmod 700 /data/data/com.termux/files/usr/bin/sudo
+		else
+			red "请连接网络后安装 sudo"
+		fi
 		if [ -f "/data/data/com.termux/files/usr/bin/sudo" ];then
 			green "sudo 已成功安装到了您的 Termux"
 		else
@@ -38,6 +43,7 @@ case $sudoinstall in
 		;;
 	0)
 		source $ToolPATH/main/termuxplugin/menu.sh
+		return 0
 		;;
 	*)
 		red "无效输入!"

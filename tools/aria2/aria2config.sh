@@ -76,6 +76,7 @@ case $aria2choose in
 		echo "$(ls $PREFIX/etc/tiviw/aria2/ | grep "bak")"
 		echo "================"
 		blue "aria2.sh.bak 代表上一次更新前本地版本\naria2.sh.bak2（如果存在）为上上次更新前本地版本"
+		red "本地版本仅代表你更新前设备上的 Aria2-Termux 版本，与云端版本无任何关联！"
 		echo -en "请选择你要恢复的文件:"
 		read aria2termuxversion
 		[[ -z $(echo $aria2termuxversion | grep "aria2.sh.bak") ]] && red "无效输入！" && source $PREFIX/etc/tiviw/main/tools/aria2/aria2config.sh && return 1
