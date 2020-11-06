@@ -74,21 +74,6 @@ check_mirrors() {
 
 check_mirrors
 
-blue "- 节点选择 -"
-blue "因为某些众所周知的原因，GitHub 在国内连接速度极为感人，对于无法正常连接 GitHub 的用户，你可以使用 GitHub 加速节点"
-echo -en "是否使用 GitHub 加速节点?[y/n]"
-read ghproxychoose
-case $ghproxychoose in
-	y)
-		echo "gh.qingxu.ga/" > $PREFIX/etc/tiviw/gh-proxy
-		;;
-	*)
-		green "Skip..."
-		;;
-esac
-
-
 green "您马上就可以进入脚本!"
-green "初始化完毕，请回车以启动脚本！"
 
 touch $PREFIX/etc/tiviw/ok

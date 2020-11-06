@@ -8,7 +8,7 @@
 
 name="Tiviw"
 sh_ver="1.0.2"
-ver_code="20201031"
+ver_code="20201106"
 ToolPATH="$PREFIX/etc/tiviw"
 
 # Color configure
@@ -46,22 +46,34 @@ fi
 
 source $ToolPATH/main/permission.sh
 
-if [ ! -f "$ToolPATH/branch" ]; then
-	branch="master"
+branch=$(cd $PREFIX/etc/tiviw/main && git branch |grep "*" | awk -F " " '{print $NF}')
+
+if [ $branch = master ]; then
 	VERSION="v$sh_ver"
 else
-	branch=$(cat $ToolPATH/branch)
 	VERSION="$ver_code"
 fi
 
 if [ ! -f "$PREFIX/bin/wget" ];then
-	pkg in wget -y >/dev/null
+	red "警告，wget 未安装！"
+	blue "wget 是 Linux 平台一个轻量便捷的下载工具"
+	blue "本脚本大量功能依赖 wget 实现"
+	green "尝试安装 wget…"
+	if check_apt_ability; then
+		pkg in wget -y >/dev/null
+	else
+		red "警告！无法完成 wget 安装！"
+	fi
+	if [ ! -f "$PREFIX/bin/wget" ];then
+		red "警告！wget 未安装！"
+		red "脚本强制中止"
+		exit 1
+	fi
+
 fi
 
 mkdir -p $ToolPATH
 [[ ! -f "$ToolPATH/ok" ]] && bash $ToolPATH/main/script/init.sh
-[[ -f "$ToolPATH/gh-proxy" ]] && ghproxy=$(cat $ToolPATH/gh-proxy)
-
 
 # The most important functions
 network_check() {
@@ -345,3 +357,5 @@ Abort() {
 	red "$abort_echo"
 	exit 0
 }
+
+clear

@@ -46,8 +46,7 @@ case $ABOUT_CHOOSE in
 			fi
 		fi
 		cd $HOME
-		source $ToolPATH/main/script/function.sh
-		source $ToolPATH/main/script/about.sh
+		source $ToolPATH/main/script/menu.sh
 		return 0
 		;;
 	2)
@@ -62,13 +61,11 @@ case $ABOUT_CHOOSE in
 				red "正在切换 dev 分支，注意，这是一个高危操作！"
 				git checkout dev
 				cp tiviw $PREFIX/bin/tiviw
-				echo "dev" > $ToolPATH/branch
 				;;
 			master)
 				green "正在切换 master 分支…"
 				git checkout master
 				cp tiviw $PREFIX/bin/tiviw
-				rm -f $ToolPATH/branch
 				;;
 			*)
 				red "不存在的分支名称！"

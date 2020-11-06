@@ -9,6 +9,31 @@ function red(){
 	echo -e "\033[31m\033[01m$1\033[0m"
 }
 
+check_mirrors() {
+	mirrors_status=$(cat $PREFIX/etc/apt/sources.list | grep "mirror" | grep -v '#')
+	if [ -z "$mirrors_status" ]; then
+		red "Termux 镜像源未配置！"
+		echo -e "对于国内用户，添加清华源作为镜像源可以有效增强 Termux 软件包下载速度"
+		echo -en "是否添加清华源？[y/n]"
+		read mirror_choose
+		case $mirror_choose in
+			y)
+				sed -i 's@^\(deb.*stable main\)$@#\1\ndeb https://mirrors.tuna.tsinghua.edu.cn/termux/termux-packages-24 stable main@' $PREFIX/etc/apt/sources.list
+				sed -i 's@^\(deb.*games stable\)$@#\1\ndeb https://mirrors.tuna.tsinghua.edu.cn/termux/game-packages-24 games stable@' $PREFIX/etc/apt/sources.list.d/game.list
+				sed -i 's@^\(deb.*science stable\)$@#\1\ndeb https://mirrors.tuna.tsinghua.edu.cn/termux/science-packages-24 science stable@' $PREFIX/etc/apt/sources.list.d/science.list
+				apt update && apt upgrade -y
+				;;
+			n)
+				blue "使用默认源进行安装"
+				;;
+			*)
+				blue "使用默认源进行安装"
+				;;
+		esac
+	fi
+
+}
+
 # Check
 if [[ $EUID -eq 0 ]]; then
 	red "检测到您正在尝试使用 ROOT 权限运行安装脚本"
@@ -30,10 +55,21 @@ if [ -d $PREFIX/etc/tiviw ]; then
 	exit 1
 fi
 
+check_mirrors
+
+
+if [ ! -f $PREFIX/bin/wget ]; then
+	red "警告，您并未安装 wget！"
+	blue "将自动安装 wget..."
+	blue "对于国内用户，未配置镜像源会导致安装时间极长"
+	apt-get update && apt-get install git -y
+	[[ ! -f $PREFIX/bin/wget ]] && red "git 安装失败" && exit 1
+fi
+
 if [ ! -f $PREFIX/bin/git ]; then
-	red -e "警告，您并未安装 git！"
-	blue -e "将自动安装 git..."
-	blue -e "对于国内用户，未配置镜像源会导致安装时间极长"
+	red "警告，您并未安装 git！"
+	blue "将自动安装 git..."
+	blue "对于国内用户，未配置镜像源会导致安装时间极长"
 	apt-get update && apt-get install git -y
 	[[ ! -f $PREFIX/bin/git ]] && red "git 安装失败" && exit 1
 fi

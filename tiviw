@@ -1,6 +1,5 @@
 #!/data/data/com.termux/files/usr/bin/sh
 name="Tiviw"
-tiviw_ver=0.1
 
 echo "校验脚本中…"
 if [ ! -f "$PREFIX/etc/tiviw/branch" ]; then
@@ -15,16 +14,16 @@ if [ ! -d "$PREFIX/etc/tiviw/main" ]; then
 fi
 
 if [ ! -d "$PREFIX/etc/tiviw/main" ]; then
-	git clone https://github.com/QingxuMo/$name $PREFIX/etc/tiviw/main >/dev/null
-fi
-
-if [ ! -f "$PREFIX/bin/bash" ]; then
-	pkg in bash -y >/dev/null
+	git clone https://github.com.cnpmjs.org/QingxuMo/$name $PREFIX/etc/tiviw/main >/dev/null
 fi
 
 if [ ! -f "$PREFIX/etc/tiviw/main/script/menu.sh" ]; then
 	echo "请检查您的互联网连接状态，如互联网连接正常，请向开发者提交 issues"
 	exit 1
+fi
+
+if [ ! -f "$PREFIX/bin/bash" ]; then
+	pkg in bash -y >/dev/null
 fi
 
 mkdir -p $PREFIX/etc/tiviw/logs
