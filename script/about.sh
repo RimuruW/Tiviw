@@ -46,6 +46,7 @@ case $ABOUT_CHOOSE in
 			fi
 		fi
 		cd $HOME
+		Step
 		source $ToolPATH/main/script/menu.sh
 		return 0
 		;;
@@ -74,8 +75,9 @@ case $ABOUT_CHOOSE in
 				return 0
 				;;
 		esac
-		source $ToolPATH/main/script/function.sh
 		cd $HOME
+		source $ToolPATH/main/script/menu.sh
+		return 0
 		;;
 	0)
 		source $ToolPATH/main/script/menu.sh
