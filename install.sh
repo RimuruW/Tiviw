@@ -62,8 +62,8 @@ if [ ! -f $PREFIX/bin/wget ]; then
 	red "警告，您并未安装 wget！"
 	blue "将自动安装 wget..."
 	blue "对于国内用户，未配置镜像源会导致安装时间极长"
-	apt-get update && apt-get install git -y
-	[[ ! -f $PREFIX/bin/wget ]] && red "git 安装失败" && exit 1
+	apt-get update && apt-get install wget -y
+	[[ ! -f $PREFIX/bin/wget ]] && red "wget 安装失败" && exit 1
 fi
 
 if [ ! -f $PREFIX/bin/git ]; then
