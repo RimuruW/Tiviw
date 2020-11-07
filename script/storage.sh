@@ -8,6 +8,8 @@
 
 if [ ! -d "$HOME/storage/shared/Android" ]; then
 	termux-setup-storage
+	blue "请回车以确认您已授权 Termux 存储权限"
+	Step
 	if [ -d "$HOME/storage/shared/Android" ]; then
 		green "存储权限获取成功！"
 		Step
