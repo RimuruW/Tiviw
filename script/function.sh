@@ -8,7 +8,7 @@
 
 name="Tiviw"
 sh_ver="1.0.2"
-ver_code=20201106
+ver_code=20201108
 ToolPATH="$PREFIX/etc/tiviw"
 
 # Color configure
@@ -47,6 +47,20 @@ fi
 source $ToolPATH/main/permission.sh
 
 branch=$(cd $PREFIX/etc/tiviw/main && git branch |grep "*" | awk -F " " '{print $NF}')
+
+dev_auto_update() {
+	red "您正在使用 dev 分支！"
+	red "dev 分支强制开启自动更新以避免异常。"
+	red "如果您不希望自动更新，请在「关于脚本」-「切换分支」处切换 master 分支"
+	echo "开始检查云端版本号…"
+	remote_ver=$(curl -s https://raw.githubusercontent.com/QingxuMo/Tiviw/dev/script/function.sh | grep -v "#" | grep "ver_code=" | awk -F "=" '{print $NF}')
+	if [ $remote_ver > $ver_code ]; then
+		green "云端版本高于本地版本，开始强制自动更新…"
+		tiviw_update
+	else
+		green "本地已为最新版本！"
+	fi
+}
 
 if [ $branch = master ]; then
 	VERSION="v$sh_ver"
@@ -340,18 +354,6 @@ update_remote_status() {
 	fi
 }
 
-dev_auto_update() {
-	red "您正在使用 dev 分支！"
-	red "dev 分支强制开启自动更新以避免异常。"
-	red "如果您不希望自动更新，请在「关于脚本」-「切换分支」处切换 master 分支"
-	remote_ver=$(curl -s https://raw.githubusercontent.com/QingxuMo/Tiviw/dev/script/function.sh | grep -v "#" | grep "ver_code=" | awk -F "=" '{print $NF}')
-	if [ $remote_ver > $ver_code ]; then
-		green "云端版本高于本地版本，开始强制自动更新…"
-		tiviw_update
-	else
-		green "本地已为最新版本！"
-	fi
-}
 update_tiviw() {
 	if network_check_sea; then
 		cd $ToolPATH/main
