@@ -32,5 +32,6 @@ case $aaachoose in
 		source $ToolPATH/main/termuxplugin/menu.sh && return 0 ;;
 	*)
 		red "无效输入，请重试"
+		aaachoose=null
 		source $ToolPATH/main/termuxplugin/aaa.sh && return 0;;
 esac

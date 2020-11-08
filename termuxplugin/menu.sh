@@ -27,6 +27,7 @@ case $termuxchoose in
 	return 0 ;;
 *)
 	red "无效输入,请重试" 
+	termuxchoose=null
 	source $ToolPATH/main/termuxplugin/menu.sh
 	return 0 ;;
 esac

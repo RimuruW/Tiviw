@@ -48,10 +48,10 @@ case $ABOUT_CHOOSE in
 		exit 0
 		;;
 	0)
-		source $ToolPATH/main/script/menu.sh
 		return 0
 		;;
 	*)
+	    ABOUT_CHOOSE=null
 		red "无效输入，请重试！"
 		Step
 		source $ToolPATH/main/script/about.sh && return 1

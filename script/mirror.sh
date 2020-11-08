@@ -56,6 +56,7 @@ case $mirrorschoose in
 		return 0 ;;
 	*)
 		red "无效输入,请重试"
+		mirrorschoose=null
 		source $ToolPATH/main/script/mirror.sh
 		return 1
 	 ;;

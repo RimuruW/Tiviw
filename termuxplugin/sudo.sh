@@ -54,6 +54,7 @@ case $sudoinstall in
 		;;
 	*)
 		red "无效输入!"
+		sudoinstall=null
 		source $ToolPATH/main/termuxplugin/sudo.sh
 		return 1
 		;;

@@ -37,6 +37,7 @@ function Linux(){
 		0)
 			return 0 ;;
 		*)
+		    installlinux=null
 			red "无效输入,请重试"
 	esac
 	return 0
@@ -53,7 +54,7 @@ function ubuntu(){
 		n)
 			pkg update -y && pkg install wget curl proot tar -y && wget https://raw.githubusercontent.com/AndronixApp/AndronixOrigin/master/Installer/Ubuntu/ubuntu.sh && chmod +x ubuntu.sh && bash ubuntu.sh ;;
 		*)
-			echo "无效输入，请重试" ;;
+			ubuntude=null && echo "无效输入，请重试" ;;
 	esac
 	return 0
 }
@@ -79,7 +80,7 @@ function ubuntudechoose(){
 		0)
 			return 0 ;;
 		*)
-			red "无效输入，请重试" 
+			ubuntudechoose=null && red "无效输入，请重试" 
 			ubuntudechoose;;
 	esac
 	return 0
@@ -98,7 +99,7 @@ function debian(){
 		t)
 			echo "Working" ;;
 		*)
-			echo "无效输入，请重试" ;;
+			debiande=null && echo "无效输入，请重试" ;;
 	esac
 	return 0
 }
@@ -125,7 +126,7 @@ function debiandechoose(){
 			return 0 ;;
 		*)
 			red "无效输入，请重试" 
-			debiandechoose;;
+			debiandechoose=null && debiandechoose;;
 	esac
 	return 0
 }
@@ -148,7 +149,7 @@ function centos(){
 			wget https://raw.githubusercontent.com/EXALAB/AnLinux-Resources/master/Scripts/Uninstaller/CentOS/UNI-centos.sh && bash UNI-centos.sh ;;
 		*)
 			red "无效输入，请重试" 
-			centos ;;
+			centosde=null && centos ;;
 	esac
 	return 0
 }
@@ -164,8 +165,6 @@ function archlinux(){
 	echo -e "\n\n"
 	echo -e "1 安装 Arch Linux\n"
 	sleep 0.016
-	echo -e "2 修复 Arch Linux 安装\n"
-	sleep 0.016
 	echo -e "0 退出"
 	sleep 0.016
 	echo -en "\t\tEnter an option: "
@@ -173,12 +172,11 @@ function archlinux(){
 	case $archlinuxinstall in
 		1)
 			termuxarch ;;
-		2)
-			echo "脚本制作中,敬请期待" ;;
 		0)
 			return 0 ;;
 		*)
 			red "无效输入，请重试"
+			archlinuxinstall=null
 			archlinux ;;
 	esac
 	return 0
@@ -301,6 +299,10 @@ function termuxapi(){
 			termuxapi ;;
 		0)
 			return 0 ;;
+		*)
+		    red "无效输入，请重试！"
+		    termuxapichoose=null
+		    termuxapi ;;
 		99)
 			echo -e "\n请输入您想要保存的 log 的名字[必填]"
 			echo -en "\t\tEnter: "
@@ -472,10 +474,14 @@ do
 	    	    termuxapi ;;
 	    8)
 	    	    Linux ;;
+	    9)
+	            green "功能还未上线，敬请期待…"
+	            echo "作者：一想到我是一个鸽子，许多版本就烟消云散了" ;;
 	    99)
 	    	    source $ToolPATH/main/script/about.sh ;;
 	    *)
-		    red "无效输入，请重试" ;;
+		    red "无效输入，请重试"
+		    option=null  ;;
     esac
 done
 
