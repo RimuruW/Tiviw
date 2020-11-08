@@ -8,7 +8,7 @@
 
 name="Tiviw"
 sh_ver="1.0.2"
-ver_code=20201108
+ver_code=20201109
 ToolPATH="$PREFIX/etc/tiviw"
 
 # Color configure
@@ -366,7 +366,7 @@ update_tiviw() {
 		git remote set-url origin https://github.com.cnpmjs.org/QingxuMo/Tiviw
 		if update_remote_status; then
 			green "尝试拉取最新版本…"
-			git checkout . && git clean -xd
+			git checkout . && git clean -xd -f
 			git pull 2>/dev/null
 			cp tiviw $PREFIX/bin/tiviw
 			green "拉取结束！"
@@ -374,7 +374,7 @@ update_tiviw() {
 		else
 			red "仍然尝试拉起最新版本…"
 			red "拉取可能会失败！"
-			git checkout . && git clean -xd
+			git checkout . && git clean -xd -f
 			git pull 2>/dev/null
 			cp tiviw $PREFIX/bin/tiviw
 			green "拉取结束！"
