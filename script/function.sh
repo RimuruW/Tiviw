@@ -8,7 +8,7 @@
 
 name="Tiviw"
 sh_ver="1.0.2"
-ver_code=20201108
+ver_code=20201106
 ToolPATH="$PREFIX/etc/tiviw"
 
 # Color configure
@@ -92,7 +92,7 @@ dev_auto_update() {
 	red "如果您不希望自动更新，请在「关于脚本」-「切换分支」处切换 master 分支"
 	echo "开始检查云端版本号…"
 	remote_ver=$(curl -s https://raw.githubusercontent.com/QingxuMo/Tiviw/dev/script/function.sh | grep -v "#" | grep "ver_code=" | awk -F "=" '{print $NF}')
-	if [ $remote_ver -gt $ver_code ]; then
+	if [ "$remote_ver" -gt "$ver_code" ]; then
 		green "云端版本高于本地版本，开始强制自动更新…"
 		tiviw_update
 	else
