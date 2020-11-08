@@ -11,41 +11,7 @@ Enter
 read ABOUT_CHOOSE
 case $ABOUT_CHOOSE in
 	1)
-		if network_check_sea; then
-			cd $ToolPATH/main
-			git pull 2>/dev/null
-			cp tiviw $PREFIX/bin/tiviw
-			green "已拉取最新版本！"
-			green "请重启脚本以应用更新！"
-		else
-			cd $ToolPATH/main
-			git remote set-url origin https://github.com.cnpmjs.org/QingxuMo/Tiviw
-			if update_remote_status; then
-				green "尝试拉取最新版本…"
-				git checkout . && git clean -xdf
-				git pull 2>/dev/null
-				cp tiviw $PREFIX/bin/tiviw
-				green "拉取结束！"
-				green "请重启脚本以应用更新！"
-			else
-				red "仍然尝试拉起最新版本…"
-				red "拉取可能会失败！"
-				git checkout . && git clean -xdf
-				git pull 2>/dev/null
-				cp tiviw $PREFIX/bin/tiviw
-				green "拉取结束！"
-				green "请重启脚本以应用更新！"
-			fi
-			git remote set-url origin https://github.com/QingxuMo/Tiviw
-			if remote_status; then
-				green "远程仓库地址恢复成功！"
-			else
-				red "请手动输入 cd $ToolPATH/main && git remote set-url origin https://github.com/QingxuMo/Tiviw 恢复远程仓库地址"
-				red "提交该界面截图至开发者以帮助开发者解决该问题！"
-				exit 1
-			fi
-		fi
-		cd $HOME
+		update_tiviw
 		Step
 		source $ToolPATH/main/script/menu.sh
 		return 0
