@@ -8,7 +8,7 @@
 
 name="Tiviw"
 sh_ver="1.0.2"
-ver_code=20201106
+ver_code=20201108
 ToolPATH="$PREFIX/etc/tiviw"
 
 # Color configure
@@ -411,4 +411,4 @@ Abort() {
 	exit 0
 }
 
-clear
+[[ $branch = master ]] && clear
