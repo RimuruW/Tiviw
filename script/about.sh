@@ -76,7 +76,8 @@ case $ABOUT_CHOOSE in
 				;;
 		esac
 		cd $HOME
-		source $ToolPATH/main/script/menu.sh
+		green "默认重启脚本以应用更改…"
+		exit 0
 		return 0
 		;;
 	0)

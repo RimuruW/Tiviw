@@ -288,7 +288,7 @@ check_pip_ability() {
 	fi
 }
 
-youget_download(){
+youget_download() {
 	echo -e "\n\n"
 	echo "you-get 支持的链接种类: https://github.com/soimort/you-get/wiki/%E4%B8%AD%E6%96%87%E8%AF%B4%E6%98%8E#%E6%94%AF%E6%8C%81%E7%BD%91%E7%AB%99"
 	echo "you-get 也可以下载网页上的视频和图片"
