@@ -9,6 +9,8 @@
 source $PREFIX/etc/tiviw/main/script/function.sh
 
 function Linux(){
+    red "目前作者无自制作的 Linux 发行版安装脚本，因此目前采用第三方 Linux 发行版安装脚本。"
+    red "第三方安装脚本需要能正常连接 GitHub 才可以使用"
 	echo -e "1 Ubuntu\n"
 	sleep 0.016
 	echo -e "2 Debian\n"
@@ -44,7 +46,7 @@ function Linux(){
 }
 
 function ubuntu(){
-	echo "\n\n 安装脚本来自于 Andronix"
+	echo -e "\n\n 安装脚本来自于 Andronix"
 	green "是否安装桌面环境?[y/n]"
 	echo -en "\t\tEnter an option: "
 	read ubuntude
@@ -87,7 +89,7 @@ function ubuntudechoose(){
 }
 
 function debian(){
-	echo "\n\n安装脚本来自于 Andronix"
+	echo -e "\n\n安装脚本来自于 Andronix"
 	green "是否安装桌面环境?[y/n]"
 	echo -en "\t\tEnter an option: "
 	read debiande
@@ -132,7 +134,7 @@ function debiandechoose(){
 }
 
 function centos(){
-	echo "\n\n安装脚本来自于 Andronix"
+	echo -e "\n\n安装脚本来自于 Andronix"
 	echo -e "\n\n"
 	echo -e "1 安装 CentOS\n"
 	sleep 0.016
