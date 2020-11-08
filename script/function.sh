@@ -8,7 +8,7 @@
 
 name="Tiviw"
 sh_ver="1.0.2"
-ver_code="20201106"
+ver_code=20201106
 ToolPATH="$PREFIX/etc/tiviw"
 
 # Color configure
@@ -52,6 +52,7 @@ if [ $branch = master ]; then
 	VERSION="v$sh_ver"
 else
 	VERSION="$ver_code"
+	dev_auto_update
 fi
 
 if [ ! -f "$PREFIX/bin/wget" ];then
@@ -171,7 +172,7 @@ else
 fi
 }
 
-NPM_mirror_check() {
+npm_mirror_check() {
 if [ -f "$ToolPATH/npmmirrorsstatus" ]; then
 	npmmirrorsstatus=`green "true"`
 	return 0
@@ -181,7 +182,7 @@ else
 fi
 }
 
-PIP_mirror_check() {
+pip_mirror_check() {
 if [ -d $HOME/.pip ]; then
 	pipmirrorsstatus=`green "true"`
 	return 0
@@ -256,7 +257,7 @@ check_pip_ability() {
 				;;
 		esac				
 	fi
-	if PIP_mirror_check; then
+	if pip_mirror_check; then
 		return 0
 	else
 		if network_check_sea; then
@@ -339,6 +340,18 @@ update_remote_status() {
 	fi
 }
 
+dev_auto_update() {
+	red "您正在使用 dev 分支！"
+	red "dev 分支强制开启自动更新以避免异常。"
+	red "如果您不希望自动更新，请在「关于脚本」-「切换分支」处切换 master 分支"
+	remote_ver=$(curl -s https://raw.githubusercontent.com/QingxuMo/Tiviw/dev/script/function.sh | grep -v "#" | grep "ver_code=" | awk -F "=" '{print $NF}')
+	if [ $remote_ver > $ver_code ]; then
+		green "云端版本高于本地版本，开始强制自动更新…"
+		tiviw_update
+	else
+		green "本地已为最新版本！"
+	fi
+}
 update_tiviw() {
 	if network_check_sea; then
 		cd $ToolPATH/main

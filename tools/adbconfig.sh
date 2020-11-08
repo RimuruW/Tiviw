@@ -14,7 +14,7 @@ echo -en "\t\tEnter an option: "
 read adbinstall
 case $adbinstall in
 	1)
-		if network_check_oversea; then
+		if network_check_sea; then
 			pkg up -y
 			cd $ToolPATH
 			wget https://github.com/MasterDevX/Termux-ADB/raw/master/InstallTools.sh
@@ -29,7 +29,7 @@ case $adbinstall in
 			red "您并未安装 ADB,无需进行此过程"
 			source $ToolPATH/main/tools/adbconfig.sh
 		fi
-		if network_check_oversea; then
+		if network_check_sea; then
 			plg up -y
 			cd $ToolPATH
 			wget https://github.com/MasterDevX/Termux-ADB/raw/master/RemoveTools.sh

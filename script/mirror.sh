@@ -7,8 +7,8 @@
 #-----------------------------------
 
 mirror_check
-NPM_mirror_check
-PIP_mirror_check
+npm_mirror_check
+pip_mirror_check
 echo -e "\n\n"
 echo "Termux 镜像源状态：" $mirrorsstatus
 echo "NPM 淘宝源状态:" $npmmirrorsstatus
