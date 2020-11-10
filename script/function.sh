@@ -8,7 +8,7 @@
 
 name="Tiviw"
 sh_ver="1.0.3"
-ver_code=20201110
+ver_code=20201111
 ToolPATH="$PREFIX/etc/tiviw"
 
 # Color configure
@@ -45,6 +45,53 @@ else
 fi
 
 source $ToolPATH/main/permission.sh
+
+if [ ! -f "$PREFIX/bin/wget" ];then
+	red "警告，wget 未安装！"
+	blue "wget 是 Linux 平台一个轻量便捷的下载工具"
+	blue "本脚本大量功能依赖 wget 实现"
+	green "尝试安装 wget…"
+	if check_apt_ability; then
+		pkg in wget -y >/dev/null
+	else
+		red "警告！无法完成 wget 安装！"
+	fi
+	if [ ! -f "$PREFIX/bin/wget" ];then
+		red "警告！wget 未安装！"
+		red "脚本强制中止"
+		exit 1
+	fi
+
+fi
+
+mkdir -p $ToolPATH
+[[ ! -f "$ToolPATH/ok" ]] && bash $ToolPATH/main/script/init.sh
+
+# The most important functions
+network_check() {
+	echo "正在检查网络连接…"
+	ping -c 1 baidu.com  > /dev/null 2>&1
+	if [ $? -eq 0 ]; then
+		green "网络已连接"
+		return 0
+	else
+		red "无法连接到网络，请检查！"
+		exit 1
+	fi
+}
+
+network_check_sea() {
+	network_check
+	green "尝试检查网络可用性…"
+	ping -c 1 google.com  > /dev/null 2>&1
+	if [ $? -eq 0 ]; then
+		green "网络可用，不使用代理"
+		return 0
+	else
+		red "网络连接受限，尝试启用代理"
+		return 1
+	fi
+}
 
 update_tiviw() {
 	if network_check_sea; then
@@ -103,61 +150,6 @@ dev_auto_update() {
 		clear
 	fi
 }
-
-if [ $branch = master ]; then
-	VERSION="v$sh_ver"
-else
-	VERSION="$ver_code"
-	dev_auto_update
-fi
-
-if [ ! -f "$PREFIX/bin/wget" ];then
-	red "警告，wget 未安装！"
-	blue "wget 是 Linux 平台一个轻量便捷的下载工具"
-	blue "本脚本大量功能依赖 wget 实现"
-	green "尝试安装 wget…"
-	if check_apt_ability; then
-		pkg in wget -y >/dev/null
-	else
-		red "警告！无法完成 wget 安装！"
-	fi
-	if [ ! -f "$PREFIX/bin/wget" ];then
-		red "警告！wget 未安装！"
-		red "脚本强制中止"
-		exit 1
-	fi
-
-fi
-
-mkdir -p $ToolPATH
-[[ ! -f "$ToolPATH/ok" ]] && bash $ToolPATH/main/script/init.sh
-
-# The most important functions
-network_check() {
-	echo "正在检查网络连接…"
-	ping -c 1 baidu.com  > /dev/null 2>&1
-	if [ $? -eq 0 ]; then
-		green "网络已连接"
-		return 0
-	else
-		red "无法连接到网络，请检查！"
-		exit 1
-	fi
-}
-
-network_check_sea() {
-	network_check
-	green "尝试检查网络可用性…"
-	ping -c 1 google.com  > /dev/null 2>&1
-	if [ $? -eq 0 ]; then
-		green "网络可用，不使用代理"
-		return 0
-	else
-		red "网络连接受限，尝试启用代理"
-		return 1
-	fi
-}
-
 
 aria2_check() {
 if [ -f "$PREFIX/bin/aria2c" ];then
@@ -395,6 +387,13 @@ update_remote_status() {
 		red "远程仓库地址修改失败！"
 	fi
 }
+
+if [ $branch = master ]; then
+	VERSION="v$sh_ver"
+else
+	VERSION="$ver_code"
+	dev_auto_update
+fi
 
 Enter() {
 echo -en "\t\tEnter an option: "
