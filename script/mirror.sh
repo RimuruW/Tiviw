@@ -9,6 +9,7 @@
 mirror_check
 npm_mirror_check
 pip_mirror_check
+mirrorschoose=null
 echo -e "\n\n"
 echo "Termux 镜像源状态：" $mirrorsstatus
 echo "NPM 淘宝源状态:" $npmmirrorsstatus

@@ -1,3 +1,4 @@
+tmpyouget=null
 echo -e "\n\n"
 blue "简易版脚本制作非常粗糙"
 blue "简易版仅面向极端小白用户/终端无操作能力者"

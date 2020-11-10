@@ -3,6 +3,7 @@ if [ -f "/data/data/com.termux/files/usr/bin/startvnc" ];then
 else
 	termuxguistatus=`red "false"`
 fi
+termuxguiinstall=null
 echo -e "\n\n安装方法来自于 酷安@萌系生物研究员"
 echo -e "\n图形化界面安装状态:" $termuxguistatus
 echo -e "\n\n"

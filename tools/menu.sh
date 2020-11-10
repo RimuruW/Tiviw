@@ -6,6 +6,7 @@
 # Copyright (c) 2020 Qingxu
 #-----------------------------------
 
+toolsinstall=null
 echo -e "\n\n"
 echo -e "1 Hexo 配置安装\n"
 sleep 0.016

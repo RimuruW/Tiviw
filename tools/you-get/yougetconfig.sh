@@ -1,4 +1,5 @@
 youget_check
+yougetoption=null
 echo -e "\n\n项目地址: https://github.com/soimort/you-get/\n\n"
 echo -e "you-get 安装状态:" $yougetconfigstatus
 echo -e "\n\n"

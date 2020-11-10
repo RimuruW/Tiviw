@@ -1,4 +1,5 @@
 sudo_check
+sudoinstall=null
 echo -e "\n\n"
 echo -e "sudo 安装状态:" $sudostatus
 echo -e "\n\n"

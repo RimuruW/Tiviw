@@ -1,3 +1,4 @@
+ABOUT_CHOOSE=null
 echo -e "1 更新脚本"
 sp
 sleep 0.016

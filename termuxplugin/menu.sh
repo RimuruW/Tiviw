@@ -1,3 +1,4 @@
+termuxchoose=null
 echo -e "1 修改启动问候语\n"
 sleep 0.016
 echo -e "2 sudo 安装\n"

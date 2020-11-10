@@ -1,4 +1,5 @@
 adbconfig_check
+adbinstall=null
 echo -e "\n\n"
 echo -e "项目地址: https://github.com/MasterDevX/Termux-ADB"
 echo -e "ADB 安装状态:" $adbconfigstatus

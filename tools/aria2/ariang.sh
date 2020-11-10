@@ -5,7 +5,7 @@
 # Repository Address: https://github.com/QingxuMo/Tovow
 # Copyright (c) 2020 Qingxu
 #-----------------------------------
-
+ariangconfig=null
 [[ ! -f "$PREFIX/bin/aria2c" ]] && red "请先安装 Aria2" && Step && source $PREFIX/etc/tiviw/main/tools/aria2/aria2config.sh
 blue "AriaNG 只是一个静态网页,直接打开在线网页和使用本地客户端在功能上并没有什么不同."
 blue "但是对于 Android 用户，我推荐安装 AriaNG GUI 客户端以便于连接和管理 Aria2"

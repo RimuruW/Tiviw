@@ -12,6 +12,7 @@ if [ -f "$PREFIX/etc/tiviw/aria2/aria2.sh" ];then
 else
 	aria2termuxstatus=`red "false"`
 fi
+aria2choose=null
 echo -e "\n\n"
 echo -e "Aria2 是一个强大的多功能下载器，Aria2-Termux 是面向 Android 且深度适配 Termux 的强大的 Aria2 一键安装与管理脚本\n"
 echo -e "项目地址: https://github.com/QingxuMo/Aria2-Termux"

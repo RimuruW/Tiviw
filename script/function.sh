@@ -8,7 +8,7 @@
 
 name="Tiviw"
 sh_ver="1.0.3"
-ver_code=20201108
+ver_code=20201110
 ToolPATH="$PREFIX/etc/tiviw"
 
 # Color configure
@@ -99,6 +99,8 @@ dev_auto_update() {
 		update_tiviw
 	else
 		green "本地已为最新版本！"
+		sleep 1
+		clear
 	fi
 }
 

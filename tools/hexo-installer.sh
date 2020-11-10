@@ -7,21 +7,31 @@
 # Copyright (c) 2020 Qingxu
 #-----------------------------------
 clear
-pkg in nodejs-lts git vim nano openssh unzip -y
-if network_check_sea; then
-	green "网络连接正常，无需镜像源"
+if check_apt_ability; then
+	pkg in nodejs-lts git vim openssh unzip -y
 else
-	green "是否更换 NPM 源为淘宝源? [y/n]"
-	echo -en "Enter an option: "
-	read npmtaobao
-	case $npmtaobao in
-		y)
-			npm config set registry https://registry.npm.taobao.org ;;
-		n)
-			echo "Use default" ;;
-		*)
-			echo "输入无效,使用默认源" ;;
-	esac
+	red "脚本认定你当前环境无法完成安装！"
+	red "安装中止！"
+	exit 1
+fi
+if npm_mirror_check; then
+	green "NPM 镜像源已配置"
+else
+	if network_check_sea; then
+		green "网络连接正常，无需镜像源"
+	else
+		green "是否更换 NPM 源为淘宝源? [y/n]"
+		echo -en "Enter an option: "
+		read npmtaobao
+		case $npmtaobao in
+			y)
+				npm config set registry https://registry.npm.taobao.org ;;
+			n)
+				echo "Use default" ;;
+			*)
+				echo "输入无效,使用默认源" ;;
+		esac
+	fi
 fi
 npm install -g npm
 npm install -g hexo-cli

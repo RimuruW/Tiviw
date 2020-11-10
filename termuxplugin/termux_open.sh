@@ -10,6 +10,7 @@ else
 	termuxloginstatus=`red "未修改"`
 fi
 [[ ! -f "$PREFIX/etc/motd.init" ]] && cp $PREFIX/etc/motd $PREFIX/etc/motd.init
+etermuxopen=null
 echo -e "\n\n"
 echo -e "问候语状态:"
 echo -e "问候语" $hushloginstatus

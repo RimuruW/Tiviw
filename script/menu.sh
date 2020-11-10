@@ -9,6 +9,7 @@
 source $PREFIX/etc/tiviw/main/script/function.sh
 
 function Linux(){
+    installlinux=null
     red "目前作者无自制作的 Linux 发行版安装脚本，因此目前采用第三方 Linux 发行版安装脚本。"
     red "第三方安装脚本需要能正常连接 GitHub 才可以使用"
 	echo -e "1 Ubuntu\n"
@@ -46,6 +47,7 @@ function Linux(){
 }
 
 function ubuntu(){
+    ubuntude=null
 	echo -e "\n\n 安装脚本来自于 Andronix"
 	green "是否安装桌面环境?[y/n]"
 	echo -en "\t\tEnter an option: "
@@ -62,6 +64,7 @@ function ubuntu(){
 }
 
 function ubuntudechoose(){
+    udechoose=null
 	echo -e "1 XFCE"
 	sleep 0.016
 	echo -e "2 LXDE"
@@ -89,6 +92,7 @@ function ubuntudechoose(){
 }
 
 function debian(){
+    debiande=null
 	echo -e "\n\n安装脚本来自于 Andronix"
 	green "是否安装桌面环境?[y/n]"
 	echo -en "\t\tEnter an option: "
@@ -107,6 +111,7 @@ function debian(){
 }
 
 function debiandechoose(){
+    ddechoose=null
 	echo -e "1 XFCE"
 	sleep 0.016
 	echo -e "2 LXDE"
@@ -134,6 +139,7 @@ function debiandechoose(){
 }
 
 function centos(){
+    centosde=null
 	echo -e "\n\n安装脚本来自于 Andronix"
 	echo -e "\n\n"
 	echo -e "1 安装 CentOS\n"
@@ -164,6 +170,7 @@ function kali(){
 }
 
 function archlinux(){
+    archlinuxinstall=null
 	echo -e "\n\n"
 	echo -e "1 安装 Arch Linux\n"
 	sleep 0.016
@@ -198,6 +205,7 @@ function termuxarch(){
 }
 
 function termuxapi(){
+    termuxapichoose=null
 	if [ ! -f "/data/data/com.termux/files/usr/libexec/termux-api" ];then
 		pkg in termux-api -y
 	fi
@@ -409,6 +417,7 @@ function logs(){
 }
 
 function menu(){
+    option=null
 	printf "$BLUE"
 	cat <<-'EOF'
                                                     
