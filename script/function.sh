@@ -102,7 +102,7 @@ dev_auto_update() {
 	red "dev 分支强制开启自动更新以避免异常。"
 	red "如果您不希望自动更新，请在「关于脚本」-「切换分支」处切换 master 分支"
 	echo "开始检查云端版本号…"
-	remote_ver=$(curl -s https://raw.githubusercontent.com/QingxuMo/Tiviw/dev/script/function.sh | grep -v "#" | grep "ver_code=" | awk -F "=" '{print $NF}')
+	remote_ver=$(curl -s https://raw.githubusercontent.com/QingxuMo/Tiviw/dev/script/function.sh | grep -v "#" | grep "ver_code=" | awk -F "=" '{print $NF}' | sed 's/\"//g' | head -1)
 	if [ "$remote_ver" -gt "$ver_code" ]; then
 		green "云端版本大于本地版本，开始强制覆盖更新…"
 		green "云端版本号：$remote_ver"
