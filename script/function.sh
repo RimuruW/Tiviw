@@ -8,7 +8,7 @@
 
 name="Tiviw"
 sh_ver="1.0.3"
-ver_code=20201112
+ver_code=20201111
 ToolPATH="$PREFIX/etc/tiviw"
 
 # Color configure
@@ -67,7 +67,6 @@ fi
 mkdir -p $ToolPATH
 [[ ! -f "$ToolPATH/ok" ]] && bash $ToolPATH/main/script/init.sh
 
-# The most important functions
 network_check() {
 	echo "正在检查网络连接…"
 	ping -c 1 baidu.com  > /dev/null 2>&1
@@ -90,6 +89,26 @@ network_check_sea() {
 	else
 		red "网络连接受限，尝试启用代理"
 		return 1
+	fi
+}
+
+remote_status() {
+	git remote -v | grep "https://github.com/QingxuMo/Tiviw"
+	if [ $? -eq 0 ]; then
+		green "远程仓库地址为源地址!"
+		return 0
+	else
+		red "远程仓库地址异常！"
+		return 1
+	fi
+}
+
+update_remote_status() {
+	git remote -v | grep "https://github.com.cnpmjs.org/QingxuMo/Tiviw"
+	if [ $? -eq 0 ]; then
+		green "远程仓库地址修改成功!"
+	else
+		red "远程仓库地址修改失败！"
 	fi
 }
 
@@ -138,7 +157,7 @@ dev_auto_update() {
 	red "dev 分支强制开启自动更新以避免异常。"
 	red "如果您不希望自动更新，请在「关于脚本」-「切换分支」处切换 master 分支"
 	echo "开始检查云端版本号…"
-	remote_ver=$(curl -s https://raw.githubusercontent.com/QingxuMo/Tiviw/dev/script/function.sh | grep -v "#" | grep "ver_code=" | awk -F "=" '{print $NF}' | sed 's/\"//g' | head -1) && sh_new_type="github"
+	remote_ver=$(curl -s https://raw.githubusercontent.com/QingxuMo/Tiviw/dev/script/function.sh | grep -v "#" | grep "ver_code=" | awk -F "=" '{print $NF}' | sed 's/\"//g' | head -1)
 	if [ "$remote_ver" -gt "$ver_code" ]; then
 		green "云端版本大于本地版本，开始强制覆盖更新…"
 		green "云端版本号：$remote_ver"
@@ -366,26 +385,6 @@ youget_download() {
 	you-get -o $yougetdownloaddir $yougetlist $yougetlink
 	green "下载已停止！"
 	green "这可能是因为所需下载内容已下载完毕，或者下载中断"
-}
-
-remote_status() {
-	git remote -v | grep "https://github.com/QingxuMo/Tiviw"
-	if [ $? -eq 0 ]; then
-		green "远程仓库地址为源地址!"
-		return 0
-	else
-		red "远程仓库地址异常！"
-		return 1
-	fi
-}
-
-update_remote_status() {
-	git remote -v | grep "https://github.com.cnpmjs.org/QingxuMo/Tiviw"
-	if [ $? -eq 0 ]; then
-		green "远程仓库地址修改成功!"
-	else
-		red "远程仓库地址修改失败！"
-	fi
 }
 
 if [ $branch = master ]; then
