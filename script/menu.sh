@@ -11,6 +11,7 @@ source $PREFIX/etc/tiviw/main/script/function.sh
 function Linux(){
     installlinux=null
     red "目前作者无自制作的 Linux 发行版安装脚本，因此目前采用第三方 Linux 发行版安装脚本。"
+    red "第三方脚本无任何可用性保障！作者不保证其可以正常工作！"
     red "第三方安装脚本需要能正常连接 GitHub 才可以使用"
 	echo -e "1 Ubuntu\n"
 	sleep 0.016

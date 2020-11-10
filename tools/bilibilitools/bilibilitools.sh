@@ -2,6 +2,7 @@ bilibilitools_check
 bilibilitools_core_path=$ToolPATH/extended/bilibilitools
 biliconfig=null
 echo -e "\n项目地址: https://github.com/Dawnnnnnn/bilibili-live-tools\nWiki: https://github.com/Dawnnnnnn/bilibili-live-tools/wiki"
+red "该脚本可能无法正常使用，等待作者更新…"
 echo -e "\nBiliBli 挂机助手安装状态:" $bilibilitoolstatus
 echo -e "\n\n"
 echo -e "1 安装 BiliBili 挂机助手\n"
