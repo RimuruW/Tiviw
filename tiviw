@@ -1,6 +1,19 @@
 #!/data/data/com.termux/files/usr/bin/sh
 name="Tiviw"
 
+BLUE=$(printf '\033[34m')
+
+printf "$BLUE"
+cat <<-'EOF'
+                                                    
+_/_/_/_/_/  _/              _/                      
+   _/          _/      _/      _/      _/      _/   
+  _/      _/  _/      _/  _/  _/      _/      _/    
+ _/      _/    _/  _/    _/    _/  _/  _/  _/       
+_/      _/      _/      _/      _/      _/          
+                                                    
+EOF
+
 echo "校验脚本中…"
 if [ ! -f "$PREFIX/etc/tiviw/branch" ]; then
 	branch="master"

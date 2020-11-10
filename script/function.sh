@@ -29,17 +29,6 @@ BLUE=$(printf '\033[34m')
 BOLD=$(printf '\033[1m')
 RESET=$(printf '\033[m')
 
-printf "$BLUE"
-cat <<-'EOF'
-                                                    
-_/_/_/_/_/  _/              _/                      
-   _/          _/      _/      _/      _/      _/   
-  _/      _/  _/      _/  _/  _/      _/      _/    
- _/      _/    _/  _/    _/    _/  _/  _/  _/       
-_/      _/      _/      _/      _/      _/          
-                                                    
-EOF
-
 # Check
 if [[ $EUID -eq 0 ]]; then
 	red "检测到您正在尝试使用 ROOT 权限运行该脚本"
