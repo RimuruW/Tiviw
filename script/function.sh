@@ -8,7 +8,7 @@
 
 name="Tiviw"
 sh_ver="1.0.3"
-ver_code=20201111
+ver_code=20201112
 ToolPATH="$PREFIX/etc/tiviw"
 
 # Color configure

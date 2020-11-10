@@ -1,11 +1,13 @@
 ABOUT_CHOOSE=null
+sp
+sp
 echo -e "1 更新脚本"
 sp
 sleep 0.016
 echo -e "2 切换分支"
 sp
 sleep 0.016
-echo -e "0 退出脚本"
+echo -e "0 退出"
 sp
 sp
 Enter
@@ -22,7 +24,7 @@ case $ABOUT_CHOOSE in
 		red "作者不保证 dev 分支代码的可用和安全性，请谨慎切换！"
 		blue "请输入你想切换的分支[master or dev]"
 		cd $ToolPATH/main
-		echo -en "Enrer an option:"
+		echo -en "Enter an option: "
 		read SWICHBRANCH
 		case $SWICHBRANCH in
 			dev)
