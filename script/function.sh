@@ -8,7 +8,7 @@
 
 name="Tiviw"
 sh_ver="1.0.3"
-ver_code=20201112
+ver_code=202011112346
 ToolPATH="$PREFIX/etc/tiviw"
 
 # Color configure
@@ -90,6 +90,43 @@ network_check_sea() {
 		red "网络连接受限，尝试启用代理"
 		return 1
 	fi
+}
+
+ask() {
+    # https://djm.me/ask
+    local prompt default reply
+
+    if [ "${2:-}" = "Y" ]; then
+        prompt="Y/n"
+        default=Y
+    elif [ "${2:-}" = "N" ]; then
+        prompt="y/N"
+        default=N
+    else
+        prompt="y/n"
+        default=
+    fi
+
+    while true; do
+
+        # Ask the question (not using "read -p" as it uses stderr not stdout)
+        echo -n "$1 [$prompt] "
+
+        # Read the answer (use /dev/tty in case stdin is redirected from somewhere else)
+        read reply </dev/tty
+
+        # Default?
+        if [ -z "$reply" ]; then
+            reply=$default
+        fi
+
+        # Check if the reply is valid
+        case "$reply" in
+            Y*|y*) return 0 ;;
+            N*|n*) return 1 ;;
+        esac
+
+    done
 }
 
 remote_status() {
