@@ -78,7 +78,7 @@ else
 fi
 
 if [ -d "$PREFIX/etc/tiviw" ]; then
-	printf '%s\n' "${yellow}您已安装 Tiviw ，无需重复安装" "如果您需要移除 Tiviw，请输入 rm -rf $PREFIX/etc/tiviw ${reset}"
+	printf '%s\n' "${yellow}[!] 您已安装 Tiviw ，无需重复安装${reset}" "${red}如果您需要移除 Tiviw，请输入 rm -rf $PREFIX/etc/tiviw ${reset}"
 	exit 1
 fi
 
@@ -92,7 +92,7 @@ if [ -e "$PREFIX/bin/$i" ]; then
 else
 	printf '%s\n'  "Installing $i..." '%s\n'
 	apt-get install -y $i || {
-		printf '%s' "${red}[!] 依赖安装失败! " "退出中……${reset}"
+		printf '%s' "${red}[!] 依赖安装失败! ${reset}" "${red}[*] 退出中……${reset}"
 			exit
 		}
 fi
