@@ -75,7 +75,8 @@ else
 fi
 
 if [ -d "$PREFIX/etc/tiviw" ]; then
-	printf  "%s${yellow}%s\n%s${reset}" "[!] 您已安装 Tiviw ，无需重复安装" "如果您需要移除 Tiviw，请输入 rm -rf $PREFIX/etc/tiviw"
+	printf  "%s${yellow}%s\n%s${reset}" "[!] 您已安装 Tiviw ，无需重复安装" 
+	printf  "%s${yellow}%s\n%s${reset}" "如果您需要移除 Tiviw，请输入 rm -rf $PREFIX/etc/tiviw"
 	exit 1
 fi
 
