@@ -141,34 +141,34 @@ fi
 done
 apt-get upgrade -y
 
-blue "[*] 正在创建工作目录…\n"
+blue "\n[*] 正在创建工作目录…"
 mkdir -p "$PREFIX/etc/tiviw"
-mkdir -p "$PREFIX/etc/tiviw/logs" "$PREFIX/etc/tiviw/linux" "$PREFIX/etc/tiviw/etc"
+mkdir -p "$PREFIX/etc/tiviw/logs" "$PREFIX/etc/tiviw/linux" "$PREFIX/etc/tiviw/etc" | pv
 
-blue "[*] 正在拉取远程仓库…\n"
-git clone https://github.com.cnpmjs.org/QingxuMo/Tiviw "$PREFIX/etc/tiviw/main"
+blue "\n[*] 正在拉取远程仓库…"
+git clone https://github.com.cnpmjs.org/QingxuMo/Tiviw "$PREFIX/etc/tiviw/main" | pv
  
-blue "[*] 正在修改远程仓库地址…\n"
+blue "\n[*] 正在修改远程仓库地址…"
 cd "$PREFIX/etc/tiviw/main" || { red "目录跳转失败！" >&2;  exit 1; }
 git remote set-url origin https://github.com/QingxuMo/Tiviw
 
-red	"[*] 正在检查远程仓库地址…\n"
+blue "\n[*] 正在检查远程仓库地址…"
 remote_status="$(git remote -v | grep "https://github.com/QingxuMo/Tiviw")"
 [[ -z "$remote_status" ]] && red "
 [!] 远程仓库地址修改失败!
 [!] 请提交错误内容至开发者!
 "
 
-blue "[*] 正在校验其他选项…\n"
+blue "\n[*] 正在校验其他选项…"
 
 cd "$HOME" || { red "[!] 目录跳转失败!" >&2;  exit 1; }
 
-blue "[*] 正在修改文件权限…\n"
-bash "$PREFIX/etc/tiviw/main/permission.sh"
+blue "\n[*] 正在修改文件权限…"
+pv "$PREFIX/etc/tiviw/main/permission.sh" | bash
 
-blue	"[*] 正在创建启动器…\n"
+blue "\n[*] 正在创建启动器…"
 rm -f "$PREFIX/bin/tiviw"
-cp "$PREFIX/etc/tiviw/main/tiviw" "$PREFIX/bin/tiviw"
+cp "$PREFIX/etc/tiviw/main/tiviw" "$PREFIX/bin/tiviw" | pv
 chmod +x "$PREFIX/bin/tiviw"
 
 if [ -f "$PREFIX/bin/tiviw" ]; then
