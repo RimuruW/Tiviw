@@ -143,10 +143,10 @@ apt-get upgrade -y
 
 blue "\n[*] 正在创建工作目录…"
 mkdir -p "$PREFIX/etc/tiviw"
-mkdir -p "$PREFIX/etc/tiviw/logs" "$PREFIX/etc/tiviw/linux" "$PREFIX/etc/tiviw/etc" | pv
+mkdir -p "$PREFIX/etc/tiviw/logs" "$PREFIX/etc/tiviw/linux" "$PREFIX/etc/tiviw/etc"
 
 blue "\n[*] 正在拉取远程仓库…"
-git clone https://github.com.cnpmjs.org/QingxuMo/Tiviw "$PREFIX/etc/tiviw/main" | pv
+git clone https://github.com.cnpmjs.org/QingxuMo/Tiviw "$PREFIX/etc/tiviw/main"
  
 blue "\n[*] 正在修改远程仓库地址…"
 cd "$PREFIX/etc/tiviw/main" || { red "目录跳转失败！" >&2;  exit 1; }
