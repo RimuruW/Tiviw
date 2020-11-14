@@ -67,7 +67,7 @@ if [[ -d /system/app && -d /system/priv-app ]]; then
 	export systeminfo
 else
 	printf  '%s\n' "${red}" 
-	printf	"[!] This operating system is not supported."
+	printf	"[!] This operating system is not supported.\n"
 	printf	'%s\n' "${reset}"
 	exit 1
 fi
@@ -86,7 +86,7 @@ check_mirrors() {
 		printf "[!] Termux 镜像源未配置!"
 		printf '%s' "${reset}"
 		printf '%s\n' "${blue}" 
-		printf "对于国内用户，添加清华源作为镜像源可以有效增强 Termux 软件包下载速度" 
+		printf "对于国内用户，添加清华源作为镜像源可以有效增强 Termux 软件包下载速度\n" 
 		printf '%s\n' "${reset}"
 		if ask "是否添加清华源?" "N"; then
 				sed -i 's@^\(deb.*stable main\)$@#\1\ndeb https://mirrors.tuna.tsinghua.edu.cn/termux/termux-packages-24 stable main@' "$PREFIX/etc/apt/sources.list"
@@ -95,7 +95,7 @@ check_mirrors() {
 				apt update && apt upgrade -y
 			else
 				printf '%s' "${blue}"
-				printf "使用默认源进行安装"
+				printf "使用默认源进行安装\n"
 				printf '%s' "${reset}"
 		fi
 	fi
@@ -104,17 +104,17 @@ check_mirrors() {
 check_mirrors
 
 printf  '%s' "${blue}"
-printf	"[*] 检查依赖中…"
+printf	"[*] 检查依赖中…\n"
 printf	'%s' "${reset}"
 apt-get update -y &> /dev/null
 for i in git wget; do
 if [ -e "$PREFIX/bin/$i" ]; then
 	echo "  $i 已安装！"
 else
-	printf '%s'  "Installing $i..."
+	echo  "Installing $i..."
 	apt-get install -y $i || {
 		printf  '%s' "${red}"
-			printf	'%s\n' "[!] 依赖安装失败!"	"[*] 退出中……"
+			printf	"[!] 依赖安装失败!\n[*] 退出中……\n"
 			printf	'%s' "${reset}"
 			exit 1
 		}
@@ -123,41 +123,41 @@ done
 apt-get upgrade -y
 
 printf  '%s' "${blue}"
-printf	"[*] 正在创建工作目录…"
+printf	"[*] 正在创建工作目录…\n"
 printf	'%s' "${reset}"
 mkdir -p "$PREFIX/etc/tiviw"
 mkdir -p "$PREFIX/etc/tiviw/logs" "$PREFIX/etc/tiviw/linux" "$PREFIX/etc/tiviw/etc"
 
 printf  '%s' "${blue}"
-printf	"[*] 正在拉取远程仓库…"
+printf	"[*] 正在拉取远程仓库…\n"
 printf	'%s' "${reset}"
 git clone https://github.com.cnpmjs.org/QingxuMo/Tiviw "$PREFIX/etc/tiviw/main"
 
 printf  '%s' "${blue}" 
-printf	"[*] 正在修改远程仓库地址…"
+printf	"[*] 正在修改远程仓库地址…\n"
 printf	'%s' "${reset}"
 cd "$PREFIX/etc/tiviw/main" || { echo "${red}目录跳转失败！${reset}" >&2;  exit 1; }
 git remote set-url origin https://github.com/QingxuMo/Tiviw
 
 printf	'%s' "${blue}" 
-printf	"[*] 正在检查远程仓库地址…"
+printf	"[*] 正在检查远程仓库地址…\n"
 printf	'%s' "${reset}"
 remote_status="$(git remote -v | grep "https://github.com/QingxuMo/Tiviw")"
-[[ -z "$remote_status" ]] && print '%s\n' "${red}[!] 远程仓库地址修改失败!" "[!] 请提交错误内容至开发者!${reset} "
+[[ -z "$remote_status" ]] && printf '%s\n' "${red}[!] 远程仓库地址修改失败!" "[!] 请提交错误内容至开发者!${reset} " && printf "\n"
 
 printf  '%s' "${blue}"
-printf	"[*] 正在校验其他选项…"
+printf	"[*] 正在校验其他选项…\n"
 printf	'%s' "${reset}"
 
 cd "$HOME" || { echo "${red}[!] 目录跳转失败!${reset}" >&2;  exit 1; }
 
 printf  '%s' "${blue}"
-printf	"[*] 正在修改文件权限…"
+printf	"[*] 正在修改文件权限…\n"
 printf	'%s' "${reset}"
 bash "$PREFIX/etc/tiviw/main/permission.sh"
 
 printf  '%s' "${blue}"
-printf	"[*] 正在创建启动器…"
+printf	"[*] 正在创建启动器…\n"
 printf	'%s' "${blue}"
 rm -f "$PREFIX/bin/tiviw"
 cp "$PREFIX/etc/tiviw/main/tiviw" "$PREFIX/bin/tiviw"
@@ -170,7 +170,7 @@ if [ -f "$PREFIX/bin/tiviw" ]; then
 	exit 0
 else
 	printf  '%s' "${red}"
-	printf	'%s\n' "[!] 安装失败！请提交错误内容至开发者！" "[*] 错误：启动器安装失败"
+	printf	"[!] 安装失败！请提交错误内容至开发者！\n[*] 错误：启动器安装失败"
 	printf	'%s' "${reset}"
 	exit 1
 fi
