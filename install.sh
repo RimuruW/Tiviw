@@ -82,10 +82,10 @@ _/      _/      _/      _/      _/      _/
 # Check
 if [[ $EUID -eq 0 ]]; then
 	yellow "
-	[!] 检测到您正在尝试使用 ROOT 权限运行安装脚本
-	[!] 这是不建议且不被允许的
-	[!] 安装全过程不需要 ROOT 权限,且以 ROOT 权限运行可能会带来一些无法预料的问题
-	[!] 为了您的设备安全，请避免在任何情况下以 ROOT 用户运行安装脚本
+[!] 检测到您正在尝试使用 ROOT 权限运行安装脚本
+[!] 这是不建议且不被允许的
+[!] 安装全过程不需要 ROOT 权限,且以 ROOT 权限运行可能会带来一些无法预料的问题
+[!] 为了您的设备安全，请避免在任何情况下以 ROOT 用户运行安装脚本
 	"
 	exit 1
 fi
@@ -99,8 +99,8 @@ fi
 
 if [ -d "$PREFIX/etc/tiviw" ]; then 
 	yellow "
-	[!] 您已安装 Tiviw ，无需重复安装
-	如果您需要移除 Tiviw，请输入 rm -rf $PREFIX/etc/tiviw
+[!] 您已安装 Tiviw ，无需重复安装
+如果您需要移除 Tiviw，请输入 rm -rf $PREFIX/etc/tiviw
 	"
 	exit 1
 fi
@@ -116,7 +116,7 @@ check_mirrors() {
 				sed -i 's@^\(deb.*science stable\)$@#\1\ndeb https://mirrors.tuna.tsinghua.edu.cn/termux/science-packages-24 science stable@' "$PREFIX/etc/apt/sources.list.d/science.list"
 				apt update && apt upgrade -y
 			else
-				blue "使用默认源进行安装\n"
+				blue "使用默认源进行安装"
 		fi
 	fi
 }
@@ -132,8 +132,8 @@ else
 	echo  "Installing $i..."
 	apt-get install -y $i || {
 		red "
-			[!] 依赖安装失败!
-			[*] 退出中……
+[!] 依赖安装失败!
+[*] 退出中……
 			"
 			exit 1
 		}
@@ -176,8 +176,8 @@ if [ -f "$PREFIX/bin/tiviw" ]; then
 	exit 0
 else
 	red	"
-	[!] 安装失败！请提交错误内容至开发者！
-	[*] 错误：启动器安装失败
+[!] 安装失败！请提交错误内容至开发者！
+[*] 错误：启动器安装失败
 	"
 	exit 1
 fi
