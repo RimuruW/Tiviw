@@ -50,29 +50,6 @@ function ask() {
     done
 }
 
-
-check_mirrors() {
-	mirrors_status=$(grep "mirror" "$PREFIX/etc/apt/sources.list" | grep -v '#')
-	if [ -z "$mirrors_status" ]; then
-		printf '%s' "${red}" 
-		printf "[!] Termux 镜像源未配置!"
-		printf '%s' "${reset}"
-		printf '%s\n' "${blue}" 
-		printf "对于国内用户，添加清华源作为镜像源可以有效增强 Termux 软件包下载速度" 
-		printf '%s\n' "${reset}"
-		if ask "是否添加清华源?" "N"; then
-				sed -i 's@^\(deb.*stable main\)$@#\1\ndeb https://mirrors.tuna.tsinghua.edu.cn/termux/termux-packages-24 stable main@' "$PREFIX/etc/apt/sources.list"
-				sed -i 's@^\(deb.*games stable\)$@#\1\ndeb https://mirrors.tuna.tsinghua.edu.cn/termux/game-packages-24 games stable@'"$PREFIX/etc/apt/sources.list.d/game.list"
-				sed -i 's@^\(deb.*science stable\)$@#\1\ndeb https://mirrors.tuna.tsinghua.edu.cn/termux/science-packages-24 science stable@' "$PREFIX/etc/apt/sources.list.d/science.list"
-				apt update && apt upgrade -y
-			else
-				printf '%s' "${blue}"
-				printf "使用默认源进行安装"
-				printf '%s' "${reset}"
-		fi
-	fi
-}
-
 # Check
 if [[ $EUID -eq 0 ]]; then
 		printf  '%s\n' "${yellow}"
@@ -101,6 +78,28 @@ if [ -d "$PREFIX/etc/tiviw" ]; then
 	printf	'%s' "${reset}"
 	exit 1
 fi
+
+check_mirrors() {
+	mirrors_status=$(grep "mirror" "$PREFIX/etc/apt/sources.list" | grep -v '#')
+	if [ -z "$mirrors_status" ]; then
+		printf '%s' "${red}" 
+		printf "[!] Termux 镜像源未配置!"
+		printf '%s' "${reset}"
+		printf '%s\n' "${blue}" 
+		printf "对于国内用户，添加清华源作为镜像源可以有效增强 Termux 软件包下载速度" 
+		printf '%s\n' "${reset}"
+		if ask "是否添加清华源?" "N"; then
+				sed -i 's@^\(deb.*stable main\)$@#\1\ndeb https://mirrors.tuna.tsinghua.edu.cn/termux/termux-packages-24 stable main@' "$PREFIX/etc/apt/sources.list"
+				sed -i 's@^\(deb.*games stable\)$@#\1\ndeb https://mirrors.tuna.tsinghua.edu.cn/termux/game-packages-24 games stable@'"$PREFIX/etc/apt/sources.list.d/game.list"
+				sed -i 's@^\(deb.*science stable\)$@#\1\ndeb https://mirrors.tuna.tsinghua.edu.cn/termux/science-packages-24 science stable@' "$PREFIX/etc/apt/sources.list.d/science.list"
+				apt update && apt upgrade -y
+			else
+				printf '%s' "${blue}"
+				printf "使用默认源进行安装"
+				printf '%s' "${reset}"
+		fi
+	fi
+}
 
 check_mirrors
 
