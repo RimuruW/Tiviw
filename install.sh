@@ -1,11 +1,11 @@
 #!/data/data/com.termux/files/usr/bin/bash
 if [ -t 1 ]; then
-	red=$(printf '%s\n' '\033[31m')
-	green=$(printf '%s\n' '\033[32m')
-	yellow=$(printf '%s\n' '\033[33m')
-	blue=$(printf '%s\n' '\033[34m')
-	light_cyan=$(printf '%s\n' '\033[1;96m')
-	reset=$(printf '%s\n' '\033[0m')
+	red=$(printf	'\033[31m')
+	green=$(printf	'\033[32m')
+	yellow=$(printf '\033[33m')
+	blue=$(printf	'\033[34m')
+	light_cyan=$(printf	'\033[1;96m')
+	reset=$(printf	'\033[0m')
 else
 	red=""
 	green=""
