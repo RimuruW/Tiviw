@@ -172,7 +172,7 @@ cp "$PREFIX/etc/tiviw/main/tiviw" "$PREFIX/bin/tiviw" | pv
 chmod +x "$PREFIX/bin/tiviw"
 
 if [ -f "$PREFIX/bin/tiviw" ]; then
-	green	"[√]  安装成功！请输入 tiviw 启动脚本！"
+	green "\n[√]  安装成功！请输入 tiviw 启动脚本！"
 	exit 0
 else
 	red	"
