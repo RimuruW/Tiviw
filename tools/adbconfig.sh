@@ -1,3 +1,10 @@
+adbconfig_check() {
+	if [ -f "/data/data/com.termux/files/usr/bin/adb.bin" ];then
+		adbconfigstatus=`green "true"`
+	else
+		adbconfigstatus=`red "false"`
+	fi
+}
 adbconfig_check
 adbinstall=null
 echo -e "\n\n"
@@ -23,12 +30,12 @@ case $adbinstall in
 		else
 			red "网络异常，无法完成 ADB 安装！"
 		fi
-		source $ToolPATH/main/tools/adbconfig.sh
+		source $ToolPATH/core/tools/adbconfig.sh
 		return 0 ;;
 	2)
 		if [ ! -f "/data/data/com.termux/files/usr/bin/adb" ];then
 			red "您并未安装 ADB,无需进行此过程"
-			source $ToolPATH/main/tools/adbconfig.sh
+			source $ToolPATH/core/tools/adbconfig.sh
 		fi
 		if network_check_sea; then
 			plg up -y
@@ -38,7 +45,7 @@ case $adbinstall in
 		else
 			red "网络异常，无法获取安装脚本以完成安装…"
 		fi
-		source $ToolPATH/main/tools/adbconfig.sh
+		source $ToolPATH/core/tools/adbconfig.sh
 		return 0 ;;
 	3)
 		if [ -f "/data/data/com.termux/files/usr/bin/adb" ];then
@@ -46,14 +53,14 @@ case $adbinstall in
 		else
 			red "请先安装 ADB"
 		fi
-		source $ToolPATH/main/tools/adbconfig.sh
+		source $ToolPATH/core/tools/adbconfig.sh
 		return 0 ;;
 	0)
-		source $ToolPATH/main/tools/menu.sh 
+		source $ToolPATH/core/tools/menu.sh 
 		return 0 ;;
 	*)
 		red "无效输入,请重试" 
-		source $ToolPATH/main/tools/adbconfig.sh
+		source $ToolPATH/core/tools/adbconfig.sh
 		return 0 ;;
 esac
 

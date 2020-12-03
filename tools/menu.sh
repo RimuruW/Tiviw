@@ -26,20 +26,20 @@ echo -en "\t\tEnter an option: "
 read toolsinstall
 case $toolsinstall in
 	1)
-		source $ToolPATH/main/tools/hexo-installer.sh ;;
+		source $ToolPATH/core/tools/hexo-installer.sh ;;
 	2)
-		source $ToolPATH/main/tools/adbconfig.sh ;;
+		source $ToolPATH/core/tools/adbconfig.sh ;;
 	3)
-		source $ToolPATH/main/tools/you-get/yougetconfig.sh ;;
+		source $ToolPATH/core/tools/you-get/yougetconfig.sh ;;
 	4)
-		source $ToolPATH/main/tools/httpconfig.sh ;;
+		source $ToolPATH/core/tools/httpconfig.sh ;;
 	5)
-		source $ToolPATH/main/tools/bilibilitools/bilibilitools.sh ;;
+		source $ToolPATH/core/tools/bilibilitools/bilibilitools.sh ;;
 	6)
-		source $ToolPATH/main/tools/aria2/aria2config.sh ;;
+		source $ToolPATH/core/tools/aria2/aria2config.sh ;;
 	0)
 		return 0 ;;
 	*)
 		red "无效输入,请重试" 
-		source $ToolPATH/main/tools/menu.sh ;;
+		source $ToolPATH/core/tools/menu.sh ;;
 esac

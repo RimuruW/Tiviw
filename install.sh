@@ -34,7 +34,8 @@ blue() {
 light() {
 	echo -e "${LIGHT}$1${RESET}"
 }
-function ask() {
+
+ask() {
     # http://djm.me/ask
     while true; do
 
@@ -110,7 +111,7 @@ check_mirrors() {
 	if [ -z "$mirrors_status" ]; then 
 		red "[!] Termux 镜像源未配置!"
 		blue "对于国内用户，添加清华源作为镜像源可以有效增强 Termux 软件包下载速度" 
-		if ask "是否添加清华源?" "N"; then
+		if ask "是否添加清华源?" "Y"; then
 				sed -i 's@^\(deb.*stable main\)$@#\1\ndeb https://mirrors.tuna.tsinghua.edu.cn/termux/termux-packages-24 stable main@' "$PREFIX/etc/apt/sources.list"
 				sed -i 's@^\(deb.*games stable\)$@#\1\ndeb https://mirrors.tuna.tsinghua.edu.cn/termux/game-packages-24 games stable@'"$PREFIX/etc/apt/sources.list.d/game.list"
 				sed -i 's@^\(deb.*science stable\)$@#\1\ndeb https://mirrors.tuna.tsinghua.edu.cn/termux/science-packages-24 science stable@' "$PREFIX/etc/apt/sources.list.d/science.list"
@@ -146,10 +147,10 @@ mkdir -p "$PREFIX/etc/tiviw"
 mkdir -p "$PREFIX/etc/tiviw/logs" "$PREFIX/etc/tiviw/linux" "$PREFIX/etc/tiviw/etc"
 
 blue "\n[*] 正在拉取远程仓库…"
-git clone https://github.com.cnpmjs.org/QingxuMo/Tiviw "$PREFIX/etc/tiviw/main"
+git clone https://github.com.cnpmjs.org/QingxuMo/Tiviw "$PREFIX/etc/tiviw/core"
  
 blue "\n[*] 正在修改远程仓库地址…"
-cd "$PREFIX/etc/tiviw/main" || { red "目录跳转失败！" >&2;  exit 1; }
+cd "$PREFIX/etc/tiviw/core" || { red "目录跳转失败！" >&2;  exit 1; }
 git remote set-url origin https://github.com/QingxuMo/Tiviw
 
 blue "\n[*] 正在检查远程仓库地址…"
@@ -164,11 +165,11 @@ blue "\n[*] 正在校验其他选项…"
 cd "$HOME" || { red "[!] 目录跳转失败!" >&2;  exit 1; }
 
 blue "\n[*] 正在修改文件权限…"
-pv "$PREFIX/etc/tiviw/main/permission.sh" | bash
+pv "$PREFIX/etc/tiviw/core/permission.sh" | bash
 
 blue "\n[*] 正在创建启动器…"
 rm -f "$PREFIX/bin/tiviw"
-cp "$PREFIX/etc/tiviw/main/tiviw" "$PREFIX/bin/tiviw" | pv
+cp "$PREFIX/etc/tiviw/core/tiviw" "$PREFIX/bin/tiviw" | pv
 chmod +x "$PREFIX/bin/tiviw"
 
 if [ -f "$PREFIX/bin/tiviw" ]; then

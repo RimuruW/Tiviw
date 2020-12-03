@@ -6,7 +6,7 @@
 # Copyright (c) 2020 Qingxu
 #-----------------------------------
 
-source $PREFIX/etc/tiviw/main/script/function.sh
+source $PREFIX/etc/tiviw/core/main/function.sh
 
 function Linux(){
     installlinux=null
@@ -471,17 +471,17 @@ do
 	    0)
 	    	    exit 0 ;;
 	    1)
-	    	    source $ToolPATH/main/script/mirror.sh ;;
+	    	    source $ToolPATH/core/main/mirror.sh ;;
 	    2)
-	    	    source $ToolPATH/main/script/board.sh ;;
+	    	    source $ToolPATH/core/main/board.sh ;;
 	    3)
-	    	    source $ToolPATH/main/script/storage.sh ;;
+	    	    source $ToolPATH/core/main/storage.sh ;;
 	    4)
-	    	    source $ToolPATH/main/script/zsh_install.sh ;;
+	    	    source $ToolPATH/core/main/zsh_install.sh ;;
 	    5)
-	    	    source $ToolPATH/main/termuxplugin/menu.sh ;;
+	    	    source $ToolPATH/core/termuxplugin/menu.sh ;;
 	    6)
-	    	    source $ToolPATH/main/tools/menu.sh ;;
+	    	    source $ToolPATH/core/tools/menu.sh ;;
 	    7)
 	    	    termuxapi ;;
 	    8)
@@ -490,7 +490,7 @@ do
 	            green "功能还未上线，敬请期待…"
 	            echo "作者：一想到我是一个鸽子，许多版本就烟消云散了" ;;
 	    99)
-	    	    source $ToolPATH/main/script/about.sh ;;
+	    	    source $ToolPATH/core/main/about.sh ;;
 	    *)
 		    red "无效输入，请重试"
 		    option=null  ;;

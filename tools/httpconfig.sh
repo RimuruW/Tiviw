@@ -1,3 +1,10 @@
+httpconfig_check() {
+	if [ -f "/data/data/com.termux/files/usr/lib/node_modules/http-server/bin/http-server" ];then
+		httpconfigstatus=$(green "true")
+	else
+		httpconfigstatus=$(red "false")
+	fi
+}
 httpconfig_check
 httpserverchoose=null
 echo -e "\n\n"
@@ -15,7 +22,7 @@ echo -en "\t\tEnter an option: "
 read httpserverchoose
 case $httpserverchoose in
 	1)
-		[[ -f "/data/data/com.termux/files/usr/lib/node_modules/http-server/bin/http-server" ]] && red "您已安装 HTTP 服务器，无需重复安装！" && source source $PREFIX/etc/tiviw/main/tools/httpconfig.sh  && return 0
+		[[ -f "/data/data/com.termux/files/usr/lib/node_modules/http-server/bin/http-server" ]] && red "您已安装 HTTP 服务器，无需重复安装！" && source source $PREFIX/etc/tiviw/core/tools/httpconfig.sh  && return 0
 		if check_apt_ability; then
 			pkg in nodejs-lts -y
 		else
@@ -32,7 +39,7 @@ case $httpserverchoose in
 	2)
 		if [ ! -f "/data/data/com.termux/files/usr/lib/node_modules/http-server/bin/http-server" ]; then
 			red "请先安装 HTTP 服务器"
-			source $PREFIX/etc/tiviw/main/tools/httpconfig.sh && return 0
+			source $PREFIX/etc/tiviw/core/tools/httpconfig.sh && return 0
 		fi
 		http-server
 		return 0
@@ -40,7 +47,7 @@ case $httpserverchoose in
 	3)
 		if [ ! -f "/data/data/com.termux/files/usr/lib/node_modules/http-server/bin/http-server" ]; then
 			red "请先安装 HTTP 服务器"
-			source $PREFIX/etc/tiviw/main/tools/httpconfig.sh && return 0
+			source $PREFIX/etc/tiviw/core/tools/httpconfig.sh && return 0
 		fi
 		green "开始卸载..."
 		npm uninstall http-server -g
@@ -50,5 +57,5 @@ case $httpserverchoose in
 		source $ToolPATH/main/tools/menu.sh ;;
 	*)
 		red "无效输入,请重试"
-		source $PREFIX/etc/tiviw/main/tools/httpconfig.sh && return 0 ;;
+		source $PREFIX/etc/tiviw/core/tools/httpconfig.sh && return 0 ;;
 esac

@@ -38,7 +38,7 @@ case $yougetoption in
 				Step
 			fi
 		fi
-		source $ToolPATH/main/tools/you-get/yougetconfig.sh
+		source $ToolPATH/core/tools/you-get/yougetconfig.sh
 		;;
 
 	2)
@@ -54,24 +54,24 @@ case $yougetoption in
 			red "请先安装 you-get！"
 			Step
 		fi
-		source $ToolPATH/main/tools/you-get/yougetconfig.sh 
+		source $ToolPATH/core/tools/you-get/yougetconfig.sh 
 		;;
 	3)
 		if [ -f "/data/data/com.termux/files/usr/bin/you-get" ];then
 			you-get -h
-			source $ToolPATH/main/tools/you-get/yougetconfig.sh
+			source $ToolPATH/core/tools/you-get/yougetconfig.sh
 		else
 			red "请先安装 you-get"
 			Step
 		fi
-		source $ToolPATH/main/tools/you-get/yougetconfig.sh ;;
+		source $ToolPATH/core/tools/you-get/yougetconfig.sh ;;
 	4)
 		if [ -f "/data/data/com.termux/files/usr/bin/you-get" ];then
-			source $ToolPATH/main/tools/you-get/yougeteasy.sh
+			source $ToolPATH/core/tools/you-get/yougeteasy.sh
 		else
 			red "请先安装 you-get"
 			Step
-			source $ToolPATH/main/tools/you-get/yougetconfig.sh
+			source $ToolPATH/core/tools/you-get/yougetconfig.sh
 		fi
 		;;
 	5)
@@ -93,15 +93,15 @@ case $yougetoption in
 			red "you-get 未安装！"
 			Step
 		fi
-		source $ToolPATH/main/tools/you-get/yougetconfig.sh ;;
+		source $ToolPATH/core/tools/you-get/yougetconfig.sh ;;
 	0)
-		source $ToolPATH/main/script/menu.sh
+		source $ToolPATH/core/main/menu.sh
 		return 0
 		;;
 	*)
 		red "无效输入,请重试"
 		Step
-		source $ToolPATH/main/tools/you-get/yougetconfig.sh ;;
+		source $ToolPATH/core/tools/you-get/yougetconfig.sh ;;
 esac
 
 

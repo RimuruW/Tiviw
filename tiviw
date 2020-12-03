@@ -20,17 +20,17 @@ if [ ! -f "$PREFIX/etc/tiviw/branch" ]; then
 else
 	branch=$(cat $PREFIX/etc/tiviw/branch)
 fi
-if [ ! -d "$PREFIX/etc/tiviw/main" ]; then
+if [ ! -d "$PREFIX/etc/tiviw/core" ]; then
 	echo "初始化脚本……"
 	mkdir -p $PREFIX/etc/tiviw/
-	git clone https://github.com/QingxuMo/$name $PREFIX/etc/tiviw/main >/dev/null
+	git clone https://github.com/QingxuMo/$name $PREFIX/etc/tiviw/core >/dev/null
 fi
 
-if [ ! -d "$PREFIX/etc/tiviw/main" ]; then
-	git clone https://github.com.cnpmjs.org/QingxuMo/$name $PREFIX/etc/tiviw/main >/dev/null
+if [ ! -d "$PREFIX/etc/tiviw/core" ]; then
+	git clone https://github.com.cnpmjs.org/QingxuMo/$name $PREFIX/etc/tiviw/core >/dev/null
 fi
 
-if [ ! -f "$PREFIX/etc/tiviw/main/script/menu.sh" ]; then
+if [ ! -f "$PREFIX/etc/tiviw/core/main/menu.sh" ]; then
 	echo "请检查您的互联网连接状态，如互联网连接正常，请向开发者提交 issues"
 	exit 1
 fi
@@ -40,5 +40,5 @@ if [ ! -f "$PREFIX/bin/bash" ]; then
 fi
 
 mkdir -p $PREFIX/etc/tiviw/logs
-bash $PREFIX/etc/tiviw/main/script/logsmanager.sh
-bash $PREFIX/etc/tiviw/main/script/menu.sh | tee -a $PREFIX/etc/tiviw/logs/1.log
+bash $PREFIX/etc/tiviw/core/main/logsmanager.sh
+bash $PREFIX/etc/tiviw/core/main/menu.sh | tee -a $PREFIX/etc/tiviw/logs/1.log

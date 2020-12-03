@@ -47,29 +47,21 @@ echo "Disk Usages :" >> $PREFIX/etc/tiviw/logs/tmp_$log
 df -h >> $PREFIX/etc/tiviw/logs/tmp_$log
 mv -f $PREFIX/etc/tiviw/logs/tmp_$log $PREFIX/etc/tiviw/logs/$log
 green "系统信息确认完毕!!"
-check_mirrors() {
-	mirrors_status=$(cat $PREFIX/etc/apt/sources.list | grep "mirror" | grep -v '#')
-	if [ -z "$mirrors_status" ]; then
-		red "Termux 镜像源未配置！"
-		echo -e "对于国内用户，添加清华源作为镜像源可以有效增强 Termux 软件包下载速度"
-		echo -en "是否添加清华源？[y/n]"
-		read mirror_choose
-		case $mirror_choose in
-			y)
-				sed -i 's@^\(deb.*stable main\)$@#\1\ndeb https://mirrors.tuna.tsinghua.edu.cn/termux/termux-packages-24 stable main@' $PREFIX/etc/apt/sources.list
-				sed -i 's@^\(deb.*games stable\)$@#\1\ndeb https://mirrors.tuna.tsinghua.edu.cn/termux/game-packages-24 games stable@' $PREFIX/etc/apt/sources.list.d/game.list
-				sed -i 's@^\(deb.*science stable\)$@#\1\ndeb https://mirrors.tuna.tsinghua.edu.cn/termux/science-packages-24 science stable@' $PREFIX/etc/apt/sources.list.d/science.list
-				apt update && apt upgrade -y
-				;;
-			n)
-				blue "使用默认源进行安装"
-				;;
-			*)
-				blue "使用默认源进行安装"
-				;;
-		esac
-	fi
 
+check_mirrors() {
+	mirrors_status=$(grep "mirror" "$PREFIX/etc/apt/sources.list" | grep -v '#')
+	if [ -z "$mirrors_status" ]; then 
+		red "[!] Termux 镜像源未配置!"
+		blue "对于国内用户，添加清华源作为镜像源可以有效增强 Termux 软件包下载速度" 
+		if ask "是否添加清华源?" "Y"; then
+				sed -i 's@^\(deb.*stable main\)$@#\1\ndeb https://mirrors.tuna.tsinghua.edu.cn/termux/termux-packages-24 stable main@' "$PREFIX/etc/apt/sources.list"
+				sed -i 's@^\(deb.*games stable\)$@#\1\ndeb https://mirrors.tuna.tsinghua.edu.cn/termux/game-packages-24 games stable@'"$PREFIX/etc/apt/sources.list.d/game.list"
+				sed -i 's@^\(deb.*science stable\)$@#\1\ndeb https://mirrors.tuna.tsinghua.edu.cn/termux/science-packages-24 science stable@' "$PREFIX/etc/apt/sources.list.d/science.list"
+				apt update && apt upgrade -y
+			else
+				blue "使用默认源进行安装"
+		fi
+	fi
 }
 
 check_mirrors

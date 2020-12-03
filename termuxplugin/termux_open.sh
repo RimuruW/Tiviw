@@ -46,7 +46,7 @@ case $etermuxopen in
 		else
 			touch $PREFIX/etc/termuxopen
 		fi
-		source $ToolPATH/main/termuxplugin/termux_open.sh && return 0 ;;
+		source $ToolPATH/core/termuxplugin/termux_open.sh && return 0 ;;
 	2)
 		if [ ! -f "$PREFIX/etc/motd.bak" ];then
 			mv $PREFIX/etc/motd $PREFIX/etc/motd.bak
@@ -69,12 +69,12 @@ case $etermuxopen in
 					fi
 					touch $PREFIX/etc/termuxopen
 					green "修改完成!"
-					source $ToolPATH/main/termuxplugin/termux_open.sh
+					source $ToolPATH/core/termuxplugin/termux_open.sh
 					return 0 ;;
 				q)
 					rm -f $PREFIX/etc/motd.tmp
 					echo "已退出"
-					source $ToolPATH/main/termuxplugin/termux_open.sh
+					source $ToolPATH/core/termuxplugin/termux_open.sh
 					return 0
 					;;
 				*)
@@ -85,12 +85,12 @@ case $etermuxopen in
 		;;
 	3)
 		cat $PREFIX/etc/motd
-		source $ToolPATH/main/termuxplugin/termux_open.sh
+		source $ToolPATH/core/termuxplugin/termux_open.sh
 		return 0 ;;
 	4)
 		if [ ! -f "$PREFIX/etc/termuxopen" ];then
 			red "问候语已为默认状态"
-			source $ToolPATH/main/termuxplugin/termux_open.sh
+			source $ToolPATH/core/termuxplugin/termux_open.sh
 			return 0
 		fi
 		if [ -f "$PREFIX/etc/motd.init" ];then
@@ -101,38 +101,38 @@ case $etermuxopen in
 		else
 			red "备份丢失,默认问候语恢复失败!!"
 		fi
-		source $ToolPATH/main/termuxplugin/termux_open.sh
+		source $ToolPATH/core/termuxplugin/termux_open.sh
 		return 0
 		;;
 	5)
 		if [ -f "$HOME/.hushlogin" ];then
 			red "您已关闭问候语,无需重复关闭"
-			source $ToolPATH/main/termuxplugin/termux_open.sh && return 0
+			source $ToolPATH/core/termuxplugin/termux_open.sh && return 0
 		fi
 		touch ~/.hushlogin
 		if [ ! -f "$HOME/.hushlogin" ];then
 			red "问候语关闭失败!"
-			source $ToolPATH/main/termuxplugin/termux_open.sh && return 0
+			source $ToolPATH/core/termuxplugin/termux_open.sh && return 0
 		fi
 		green "问候语关闭成功!"
-		source $ToolPATH/main/termuxplugin/termux_open.sh
+		source $ToolPATH/core/termuxplugin/termux_open.sh
 		return 0
 		;;
 	6)
 		if [ ! -f "$HOME/.hushlogin" ];then
 			red "您已开启问候语,无需重复关闭"
-			source $ToolPATH/main/termuxplugin/termux_open.sh && return 0
+			source $ToolPATH/core/termuxplugin/termux_open.sh && return 0
 		fi
 		rm -f  $HOME/.hushlogin
 		if [ -f "$HOME/.hushlogin" ];then
 			red "问候语开启失败!"
-			source $ToolPATH/main/termuxplugin/termux_open.sh
+			source $ToolPATH/core/termuxplugin/termux_open.sh
 		fi
 		green "问候语开启成功!"
-		source $ToolPATH/main/termuxplugin/termux_open.sh && return 0
+		source $ToolPATH/core/termuxplugin/termux_open.sh && return 0
 		;;
 	0)
-		source $ToolPATH/main/termuxplugin/menu.sh && return 0 ;;
+		source $ToolPATH/core/termuxplugin/menu.sh && return 0 ;;
 	*)
 	    red "无效输入，请重试！"
 	    etermuxopen=null ;;

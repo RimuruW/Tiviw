@@ -6,6 +6,14 @@
 # Copyright (c) 2020 Qingxu
 #-----------------------------------
 
+aria2_check() {
+if [ -f "$PREFIX/bin/aria2c" ];then
+	aria2status=$(green "true")
+else
+	aria2status=$(red "false")
+fi
+}
+
 aria2_check
 if [ -f "$PREFIX/etc/tiviw/aria2/aria2.sh" ];then
 	aria2termuxstatus=`green "true"`
@@ -43,9 +51,9 @@ case $aria2choose in
 		else
 			red "您已安装Aria2-Termux，无需重复安装"
 		fi
-		[[ ! -f "$PREFIX/etc/tiviw/aria2/aria2.sh" ]] && red "Aria2 安装脚本下载失败，请检查网络连接状态" &&  echo "请回车确认" && read -n 1 line  && source $PREFIX/etc/tiviw/main/tools/aria2/aria2config.sh && return 1
+		[[ ! -f "$PREFIX/etc/tiviw/aria2/aria2.sh" ]] && red "Aria2 安装脚本下载失败，请检查网络连接状态" &&  echo "请回车确认" && read -n 1 line  && source $PREFIX/etc/tiviw/core/tools/aria2/aria2config.sh && return 1
 		bash $PREFIX/etc/tiviw/aria2/aria2.sh
-		source $PREFIX/etc/tiviw/main/tools/aria2/aria2config.sh && return 0
+		source $PREFIX/etc/tiviw/core/tools/aria2/aria2config.sh && return 0
 		;;
 	2)
 		if network_check; then
@@ -69,7 +77,7 @@ case $aria2choose in
 		else
 			red "网络连接异常！"
 		fi
-		source $PREFIX/etc/tiviw/main/tools/aria2/aria2config.sh && return 0
+		source $PREFIX/etc/tiviw/core/tools/aria2/aria2config.sh && return 0
 		;;
 	3)
 		echo "检测到备份文件如下:"
@@ -80,18 +88,18 @@ case $aria2choose in
 		red "本地版本仅代表你更新前设备上的 Aria2-Termux 版本，与云端版本无任何关联！"
 		echo -en "请选择你要恢复的文件:"
 		read aria2termuxversion
-		[[ -z $(echo $aria2termuxversion | grep "aria2.sh.bak") ]] && red "无效输入！" && source $PREFIX/etc/tiviw/main/tools/aria2/aria2config.sh && return 1
+		[[ -z $(echo $aria2termuxversion | grep "aria2.sh.bak") ]] && red "无效输入！" && source $PREFIX/etc/tiviw/core/tools/aria2/aria2config.sh && return 1
 		mv -f $PREFIX/etc/tiviw/aria2/$aria2termuxversion $PREFIX/etc/tiviw/aria2/aria2.sh
 		green "执行完成"
-		source $PREFIX/etc/tiviw/main/tools/aria2/aria2config.sh && return 0
+		source $PREFIX/etc/tiviw/core/tools/aria2/aria2config.sh && return 0
 		;;
 
 	4)
-		source $PREFIX/etc/tiviw/main/tools/aria2/ariang.sh ;;
+		source $PREFIX/etc/tiviw/core/tools/aria2/ariang.sh ;;
 	0)
 		return 0 ;;
 	*)
 		red "无效输入，请重试"
-		source $PREFIX/etc/tiviw/main/tools/aria2/aria2config.sh
+		source $PREFIX/etc/tiviw/core/tools/aria2/aria2config.sh
 		;;
 esac

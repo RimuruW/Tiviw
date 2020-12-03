@@ -20,7 +20,7 @@ case $termuxguiinstall in
 		if [ -f "/data/data/com.termux/files/usr/bin/startvnc" ];then
 			red "您已安装图形化界面,不必重复进行安装"
 			Step
-			source $ToolPATH/main/termuxplugin/termuxgui.sh
+			source $ToolPATH/core/termuxplugin/termuxgui.sh
 			return 1
 		fi
 		pkg i -y x11-repo
@@ -39,7 +39,7 @@ case $termuxguiinstall in
 			red "Termux GUI 安装失败"
 			Step
 		fi
-		source $ToolPATH/main/termuxplugin/termuxgui.sh
+		source $ToolPATH/core/termuxplugin/termuxgui.sh
 		return 0
 		;;
 	2)
@@ -48,13 +48,13 @@ case $termuxguiinstall in
 		green "在启动 VNC 服务前，请安装 VNC Viewer"
 		green "下载链接: https://play.google.com/store/apps/details?id=com.realvnc.viewer.android"
 		Step
-		source $ToolPATH/main/termuxplugin/termuxgui.sh
+		source $ToolPATH/core/termuxplugin/termuxgui.sh
 		return 0
 		;;
 	0)
-		source $ToolPATH/main/termuxplugin/menu.sh && return 0 ;;
+		source $ToolPATH/core/termuxplugin/menu.sh && return 0 ;;
 	*)
 		red "无效输入,请重试" 
 		termuxguiinstall=null
-	    source $ToolPATH/main/termuxplugin/termuxgui.sh && return 0 ;;
+	    source $ToolPATH/core/termuxplugin/termuxgui.sh && return 0 ;;
 esac

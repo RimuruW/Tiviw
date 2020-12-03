@@ -16,7 +16,7 @@ case $ABOUT_CHOOSE in
 	1)
 		update_tiviw
 		Step
-		source $ToolPATH/main/script/menu.sh
+		source $ToolPATH/core/main/menu.sh
 		return 0
 		;;
 	2)
@@ -40,12 +40,12 @@ case $ABOUT_CHOOSE in
 			*)
 				red "不存在的分支名称！"
 				red "请输入 master 或 dev！"
-				source $ToolPATH/main/script/about.sh
+				source $ToolPATH/core/main/about.sh
 				return 0
 				;;
 		esac
 		cd $HOME
-		source $ToolPATH/main/script/function.sh
+		source $ToolPATH/core/main/function.sh
 		green "分支切换完毕！"
 		green "默认重启脚本以应用更改…"
 		exit 0
@@ -57,7 +57,7 @@ case $ABOUT_CHOOSE in
 	    ABOUT_CHOOSE=null
 		red "无效输入，请重试！"
 		Step
-		source $ToolPATH/main/script/about.sh && return 1
+		source $ToolPATH/core/main/about.sh && return 1
 		;;
 esac
 

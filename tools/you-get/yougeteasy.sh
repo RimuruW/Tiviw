@@ -11,13 +11,13 @@ read tmpyouget
 case $tmpyouget in
 	1)
 		youget_download
-		source $ToolPATH/main/tools/you-get/yougeteasy.sh ;;
+		source $ToolPATH/core/tools/you-get/yougeteasy.sh ;;
 	0)
-		source $ToolPATH/main/tools/you-get/yougetconfig.sh ;;
+		source $ToolPATH/core/tools/you-get/yougetconfig.sh ;;
 
 	*)
 		red "无效输入,请重试"
 		Step
-		source $ToolPATH/main/tools/you-get/yougeteasy.sh ;;
+		source $ToolPATH/core/tools/you-get/yougeteasy.sh ;;
 esac 
 

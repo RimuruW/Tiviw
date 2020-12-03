@@ -1,3 +1,10 @@
+sudo_check() {
+if [ -f "/data/data/com.termux/files/usr/bin/sudo" ];then
+	sudostatus=$(green "true")
+else
+	sudostatus=$(red "false")
+fi
+}
 sudo_check
 sudoinstall=null
 echo -e "\n\n"
@@ -13,7 +20,7 @@ case $sudoinstall in
 		if [ -f "/data/data/com.termux/files/usr/bin/sudo" ];then
 			blue "您已安装 sudo,请勿重复安装"
 			Step
-			source $ToolPATH/main/termuxplugin/sudo.sh
+			source $ToolPATH/core/termuxplugin/sudo.sh
 			return 1
 		fi
 		if network_check; then
@@ -32,7 +39,7 @@ case $sudoinstall in
 		fi
 		echo "安装脚本运行完毕"
 		Step
-		source $ToolPATH/main/termuxplugin/menu.sh
+		source $ToolPATH/core/termuxplugin/menu.sh
 		return 0
 		;;
 	2)
@@ -46,17 +53,17 @@ case $sudoinstall in
 			green "sudo 卸载成功!"
 		fi
 		Step
-		source $ToolPATH/main/termuxplugin/menu.sh
+		source $ToolPATH/core/termuxplugin/menu.sh
 		return 0
 		;;
 	0)
-		source $ToolPATH/main/termuxplugin/menu.sh
+		source $ToolPATH/core/termuxplugin/menu.sh
 		return 0
 		;;
 	*)
 		red "无效输入!"
 		sudoinstall=null
-		source $ToolPATH/main/termuxplugin/sudo.sh
+		source $ToolPATH/core/termuxplugin/sudo.sh
 		return 1
 		;;
 esac
