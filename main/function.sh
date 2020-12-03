@@ -9,7 +9,7 @@
 name="Tiviw"
 export name
 sh_ver="1.0.3"
-ver_code=202011112346
+ver_code=202012040140
 ToolPATH="$PREFIX/etc/tiviw"
 
 if [ -t 1 ]; then
