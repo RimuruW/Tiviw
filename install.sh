@@ -147,12 +147,12 @@ mkdir -p "$PREFIX/etc/tiviw"
 mkdir -p "$PREFIX/etc/tiviw/logs" "$PREFIX/etc/tiviw/linux" "$PREFIX/etc/tiviw/etc"
 
 blue "\n[*] 正在拉取远程仓库…"
-git clone https://github.com/QingxuMo/Tiviw "$PREFIX/etc/tiviw/core"
-#git clone https://github.com.cnpmjs.org/QingxuMo/Tiviw "$PREFIX/etc/tiviw/core"
+#git clone https://github.com/QingxuMo/Tiviw "$PREFIX/etc/tiviw/core"
+git clone https://gitee.com/QingxuMo/tiviw "$PREFIX/etc/tiviw/core"
  
-#blue "\n[*] 正在修改远程仓库地址…"
-#cd "$PREFIX/etc/tiviw/core" || { red "目录跳转失败！" >&2;  exit 1; }
-#git remote set-url origin https://github.com/QingxuMo/Tiviw
+blue "\n[*] 正在修改远程仓库地址…"
+cd "$PREFIX/etc/tiviw/core" || { red "目录跳转失败！" >&2;  exit 1; }
+git remote set-url origin https://github.com/QingxuMo/Tiviw
 
 blue "\n[*] 正在检查远程仓库地址…"
 remote_status="$(git remote -v | grep "https://github.com/QingxuMo/Tiviw")"

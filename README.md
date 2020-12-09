@@ -10,5 +10,5 @@ bash -c "$(curl -L https://raw.githubusercontent.com/QingxuMo/Tiviw/dev/install.
 > 国内用户请输入以下命令
 
 ```
-bash -c "$(curl -L https://cdn.jsdelivr.net/gh/QingxuMo/Tiviw@dev/install.sh)"
+bash -c "$(curl -L https://gitee.com/QingxuMo/tiviw/raw/dev/install.sh)"
 ```
