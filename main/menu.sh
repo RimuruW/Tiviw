@@ -419,8 +419,7 @@ function logs(){
 
 function menu(){
     option=null
-	printf "$BLUE"
-	cat <<-'EOF'
+	blue "
                                                     
 _/_/_/_/_/  _/              _/                      
    _/          _/      _/      _/      _/      _/   
@@ -428,8 +427,7 @@ _/_/_/_/_/  _/              _/
  _/      _/    _/  _/    _/    _/  _/  _/  _/       
 _/      _/      _/      _/      _/      _/          
                                                     
-	EOF
-	printf "$RESET"
+"
         echo -en "\t\t\t\t$VERSION"
         [[ $branch = dev ]] && red " dev"
         [[ $branch = master ]] && green " master"
