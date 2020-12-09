@@ -1,27 +1,16 @@
 name: Sync to Gitee
 
-on:
-  push:
-    branches:
-      - master
-      - dev
-      - Canary
-
-env:
-  TZ: Asia/Shanghai
+on: [ push, delete, create ]
 
 jobs:
-  run:
+  git-mirror:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout codes
-        uses: actions/checkout@v2
-      - name: Sync
-        uses: Yikun/hub-mirror-action@master
+      - uses: wearerequired/git-mirror-action@v1
+        env:
+          SSH_PRIVATE_KEY: ${{ secrets.GITEE_PRIVATE_KEY }}
         with:
-          src: github/QingxuMo
-          dst: gitee/QingxuMo
-          dst_key: ${{ secrets.GITEE_PRIVATE_KEY }}
-          dst_token: ${{ secrets.GITEE_TOKEN }}
-          white_list: "Tiviw"
+          source-repo: 'git@github.com:QingxuMo/Tiviw.git'
+          destination-repo: 'git@gitee.com:QingxuMo/tiviw.git'
+
 
