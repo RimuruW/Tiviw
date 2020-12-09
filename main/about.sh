@@ -23,7 +23,7 @@ case $ABOUT_CHOOSE in
 		red "注意，该选项是仅面向开发者测试的选项，普通用户请使用默认的 master 分支！"
 		red "作者不保证 dev 分支代码的可用和安全性，请谨慎切换！"
 		blue "请输入你想切换的分支[master or dev]"
-		cd $ToolPATH/main
+		cd $ToolPATH/core
 		echo -en "Enter an option: "
 		read SWICHBRANCH
 		case $SWICHBRANCH in
