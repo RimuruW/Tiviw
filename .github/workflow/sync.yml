@@ -1,0 +1,27 @@
+name: Sync to Gitee
+
+on:
+  push:
+    branches:
+      - master
+      - dev
+      - Canary
+
+env:
+  TZ: Asia/Shanghai
+
+jobs:
+  run:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout codes
+        uses: actions/checkout@v2
+      - name: Sync
+        uses: Yikun/hub-mirror-action@master
+        with:
+          src: github/QingxuMo
+          dst: gitee/QingxuMo
+          dst_key: ${{ secrets.GITEE_PRIVATE_KEY }}
+          dst_token: ${{ secrets.GITEE_TOKEN }}
+          static_list: "Tiviw"
+

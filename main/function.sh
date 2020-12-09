@@ -181,7 +181,7 @@ update_tiviw() {
 [*] 请重启脚本以应用更新！
 		"
 	else
-		cd "$ToolPATH/main" || { red "[!] 目录跳转失败！" >&2;  exit 1; }
+		cd "$ToolPATH/core" || { red "[!] 目录跳转失败！" >&2;  exit 1; }
 		git remote set-url origin https://github.com.cnpmjs.org/QingxuMo/Tiviw
 		if update_remote_status; then
 			green "[*] 尝试拉取最新版本…"
