@@ -1,8 +1,8 @@
 #!/data/data/com.termux/files/usr/bin/bash
 #-----------------------------------
-# Author: Qingxu (QingxuMo)
+# Author: Qingxu (RimuruW)
 # Description: Hexo one-click installation cript for Termux.
-# Repository Address: https://github.com/QingxuMo/Termux-Hexo-installer
+# Repository Address: https://github.com/RimuruW/Termux-Hexo-installer
 # Version: 0.2
 # Copyright (c) 2020 Qingxu
 #-----------------------------------
