@@ -9,24 +9,15 @@
 name="Tiviw"
 export name
 sh_ver="1.0.4"
-ver_code=202012100205
+ver_code=202012312144
 ToolPATH="$PREFIX/etc/tiviw"
 
-if [ -t 1 ]; then
-	RED=$(printf	'\033[31m')
-	GREEN=$(printf	'\033[32m')
-	YELLOW=$(printf '\033[33m')
-	BLUE=$(printf	'\033[34m')
-	LIGHT=$(printf	'\033[1;96m')
-	RESET=$(printf	'\033[0m')
-else
-	RED=""
-	GREEN=""
-	YELLOW=""
-	BLUE=""
-	LIGHT=""
-	RESET=""
-fi
+RED=$(printf	'\033[31m')
+GREEN=$(printf	'\033[32m')
+YELLOW=$(printf '\033[33m')
+BLUE=$(printf	'\033[34m')
+LIGHT=$(printf	'\033[1;96m')
+RESET=$(printf	'\033[0m')
 
 red() {
 	echo -e "${RED}$1${RESET}"
@@ -102,7 +93,7 @@ else
 fi
 
 if [ "$(uname -o)" != "Android" ]; then
-	PREFIX=/data/data/com.termux/files/usr
+	PREFIX="/data/data/com.termux/files/usr"
 fi
 
 source "$ToolPATH/core/permission.sh"

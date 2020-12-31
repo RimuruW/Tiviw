@@ -112,12 +112,12 @@ check_mirrors() {
 		red "[!] Termux 镜像源未配置!"
 		blue "对于国内用户，添加清华源作为镜像源可以有效增强 Termux 软件包下载速度" 
 		if ask "是否添加清华源?" "Y"; then
-				sed -i 's@^\(deb.*stable main\)$@#\1\ndeb https://mirrors.tuna.tsinghua.edu.cn/termux/termux-packages-24 stable main@' "$PREFIX/etc/apt/sources.list"
-				sed -i 's@^\(deb.*games stable\)$@#\1\ndeb https://mirrors.tuna.tsinghua.edu.cn/termux/game-packages-24 games stable@'"$PREFIX/etc/apt/sources.list.d/game.list"
-				sed -i 's@^\(deb.*science stable\)$@#\1\ndeb https://mirrors.tuna.tsinghua.edu.cn/termux/science-packages-24 science stable@' "$PREFIX/etc/apt/sources.list.d/science.list"
-				apt update && apt upgrade -y
-			else
-				blue "使用默认源进行安装"
+			sed -i 's@^\(deb.*stable main\)$@#\1\ndeb https://mirrors.tuna.tsinghua.edu.cn/termux/termux-packages-24 stable main@' "$PREFIX/etc/apt/sources.list"
+			sed -i 's@^\(deb.*games stable\)$@#\1\ndeb https://mirrors.tuna.tsinghua.edu.cn/termux/game-packages-24 games stable@' "$PREFIX/etc/apt/sources.list.d/game.list"
+			sed -i 's@^\(deb.*science stable\)$@#\1\ndeb https://mirrors.tuna.tsinghua.edu.cn/termux/science-packages-24 science stable@' "$PREFIX/etc/apt/sources.list.d/science.list"
+			apt update && apt upgrade
+		else
+			blue "使用默认源进行安装"
 		fi
 	fi
 }
@@ -166,11 +166,11 @@ blue "\n[*] 正在校验其他选项…"
 cd "$HOME" || { red "[!] 目录跳转失败!" >&2;  exit 1; }
 
 blue "\n[*] 正在修改文件权限…"
-pv "$PREFIX/etc/tiviw/core/permission.sh" | bash
+bash "$PREFIX/etc/tiviw/core/permission.sh"
 
 blue "\n[*] 正在创建启动器…"
 rm -f "$PREFIX/bin/tiviw"
-cp "$PREFIX/etc/tiviw/core/tiviw" "$PREFIX/bin/tiviw" | pv
+cp "$PREFIX/etc/tiviw/core/tiviw" "$PREFIX/bin/tiviw"
 chmod +x "$PREFIX/bin/tiviw"
 
 if [ -f "$PREFIX/bin/tiviw" ]; then
