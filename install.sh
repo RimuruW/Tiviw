@@ -146,13 +146,19 @@ blue "\n[*] 正在创建工作目录…"
 mkdir -p "$PREFIX/etc/tiviw"
 mkdir -p "$PREFIX/etc/tiviw/logs" "$PREFIX/etc/tiviw/linux" "$PREFIX/etc/tiviw/etc"
 
-blue "\n[*] 正在拉取远程仓库…"
-#git clone https://github.com/RimuruW/Tiviw "$PREFIX/etc/tiviw/core"
-git clone https://gitee.com/RimuruW/tiviw "$PREFIX/etc/tiviw/core"
- 
-blue "\n[*] 正在修改远程仓库地址…"
-cd "$PREFIX/etc/tiviw/core" || { red "目录跳转失败！" >&2;  exit 1; }
-git remote set-url origin https://github.com/RimuruW/Tiviw
+blue "\n[*] 正在检测网络可用性…"
+if ping -q -c 1 -W 1 google.com >/dev/null; then
+	green "[✓] 网络可用！"
+	blue "\n[*] 正在拉取远程仓库…"
+	git clone https://github.com/RimuruW/Tiviw "$PREFIX/etc/tiviw/core"
+else
+	red "[!] 网络连接受限，尝试启用代理！"
+	blue "\n[*] 正在拉取远程仓库…"
+	git clone https://gitee.com/RimuruW/tiviw "$PREFIX/etc/tiviw/core"
+	blue "\n[*] 正在修改远程仓库地址…"
+	cd "$PREFIX/etc/tiviw/core" || { red "目录跳转失败！" >&2;  exit 1; }
+	git remote set-url origin https://github.com/RimuruW/Tiviw
+fi
 
 blue "\n[*] 正在检查远程仓库地址…"
 remote_status="$(git remote -v | grep "https://github.com/RimuruW/Tiviw")"
