@@ -1,7 +1,7 @@
 #-----------------------------------
-# Author: Qingxu (QingxuMo)
+# Author: Qingxu (RimuruW)
 # Description: Termux Tools
-# Repository Address: https://github.com/QingxuMo/Tovow
+# Repository Address: https://github.com/RimuruW/Tovow
 # Copyright (c) 2020 Qingxu
 #-----------------------------------
 

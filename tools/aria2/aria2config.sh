@@ -1,8 +1,8 @@
 #!/data/data/com.termux/files/usr/bin/bash
 #-----------------------------------
-# Author: Qingxu (QingxuMo)
+# Author: Qingxu (RimuruW)
 # Description: Termux Tools
-# Repository Address: https://github.com/QingxuMo/Tovow
+# Repository Address: https://github.com/RimuruW/Tovow
 # Copyright (c) 2020 Qingxu
 #-----------------------------------
 
@@ -23,7 +23,7 @@ fi
 aria2choose=null
 echo -e "\n\n"
 echo -e "Aria2 是一个强大的多功能下载器，Aria2-Termux 是面向 Android 且深度适配 Termux 的强大的 Aria2 一键安装与管理脚本\n"
-echo -e "项目地址: https://github.com/QingxuMo/Aria2-Termux"
+echo -e "项目地址: https://github.com/RimuruW/Aria2-Termux"
 echo -e "\n\n"
 echo "Aria2 安装状态: " $aria2status
 echo "Aria2-Termux 安装状态: " $aria2termuxstatus
@@ -44,9 +44,9 @@ case $aria2choose in
 	1)
 		if [ ! -f "$PREFIX/etc/tiviw/aria2/aria2.sh" ]; then
 			if network_check_sea; then
-				mkdir -p $PREFIX/etc/tiviw/aria2 && wget -P $PREFIX/etc/tiviw/aria2 https://raw.githubusercontent.com/QingxuMo/Aria2-Termux/master/aria2.sh && chmod +x $PREFIX/etc/tiviw/aria2/aria2.sh
+				mkdir -p $PREFIX/etc/tiviw/aria2 && wget -P $PREFIX/etc/tiviw/aria2 https://raw.githubusercontent.com/RimuruW/Aria2-Termux/master/aria2.sh && chmod +x $PREFIX/etc/tiviw/aria2/aria2.sh
 			else
-				mkdir -p $PREFIX/etc/tiviw/aria2 && wget -P $PREFIX/etc/tiviw/aria2 https://cdn.jsdelivr.net/gh/QingxuMo/Aria2-Termux@master/aria2.sh && chmod +x $PREFIX/etc/tiviw/aria2/aria2.sh
+				mkdir -p $PREFIX/etc/tiviw/aria2 && wget -P $PREFIX/etc/tiviw/aria2 https://cdn.jsdelivr.net/gh/RimuruW/Aria2-Termux@master/aria2.sh && chmod +x $PREFIX/etc/tiviw/aria2/aria2.sh
 			fi
 		else
 			red "您已安装Aria2-Termux，无需重复安装"
@@ -65,9 +65,9 @@ case $aria2choose in
 			    fi
 			mv $PREFIX/etc/tiviw/aria2/aria2.sh $PREFIX/etc/tiviw/aria2/aria2.sh.bak
 			if network_check_sea; then
-				mkdir -p $PREFIX/etc/tiviw/aria2 && wget -P $PREFIX/etc/tiviw/aria2 https://raw.githubusercontent.com/QingxuMo/Aria2-Termux/master/aria2.sh && chmod +x $PREFIX/etc/tiviw/aria2/aria2.sh
+				mkdir -p $PREFIX/etc/tiviw/aria2 && wget -P $PREFIX/etc/tiviw/aria2 https://raw.githubusercontent.com/RimuruW/Aria2-Termux/master/aria2.sh && chmod +x $PREFIX/etc/tiviw/aria2/aria2.sh
 			else
-				mkdir -p $PREFIX/etc/tiviw/aria2 && wget -P $PREFIX/etc/tiviw/aria2 https://cdn.jsdelivr.net/gh/QingxuMo/Aria2-Termux@master/aria2.sh && chmod +x $PREFIX/etc/tiviw/aria2/aria2.sh
+				mkdir -p $PREFIX/etc/tiviw/aria2 && wget -P $PREFIX/etc/tiviw/aria2 https://cdn.jsdelivr.net/gh/RimuruW/Aria2-Termux@master/aria2.sh && chmod +x $PREFIX/etc/tiviw/aria2/aria2.sh
 			fi
 			if [ -f $PREFIX/etc/tiviw/aria2/aria2.sh ]; then
 				green "更新成功！"

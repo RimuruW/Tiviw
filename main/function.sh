@@ -1,8 +1,8 @@
 #!/data/data/com.termux/files/usr/bin/bash
 #-----------------------------------
-# Author: Qingxu (QingxuMo)
+# Author: Qingxu (RimuruW)
 # Description: Termux Tools
-# Repository Address: https://github.com/QingxuMo/Tovow
+# Repository Address: https://github.com/RimuruW/Tovow
 # Copyright (c) 2020 Qingxu
 #-----------------------------------
 
@@ -154,7 +154,7 @@ network_check_sea() {
 }
 
 remote_status() {
-	if git remote -v | grep "https://github.com/QingxuMo/Tiviw"; then
+	if git remote -v | grep "https://github.com/RimuruW/Tiviw"; then
 		green "[√] 远程仓库地址为源地址!"
 		return 0
 	else
@@ -164,7 +164,7 @@ remote_status() {
 }
 
 update_remote_status() {
-	if git remote -v | grep "https://gitee.com/QingxuMo/tiviw"; then
+	if git remote -v | grep "https://gitee.com/RimuruW/tiviw"; then
 		green "[√] 远程仓库地址修改成功!"
 	else
 		red "[!] 远程仓库地址修改失败！"
@@ -182,7 +182,7 @@ update_tiviw() {
 		"
 	else
 		cd "$ToolPATH/core" || { red "[!] 目录跳转失败！" >&2;  exit 1; }
-		git remote set-url origin https://gitee.com/QingxuMo/tiviw
+		git remote set-url origin https://gitee.com/RimuruW/tiviw
 		if update_remote_status; then
 			green "[*] 尝试拉取最新版本…"
 			git checkout . && git clean -xd -f
@@ -199,13 +199,13 @@ update_tiviw() {
 			green "[*] 拉取结束！"
 			green "[*] 请重启脚本以应用更新！"
 		fi
-		git remote set-url origin https://github.com/QingxuMo/Tiviw
+		git remote set-url origin https://github.com/RimuruW/Tiviw
 		if remote_status; then
 			green "[√] 远程仓库地址恢复成功！"
 		else
 			red "
 [!] 远程仓库地址恢复失败！
-请手动输入 cd $ToolPATH/main && git remote set-url origin https://github.com/QingxuMo/Tiviw 恢复远程仓库地址
+请手动输入 cd $ToolPATH/main && git remote set-url origin https://github.com/RimuruW/Tiviw 恢复远程仓库地址
 提交该界面截图至开发者以帮助开发者解决该问题！
 "
 			exit 1
@@ -221,8 +221,8 @@ dev_auto_update() {
 	red "dev 分支强制开启自动更新以避免异常。"
 	red "如果您不希望自动更新，请在「关于脚本」-「切换分支」处切换 master 分支"
 	echo "开始检查云端版本号…"
-	remote_ver=$(curl -s https://raw.githubusercontent.com/QingxuMo/Tiviw/dev/main/function.sh | grep -v "#" | grep "ver_code=" | awk -F "=" '{print $NF}' | sed 's/\"//g' | head -1)
-	[[ -z "$remote_ver" ]] && remote_ver=$(curl -s https://gitee.com/QingxuMo/tiviw/raw/dev/main/function.sh | grep -v "#" | grep "ver_code=" | awk -F "=" '{print $NF}' | sed 's/\"//g' | head -1)
+	remote_ver=$(curl -s https://raw.githubusercontent.com/RimuruW/Tiviw/dev/main/function.sh | grep -v "#" | grep "ver_code=" | awk -F "=" '{print $NF}' | sed 's/\"//g' | head -1)
+	[[ -z "$remote_ver" ]] && remote_ver=$(curl -s https://gitee.com/RimuruW/tiviw/raw/dev/main/function.sh | grep -v "#" | grep "ver_code=" | awk -F "=" '{print $NF}' | sed 's/\"//g' | head -1)
 	if [ "$remote_ver" -gt "$ver_code" ]; then
 		green "云端版本大于本地版本，开始强制覆盖更新…"
 		green "云端版本号：$remote_ver"

@@ -1,8 +1,8 @@
 #!/data/data/com.termux/files/usr/bin/bash
 #-----------------------------------
-# Author: Qingxu (QingxuMo)
+# Author: Qingxu (RimuruW)
 # Description: Termux Tools
-# Repository Address: https://github.com/QingxuMo/Tiviw
+# Repository Address: https://github.com/RimuruW/Tiviw
 # Copyright (c) 2020 Qingxu
 #-----------------------------------
 
@@ -431,7 +431,7 @@ _/      _/      _/      _/      _/      _/
         echo -en "\t\t\t\t$VERSION"
         [[ $branch = dev ]] && red " dev"
         [[ $branch = master ]] && green " master"
-	echo -e "\t\t\t\tBy Qingxu (QingxuMo)"
+	echo -e "\t\t\t\tBy Qingxu (RimuruW)"
 #if  [ $(which fortune) = /data/data/com.termux/files/usr/bin/fortune ]; then
 #    fortune
 #else

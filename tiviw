@@ -23,11 +23,11 @@ fi
 if [ ! -d "$PREFIX/etc/tiviw/core" ]; then
 	echo "初始化脚本……"
 	mkdir -p $PREFIX/etc/tiviw/
-	git clone https://github.com/QingxuMo/$name $PREFIX/etc/tiviw/core >/dev/null
+	git clone https://github.com/RimuruW/$name $PREFIX/etc/tiviw/core >/dev/null
 fi
 
 if [ ! -d "$PREFIX/etc/tiviw/core" ]; then
-	git clone https://gitee.com/QingxuMo/$name $PREFIX/etc/tiviw/core >/dev/null
+	git clone https://gitee.com/RimuruW/$name $PREFIX/etc/tiviw/core >/dev/null
 fi
 
 if [ ! -f "$PREFIX/etc/tiviw/core/main/menu.sh" ]; then
