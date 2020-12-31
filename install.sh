@@ -1,19 +1,11 @@
 #!/data/data/com.termux/files/usr/bin/bash
-if [ -t 1 ]; then
-	RED=$(printf	'\033[31m')
-	GREEN=$(printf	'\033[32m')
-	YELLOW=$(printf '\033[33m')
-	BLUE=$(printf	'\033[34m')
-	LIGHT=$(printf	'\033[1;96m')
-	RESET=$(printf	'\033[0m')
-else
-	RED=""
-	GREEN=""
-	YELLOW=""
-	BLUE=""
-	LIGHT=""
-	RESET=""
-fi
+
+RED=$(printf	'\033[31m')
+GREEN=$(printf	'\033[32m')
+YELLOW=$(printf '\033[33m')
+BLUE=$(printf	'\033[34m')
+LIGHT=$(printf	'\033[1;96m')
+RESET=$(printf	'\033[0m')
 
 red() {
 	echo -e "${RED}$1${RESET}"
@@ -151,12 +143,15 @@ if ping -q -c 1 -W 1 google.com >/dev/null; then
 	green "[✓] 网络可用！"
 	blue "\n[*] 正在拉取远程仓库…"
 	git clone https://github.com/RimuruW/Tiviw "$PREFIX/etc/tiviw/core"
+	cd "$PREFIX/etc/tiviw/core" || { red "目录跳转失败！" >&2;  exit 1; }
+	git checkout master
 else
 	red "[!] 网络连接受限，尝试启用代理！"
 	blue "\n[*] 正在拉取远程仓库…"
 	git clone https://gitee.com/RimuruW/tiviw "$PREFIX/etc/tiviw/core"
 	blue "\n[*] 正在修改远程仓库地址…"
 	cd "$PREFIX/etc/tiviw/core" || { red "目录跳转失败！" >&2;  exit 1; }
+	git checkout master
 	git remote set-url origin https://github.com/RimuruW/Tiviw
 fi
 
