@@ -9,7 +9,7 @@
 name="Tiviw"
 export name
 sh_ver="1.0.6"
-ver_code=202101052316
+ver_code=202101052321
 ToolPATH="$PREFIX/etc/tiviw"
 
 RED=$(printf	'\033[31m')

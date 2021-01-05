@@ -30,11 +30,15 @@ case $ABOUT_CHOOSE in
 			dev)
 				red "正在切换 dev 分支，注意，这是一个高危操作！"
 				git checkout dev
+				echo "${BLUE}[*]${RESET} 正在拉取最新版本"
+				update_tiviw
 				cp tiviw $PREFIX/bin/tiviw
 				;;
 			master)
 				green "正在切换 master 分支…"
 				git checkout master
+				echo "${BLUE}[*]${RESET} 正在拉取最新版本"
+				update_tiviw
 				cp tiviw $PREFIX/bin/tiviw
 				;;
 			*)
