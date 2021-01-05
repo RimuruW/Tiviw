@@ -27,14 +27,10 @@ Tiviw 提供一键安装脚本，支持一键自动安装。**一键安装脚本
 
 一键自动安装命令
 ```bash
-bash -c "$(curl -L https://raw.githubusercontent.com/RimuruW/Tiviw/dev/install.sh)"
+bash -c "$(curl -sL https://qingxu.live/tiviw.sh)"
 ```
-> 国内用户请输入以下命令
-> ```bash
-> bash -c "$(curl -L https://gitee.com/RimuruW/tiviw/raw/dev/install.sh)"
-> ```
 
-自动安装脚本会创建`$PREFIX/etc/tiviw`目录作为工作目录，请勿手动对该目录进行任何更改以避免脚本运行异常。
+该命令会自动根据设备网络环境选择安装脚本下载渠道，并创建`$PREFIX/etc/tiviw`目录作为工作目录，**请勿手动对该目录进行任何更改**以避免脚本运行异常。
 
 ### 手动安装 Tiviw（绝大多数情况下不建议）
 Tiviw 同样可以通过手动输入命令完成安装。当 Tiviw 的安装脚本出现问题造成 Tiviw 无法正常安装时，手动安装可以有效避免某些不应该出现的问题。
