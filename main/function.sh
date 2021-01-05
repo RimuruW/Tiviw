@@ -9,7 +9,7 @@
 name="Tiviw"
 export name
 sh_ver="1.0.6"
-ver_code=202101052321
+ver_code=202101052332
 ToolPATH="$PREFIX/etc/tiviw"
 
 RED=$(printf	'\033[31m')
@@ -55,16 +55,15 @@ ask() {
         fi
 
         # Ask the question
-		printf '%s\n' "${LIGHT}"
-        printf "[?] "
-        read -r -p "$1 [$prompt] " REPLY
+        printf "${LIGHT}\n[?] "
+        read -p "$1 [$prompt] " REPLY
 
         # Default?
         if [ -z "$REPLY" ]; then
             REPLY=$default
         fi
 
-		printf '%s\n' "${RESET}"
+        printf "${RESET}"
 
         # Check if the reply is valid
         case "$REPLY" in
