@@ -21,7 +21,7 @@ else
 		green "网络连接正常，无需镜像源"
 	else
 		if ask "是否更换 NPM 源为淘宝源?" "Y"; then
-			npm config set registry https://registry.npm.taobao.org ;;
+			npm config set registry https://registry.npm.taobao.org
 		else
 			red "Use default"
 		fi
