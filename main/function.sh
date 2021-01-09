@@ -251,7 +251,7 @@ fi
 }
 
 check_npm_mirror() {
-	if grep "registry" $HOME/.npmrc | grep -v '#'; then
+	if [[ grep "registry" $HOME/.npmrc | grep -v '#' ]]; then
 		return 0
 	else
 		return 1
@@ -259,7 +259,7 @@ check_npm_mirror() {
 }
 
 check_pip_mirror() {
-	if [ grep "index-url" $HOME/.pip/pip.conf | grep -v '#' ]; then
+	if [[ grep "index-url" $HOME/.pip/pip.conf | grep -v '#' ]]; then
 		return 0
 	else
 		return 1
