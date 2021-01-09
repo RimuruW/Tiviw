@@ -247,11 +247,11 @@ if [ -n "$mirrors_status" ]; then
 else
 	return 1
 fi
-	export mirrorsstatus
 }
 
 check_npm_mirror() {
-	if [[ grep "registry" $HOME/.npmrc | grep -v '#' ]]; then
+	npm_mirrors_status=${grep "registry" $HOME/.npmrc | grep -v '#'}
+	if [[ -n "$npm_mirrors_status" ]]; then
 		return 0
 	else
 		return 1
@@ -259,12 +259,12 @@ check_npm_mirror() {
 }
 
 check_pip_mirror() {
-	if [[ grep "index-url" $HOME/.pip/pip.conf | grep -v '#' ]]; then
+	pip_mirrors_status=${grep "index-url" $HOME/.pip/pip.conf | grep -v '#'}
+	if [[ -n "$pip_mirrors_status ]]; then
 		return 0
 	else
 		return 1
 	fi
-
 }
 
 check_apt_ability() {
