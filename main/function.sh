@@ -9,7 +9,7 @@
 name="Tiviw"
 export name
 sh_ver="1.0.6"
-ver_code=202101092237
+ver_code=202101092251
 ToolPATH="$PREFIX/etc/tiviw"
 
 RED=$(printf	'\033[31m')
@@ -250,7 +250,7 @@ fi
 }
 
 check_npm_mirror() {
-	npm_mirrors_status=${grep "registry" $HOME/.npmrc | grep -v '#'}
+	npm_mirrors_status=$(grep "registry" $HOME/.npmrc | grep -v '#')
 	if [[ -n "$npm_mirrors_status" ]]; then
 		return 0
 	else
@@ -259,8 +259,8 @@ check_npm_mirror() {
 }
 
 check_pip_mirror() {
-	pip_mirrors_status=${grep "index-url" $HOME/.pip/pip.conf | grep -v '#'}
-	if [[ -n "$pip_mirrors_status ]]; then
+	pip_mirrors_status=$(grep "index-url" $HOME/.pip/pip.conf | grep -v '#')
+	if [[ -n "$pip_mirrors_status" ]]; then
 		return 0
 	else
 		return 1
