@@ -41,5 +41,5 @@ case $toolsinstall in
 		return 0 ;;
 	*)
 		red "无效输入,请重试" 
-		source $ToolPATH/core/tools/menu.sh ;;
+		source $ToolPATH/core/tools/index.sh ;;
 esac

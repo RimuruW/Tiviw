@@ -106,7 +106,7 @@ tiviw
 直接执行相应脚本文件
 ```bash
 bash $PREFIX/etc/tiviw/core/main/logsmanager.sh
-bash $PREFIX/etc/tiviw/core/main/menu.sh | tee -a $PREFIX/etc/tiviw/logs/1.log
+bash $PREFIX/etc/tiviw/core/main/index.sh | tee -a $PREFIX/etc/tiviw/logs/1.log
 ```
 
 > 注意，**请勿以 root 权限执行 Tiviw**！这可能造成某些**未知的 bug** 并造成**无法挽回的损失**！Tiviw 已内置 root 权限检测，在检测到用户使用 root 权限执行脚本时自动中止脚本。

@@ -9,7 +9,7 @@
 name="Tiviw"
 export name
 sh_ver="1.0.6"
-ver_code=202101092148
+ver_code=202101092232
 ToolPATH="$PREFIX/etc/tiviw"
 
 RED=$(printf	'\033[31m')
@@ -240,42 +240,35 @@ python_check() {
 	fi
 }
 
-mirror_check() {
+check_mirror() {
 mirrors_status=$(grep "mirror" $PREFIX/etc/apt/sources.list | grep -v '#')
 if [ -n "$mirrors_status" ]; then
-	mirrorsstatus=$(green "true")
 	return 0
 else
-	mirrorsstatus=$(red "false")
 	return 1
 fi
 	export mirrorsstatus
 }
 
-npm_mirror_check() {
-if [ -f "$ToolPATH/npmmirrorsstatus" ]; then
-	npmmirrorsstatus=$(green "true")
-	return 0
-else
-	npmmirrorsstatus=$(red "false")
-	return 1
-fi
-	export npmmirrorsstatus
+check_npm_mirror() {
+	if [ grep "registry" $HOME/.npmrc | grep -v '#' ]; then
+		return 0
+	else
+		return 1
+	fi
 }
 
-pip_mirror_check() {
-if [ -d "$HOME/.pip" ]; then
-	pipmirrorsstatus=$(green "true")
-	return 0
-else
-	pipmirrorsstatus=$(red "false")
-	return 1
-fi
-	export pipmirrorsstatus
+check_pip_mirror() {
+	if [ grep "index-url" $HOME/.pip/pip.conf | grep -v '#' ]; then
+		return 0
+	else
+		return 1
+	fi
+
 }
 
 check_apt_ability() {
-	if mirror_check; then
+	if check_mirror; then
 		green "Termux 镜像源已配置"
 		return 0
 	else
@@ -340,7 +333,7 @@ check_pip_ability() {
 				;;
 		esac				
 	fi
-	if pip_mirror_check; then
+	if check_pip_mirror; then
 		return 0
 	else
 		if network_check_sea; then

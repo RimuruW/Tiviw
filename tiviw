@@ -32,7 +32,7 @@ if [ ! -d "$PREFIX/etc/tiviw/core" ]; then
 	git clone https://gitee.com/RimuruW/$name $PREFIX/etc/tiviw/core >/dev/null
 fi
 
-if [ ! -f "$PREFIX/etc/tiviw/core/main/menu.sh" ]; then
+if [ ! -f "$PREFIX/etc/tiviw/core/main/index.sh" ]; then
 	echo "请检查您的互联网连接状态，如互联网连接正常，请向开发者提交 issues"
 	exit 1
 fi
@@ -43,4 +43,4 @@ fi
 
 mkdir -p $PREFIX/etc/tiviw/logs
 bash $PREFIX/etc/tiviw/core/main/logsmanager.sh
-bash $PREFIX/etc/tiviw/core/main/menu.sh | tee -a $PREFIX/etc/tiviw/logs/1.log
+bash $PREFIX/etc/tiviw/core/main/index.sh | tee -a $PREFIX/etc/tiviw/logs/1.log

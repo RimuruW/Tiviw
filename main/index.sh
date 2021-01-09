@@ -211,7 +211,7 @@ function termuxapi(){
 		pkg in termux-api -y
 	fi
 	unset termuxapichoose
-	[[ ! -z $termuxapichoose ]] && red "程序出现了内部错误，强制返回标题界面" && echo -en "\n\n\t\t\t请回车以继续" && read -n 1 line &&  menu
+	[[ ! -z $termuxapichoose ]] && red "程序出现了内部错误，强制返回标题界面" && echo -en "\n\n\t\t\t请回车以继续" && read -n 1 line &&  index
 	need=`blue "Need"`
 	echo -e "\n\n"
 	blue "注意,该界面部分功能需要安装并授权 Termux:API 才能使用"
@@ -417,7 +417,7 @@ function logs(){
 	esac
 }
 
-function menu(){
+function index(){
     option=null
 	blue "
                                                     
@@ -464,7 +464,7 @@ _/      _/      _/      _/      _/      _/
 
 while [ 1 ]
 do
-    menu
+    index
     case $option in
 	    0)
 	    	    exit 0 ;;
@@ -477,9 +477,9 @@ do
 	    4)
 	    	    source $ToolPATH/core/main/zsh_install.sh ;;
 	    5)
-	    	    source $ToolPATH/core/termuxplugin/menu.sh ;;
+	    	    source $ToolPATH/core/termuxplugin/index.sh ;;
 	    6)
-	    	    source $ToolPATH/core/tools/menu.sh ;;
+	    	    source $ToolPATH/core/tools/index.sh ;;
 	    7)
 	    	    termuxapi ;;
 	    8)

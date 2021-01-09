@@ -52,7 +52,7 @@ case $termuxguiinstall in
 		return 0
 		;;
 	0)
-		source $ToolPATH/core/termuxplugin/menu.sh && return 0 ;;
+		source $ToolPATH/core/termuxplugin/index.sh && return 0 ;;
 	*)
 		red "无效输入,请重试" 
 		termuxguiinstall=null

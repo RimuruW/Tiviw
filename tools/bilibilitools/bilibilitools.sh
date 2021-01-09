@@ -63,7 +63,7 @@ case $biliconfig in
 			green "如果一切正常,BiliBili 挂机助手已删除完成!"
 			return 0 ;;
 		0)
-			source $ToolPATH/core/tools/menu.sh ;;
+			source $ToolPATH/core/tools/index.sh ;;
 		*)
 			red "无效输入,请重试" 
 			source $ToolPATH/core/tools/bilibilitools/bilibilitools.sh ;;

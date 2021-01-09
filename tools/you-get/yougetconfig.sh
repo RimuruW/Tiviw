@@ -95,7 +95,7 @@ case $yougetoption in
 		fi
 		source $ToolPATH/core/tools/you-get/yougetconfig.sh ;;
 	0)
-		source $ToolPATH/core/main/menu.sh
+		source $ToolPATH/core/main/index.sh
 		return 0
 		;;
 	*)

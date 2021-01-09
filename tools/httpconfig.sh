@@ -28,7 +28,7 @@ case $httpserverchoose in
 		else
 			red "当前 Termux 环境不满足安装所需条件，仍尝试安装…"
 		fi
-		if npm_mirror_check; then
+		if check_npm_mirror; then
 			npm install -g http-server
 		else
 			red "脚本认定你当前网络环境无法完成安装！"
@@ -52,9 +52,9 @@ case $httpserverchoose in
 		green "开始卸载..."
 		npm uninstall http-server -g
 		green "卸载完成!"
-		source $ToolPATH/main/tools/menu.sh && return 0 ;;
+		source $ToolPATH/main/tools/index.sh && return 0 ;;
 	0)
-		source $ToolPATH/main/tools/menu.sh ;;
+		source $ToolPATH/main/tools/index.sh ;;
 	*)
 		red "无效输入,请重试"
 		source $PREFIX/etc/tiviw/core/tools/httpconfig.sh && return 0 ;;

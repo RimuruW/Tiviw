@@ -56,7 +56,7 @@ case $adbinstall in
 		source $ToolPATH/core/tools/adbconfig.sh
 		return 0 ;;
 	0)
-		source $ToolPATH/core/tools/menu.sh 
+		source $ToolPATH/core/tools/index.sh 
 		return 0 ;;
 	*)
 		red "无效输入,请重试" 

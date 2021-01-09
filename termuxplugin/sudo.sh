@@ -39,7 +39,7 @@ case $sudoinstall in
 		fi
 		echo "安装脚本运行完毕"
 		Step
-		source $ToolPATH/core/termuxplugin/menu.sh
+		source $ToolPATH/core/termuxplugin/index.sh
 		return 0
 		;;
 	2)
@@ -53,11 +53,11 @@ case $sudoinstall in
 			green "sudo 卸载成功!"
 		fi
 		Step
-		source $ToolPATH/core/termuxplugin/menu.sh
+		source $ToolPATH/core/termuxplugin/index.sh
 		return 0
 		;;
 	0)
-		source $ToolPATH/core/termuxplugin/menu.sh
+		source $ToolPATH/core/termuxplugin/index.sh
 		return 0
 		;;
 	*)

@@ -28,9 +28,9 @@ case $aaachoose in
 		else
 			red "删除失败！"
 		fi
-		source $ToolPATH/core/termuxplugin/menu.sh && return 0 ;;
+		source $ToolPATH/core/termuxplugin/index.sh && return 0 ;;
 	0)
-		source $ToolPATH/core/termuxplugin/menu.sh && return 0 ;;
+		source $ToolPATH/core/termuxplugin/index.sh && return 0 ;;
 	*)
 		red "无效输入，请重试"
 		aaachoose=null

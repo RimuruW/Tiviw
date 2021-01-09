@@ -16,7 +16,7 @@ case $ABOUT_CHOOSE in
 	1)
 		update_tiviw
 		Step
-		source $ToolPATH/core/main/menu.sh
+		source $ToolPATH/core/main/index.sh
 		return 0
 		;;
 	2)
