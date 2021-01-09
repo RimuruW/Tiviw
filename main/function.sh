@@ -9,7 +9,7 @@
 name="Tiviw"
 export name
 sh_ver="1.0.6"
-ver_code=202101052332
+ver_code=202101092148
 ToolPATH="$PREFIX/etc/tiviw"
 
 RED=$(printf	'\033[31m')
@@ -123,10 +123,8 @@ mkdir -p "$ToolPATH"
 network_check() {
 	echo "正在检查网络连接…"
 	if ping -q -c 1 -W 1 baidu.com >/dev/null; then
-		green "[√] 网络已连接"
 		return 0
 	else
-		red "[!] 网络未连接！"
 		exit 1
 	fi
 }
@@ -135,10 +133,8 @@ network_check_sea() {
 	network_check
 	green "[*] 尝试检查网络可用性…"
 	if ping -q -c 1 -W 1 google.com >/dev/null; then
-		green "[✓] 网络可用！"
 		return 0
 	else
-		red "[!] 网络不可用，尝试启用代理！"
 		return 1
 	fi
 }

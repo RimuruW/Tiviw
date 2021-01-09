@@ -32,7 +32,7 @@ npm install -g hexo-cli
 if ask "是否立即创建一个文件夹并初始化？" "N"; then
 	green "请输入您想创建的 Hexo 博客文件夹名称 [必填]"
 	echo -en "\t\tEnter the name: "
-	read -n blogname
+	read -p blogname
 	[[ -z "$blogname" ]] && red "未获取到博客文件夹名称，初始化失败！" && exit 1
 	mkdir -p "$HOME/$blogname"
 	blog="$HOME/$blogname"
