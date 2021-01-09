@@ -6,17 +6,17 @@
 # Copyright (c) 2020 Qingxu
 #-----------------------------------
 
-if check_mirror, then
+if check_mirror; then
 	mirrorsstatus="${GREEN}True${RESET}"
 else
 	mirrorsstatus="${RED}False${RESET}"
 fi
-if check_npm_mirror, then
+if check_npm_mirror; then
 	npmmirrorsstatus="${GREEN}True${RESET}"
 else
 	npmmirrorsstatus="${RED}False${RESET}"
 fi
-if check_pip_mirror, then
+if check_pip_mirror; then
 	pipmirrorsstatus="${GREEN}True${RESET}"
 else
 	pipmirrorsstatus="${RED}False${RESET}"
@@ -48,10 +48,10 @@ case $mirrorschoose in
 		return 0
 	;;
 	2)
-		if [[ ! -f "$PREFIX/bin/npm" ]], then
+		if [[ ! -f "$PREFIX/bin/npm" ]]; then
 			echo "${RED}[!]${RESET} Node.js 未安装！"
-			if ask "是否安装 Node.js？" "Y",then
-				if check_apt_ability, then
+			if ask "是否安装 Node.js？" "Y"; then
+				if check_apt_ability; then
 					pkg i nodejs-lts -y
 				else
 					echo "${RED}[!]${RESET} 无法完成镜像源更换，请先安装 Node.js！" && source $ToolPATH/core/main/mirror.sh && return 1
@@ -62,7 +62,7 @@ case $mirrorschoose in
 		fi
 		echo "${BLUE}[*]${RESET} 尝试添加设置 NPM 镜像源…"
 		npm config set registry https://registry.npm.taobao.org
-		if check_npm_mirror, then
+		if check_npm_mirror; then
 			echo "${GREEN}[✓]${RESET} NPM 镜像源已设置！"
 		else
 			echo "${RED}[!]${RESET} NPM 镜像源设置失败！请提交 bug 反馈至开发者！"
@@ -72,10 +72,10 @@ case $mirrorschoose in
 		return 0
 		;;
 	3)
-		if [[ ! -f "$PREFIX/bin/python" ]], then
+		if [[ ! -f "$PREFIX/bin/python" ]]; then
 			echo "${RED}[!]${RESET} Python 未安装！"
-			if ask "是否安装 Python？" "Y",then
-				if check_apt_ability, then
+			if ask "是否安装 Python？" "Y"; then
+				if check_apt_ability; then
 					pkg i python -y
 				else
 					echo "${RED}[!]${RESET} 无法完成镜像源更换，请先安装 Python！" && source $ToolPATH/core/main/mirror.sh && return 1
@@ -86,7 +86,7 @@ case $mirrorschoose in
 		fi
 		pip install -i https://pypi.tuna.tsinghua.edu.cn/simple pip -U
 		pip config set global.index-url https://pypi.tuna.tsinghua.edu.cn/simple
-		if check_pip_mirror, then
+		if check_pip_mirror; then
 			echo "${GREEN}[✓]${RESET} pip 镜像源已设置！"
 		else
 			echo "${RED}[!]${RESET} pip 镜像源设置失败！请提交 bug 反馈至开发者！"

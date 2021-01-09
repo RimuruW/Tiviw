@@ -9,7 +9,7 @@
 name="Tiviw"
 export name
 sh_ver="1.0.6"
-ver_code=202101092232
+ver_code=202101092237
 ToolPATH="$PREFIX/etc/tiviw"
 
 RED=$(printf	'\033[31m')
@@ -233,7 +233,7 @@ youget_check() {
 }
 
 python_check() {
-	if [ ! -f "/data/data/com.termux/files/usr/bin/python" ];then
+	if [ ! -f "/data/data/com.termux/files/usr/bin/python" ]; then
 		return 1
 	else
 		return 0
@@ -251,7 +251,7 @@ fi
 }
 
 check_npm_mirror() {
-	if [ grep "registry" $HOME/.npmrc | grep -v '#' ]; then
+	if grep "registry" $HOME/.npmrc | grep -v '#'; then
 		return 0
 	else
 		return 1
