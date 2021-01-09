@@ -251,7 +251,7 @@ fi
 
 check_npm_mirror() {
 	npm_mirrors_status=$(grep "registry" $HOME/.npmrc | grep -v '#')
-	if [[ -n "$npm_mirrors_status" ]]; then
+	if [ -n "$npm_mirrors_status" ]; then
 		return 0
 	else
 		return 1
@@ -260,7 +260,7 @@ check_npm_mirror() {
 
 check_pip_mirror() {
 	pip_mirrors_status=$(grep "index-url" $HOME/.pip/pip.conf | grep -v '#')
-	if [[ -n "$pip_mirrors_status" ]]; then
+	if [ -n "$pip_mirrors_status" ]; then
 		return 0
 	else
 		return 1
