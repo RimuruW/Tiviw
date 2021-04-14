@@ -259,7 +259,7 @@ check_npm_mirror() {
 }
 
 check_pip_mirror() {
-	pip_mirrors_status=$(grep "index-url" $HOME/.pip/pip.conf | grep -v '#')
+	pip_mirrors_status=$(grep "index-url" $HOME/.config/.pip/pip.conf | grep -v '#')
 	if [ -n "$pip_mirrors_status" ]; then
 		return 0
 	else
